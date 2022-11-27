@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link type="text/css" rel="stylesheet" href="{{ css_path }}/fonts.css">
+    <link type="text/css" rel="stylesheet" href="{{ css_path }}/main/desktop.css">
+    <title>{{ title }}</title>
+</head>
+<body>
+    <div class="container">
+        <div class="navbar">
+            <div class="navbar-logo">
+                <h1 class="logo">zenrepair</h1>
+            </div>
+            <div class="navbar-buttons">
+                <a href="#"><img src="{{ assets_path }}/icons/home.svg"></a>
+                <a href="#"><img src="{{ assets_path }}/icons/user-group.svg"></a>
+                <a href="#"><img src="{{ assets_path }}/icons/ticket.svg"></a>
+            </div>
+            <div class="navbar-divider"></div>
+            <div class="navbar-buttons">
+                <a href="#"><img src="{{ assets_path }}/icons/magnifying-glass-circle.svg"></a>
+                <a href="#"><img src="{{ assets_path }}/icons/user-circle.svg"></a>
+            </div>
+        </div>
+        <div class="sidebar">
+            {% block sidebar %}
+
+            {% endblock %}
+        </div>
+        <div class="content">
+            <h2>Hello, {{ name }}</h2>
+        </div>
+    </div>
+</body>
+</html>

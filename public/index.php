@@ -12,4 +12,4 @@
  * @author B Moss
  */
 
-include_once '../private/bootstrap.php';
+include_once '../bootstrap.php';

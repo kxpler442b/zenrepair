@@ -1,1 +1,7 @@
+node_modules
 /private/vendor
+
+/pb_data
+/pb_migrations
+
+.okta.env

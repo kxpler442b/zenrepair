@@ -1,0 +1,15 @@
+{% extends "/testing/test_layout.html" %}
+
+{% block table_data %}
+    {% for ticket in tickets %}
+        <tr>
+            <td>{{ ticket.id }}</td>
+            <td>{{ ticket.subject }}</td>
+            <td>{{ ticket.customer }}</td>
+            <td>{{ ticket.device }}</td>
+            <td>{{ ticket.status }}</td>
+            <td>{{ ticket.created }}</td>
+            <td>{{ ticket.updated }}</td>
+        </tr>
+    {% endfor %}
+{% endblock %}

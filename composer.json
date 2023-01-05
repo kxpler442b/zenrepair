@@ -1,20 +1,21 @@
 {
-    "config": {
-        "optimize-autoloader": true
-    },
-
+    "name": "kxpler442b/zenrepair",
+    "type": "project",
+    "license": "MIT",
     "autoload": {
         "psr-4": {
-            "App\\": "app/"
-        },
-        "classmap": ["app/"]
+            "App\\": "private/app/"
+        }
     },
-
+    "authors": [
+        {
+            "name": "kxpler442b",
+            "email": "benmoss2002@fastmail.co.uk"
+        }
+    ],
     "require": {
         "slim/slim": "^3",
         "slim/twig-view": "^2",
-        "doctrine/orm": "^2.13",
-        "monolog/monolog": "^2.8",
-        "vlucas/phpdotenv": "^5.5"
+        "doctrine/orm": "^2.14"
     }
 }

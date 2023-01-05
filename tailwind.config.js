@@ -1,12 +1,16 @@
+const defaultTheme = require('tailwindcss/defaultTheme');
+
 /** @type {import('tailwindcss').Config} */
 module.exports = {
-  content: ['./private/app/views/**/*.{html, twig}'],
+  content: ['./private/app/Views/**/*.{html, twig}'],
   theme: {
     extend: {
       fontFamily: {
-        'inter': ['Inter', 'sans-serif']
-      },
+        sans: ["'Inter'", ...defaultTheme.fontFamily.sans],
+      }
     },
   },
-  plugins: [],
+  plugins: [
+    require('@tailwindcss/forms'),
+  ],
 }

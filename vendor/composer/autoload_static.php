@@ -202,6 +202,8 @@ class ComposerStaticInitc8ce22d42c13648df4e2484a556a327a
     public static $classMap = array (
         'App\\Controllers\\AuthController' => __DIR__ . '/../..' . '/private/app/Controllers/AuthController.php',
         'App\\Controllers\\BaseController' => __DIR__ . '/../..' . '/private/app/Controllers/BaseController.php',
+        'App\\Controllers\\DashboardController' => __DIR__ . '/../..' . '/private/app/Controllers/DashboardController.php',
+        'App\\Libraries\\Database' => __DIR__ . '/../..' . '/private/app/Libraries/Database.php',
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Doctrine\\Common\\Cache\\Cache' => __DIR__ . '/..' . '/doctrine/cache/lib/Doctrine/Common/Cache/Cache.php',

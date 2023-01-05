@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta author="Benjamin Moss">
+
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google Fonts API -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <!-- Inter Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS -->
+    <link href="{{ css_path }}/output.css" type="text/css" rel="stylesheet">
+
+    <title>{{ title }}</title>
+</head>
+<body class="h-screen overflow-hidden text-white bg-slate-900">
+    <div class="sticky flex flex-row justify-between align-middle items-center h-16 px-5 border-b border-slate-800">
+        <div>
+            <a href="/dashboard" class="px-5 py-3 font-semibold text-sm text-white rounded-full border border-transparent hover:border-slate-600 hover:bg-slate-800">Dashboard</a>
+            <a href="/customers" class="px-5 py-3 font-semibold text-sm text-white rounded-full border border-transparent hover:border-slate-600 hover:bg-slate-800">Customers</a>
+            <a href="#" class="px-5 py-3 font-semibold text-sm text-white rounded-full border border-transparent hover:border-slate-600 hover:bg-slate-800">Tickets</a>
+            <a href="#" class="px-5 py-3 font-semibold text-sm text-white rounded-full border border-transparent hover:border-slate-600 hover:bg-slate-800">Devices</a>
+        </div>
+        <div>
+            <a href="#" class="px-5 py-3 font-semibold text-sm text-white rounded-full border border-transparent hover:border-slate-600 hover:bg-slate-800">{{ user.first_name }} {{ user.last_name }}</a>
+        </div>
+    </div>
+    <div class="flex flex-col justify-start align-middle items-center px-64">
+        {% block content %}
+
+        {% endblock %}
+    </div>
+</body>
+</html>

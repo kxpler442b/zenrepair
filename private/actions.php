@@ -11,3 +11,5 @@
  */
 
 include $app_path . '/Actions/AuthActions.php';
+
+include $app_path . '/Actions/AppActions.php';

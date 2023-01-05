@@ -8,6 +8,8 @@ $baseDir = dirname($vendorDir);
 return array(
     'App\\Controllers\\AuthController' => $baseDir . '/private/app/Controllers/AuthController.php',
     'App\\Controllers\\BaseController' => $baseDir . '/private/app/Controllers/BaseController.php',
+    'App\\Controllers\\DashboardController' => $baseDir . '/private/app/Controllers/DashboardController.php',
+    'App\\Libraries\\Database' => $baseDir . '/private/app/Libraries/Database.php',
     'Attribute' => $vendorDir . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
     'Doctrine\\Common\\Cache\\Cache' => $vendorDir . '/doctrine/cache/lib/Doctrine/Common/Cache/Cache.php',

@@ -1,0 +1,33 @@
+<div class="flex flex-col justify-start align-middle items-center mx-64">
+    <div class="w-full my-9">
+        <h1 class="font-bold text-3xl">Customers</h1>
+    </div>
+    <div class="w-full">
+        <table class="w-full table-auto border border-slate-700 border-collapse">
+            <thead>
+                <tr>
+                    <th width="3%" class="px-3 py-1 font-semibold text-md text-center border border-slate-700">#</th>
+                    <th width="33%" class="px-3 font-semibold text-md text-left border border-slate-700">Name</th>
+                    <th width="33%" class="px-3 font-semibold text-md text-left border border-slate-700">Email Address</th>
+                    <th width="33%" class="px-3 font-semibold text-md text-left border border-slate-700">Mobile Number</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for customer in customers %}
+                <tr>
+                    <td class="px-3 py-3 text-sm text-center border border-slate-700 bg-slate-800">{{ customer.id }}</td>
+                    <td class="px-3 text-sm border border-slate-700 bg-slate-800">{{ customer.name }}</td>
+                    <td class="px-3 text-sm border border-slate-700 bg-slate-800">{{ customer.email }}</td>
+                    <td class="px-3 text-sm border border-slate-700 bg-slate-800">{{ customer.mobile }}</td>
+                </tr>
+                {% endfor %}
+                <tr class="hidden">
+                    <td class="px-3 py-3 text-sm border border-slate-700 bg-slate-800">0000</td>
+                    <td class="px-3 text-sm border border-slate-700 bg-slate-800">Placeholder</td>
+                    <td class="px-3 text-sm border border-slate-700 bg-slate-800">placeholder</td>
+                    <td class="px-3 text-sm border border-slate-700 bg-slate-800">07123456789</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

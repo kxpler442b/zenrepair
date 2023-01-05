@@ -11,5 +11,8 @@
  */
 
 $slim->get('/', \App\Controllers\AuthController::class . ':index')->setname('index');
-$slim->get('/login', \App\Controllers\AuthController::class . ':login')->setname('login');
+
+$slim->get('/login', \App\Controllers\AuthController::class . ':login')->setname('login_get');
+$slim->post('/login', \App\Controllers\AuthController::class . ':login')->setname('login_post');
+
 $slim->get('/logout', \App\Controllers\AuthController::class . ':logout')->setname('logout');

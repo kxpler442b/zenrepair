@@ -24,14 +24,27 @@ class AuthController extends BaseController
 
     public function login(Request $request, Response $response)
     {
-        $twig_data = [
-            'css_path' => CSS_PATH,
-            'js_path' => JS_PATH,
-            'assets_path' => ASSETS_PATH,
-            'title' => 'Log In'
-        ];
+        $this->method = $request->getMethod();
 
-        return $this->twig->render($response, '/login/login_view.twig', $twig_data);
+        if ($this->method === 'GET') {
+
+            $twig_data = [
+                'css_path' => CSS_PATH,
+                'js_path' => JS_PATH,
+                'assets_path' => ASSETS_PATH,
+                'title' => 'Log In'
+            ];
+    
+            return $this->twig->render($response, '/login/login_view.twig', $twig_data);
+
+        } elseif ($this->method === 'POST') {
+            
+            // $this->params = $request->getParams();
+            //var_dump($this->params);
+
+            return $response->withRedirect('/dashboard');
+
+        }
     }
 
     public function logout(Request $request, Response $response)

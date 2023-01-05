@@ -12,11 +12,16 @@ abstract class BaseController
 {
     protected $container;
     protected $twig;
+    protected $method;
+
+    protected $params;
 
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
         $this->twig = $container->get('twig');
+        $this->method = 'GET';
+        $this->params = [];
     }
 
     public function __destruct() {}

@@ -16,7 +16,7 @@ require 'dependencies.php';
 
 $slim = new \Slim\App($container);
 
-require 'actions.php';
+require 'routes.php';
 
 // session_start();
 

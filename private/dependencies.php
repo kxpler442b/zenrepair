@@ -20,6 +20,10 @@ $container['twig'] = function ($container) {
     return $twig;
 };
 
+$container['database'] = function ($container) {
+    return new \App\Libraries\Database($container, $container['settings']['database']);
+};
+
 $container['AuthController'] = function ($c) {
     return new \App\Controllers\AuthController($c);
 };

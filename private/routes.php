@@ -10,6 +10,8 @@
  * @author B Moss
  */
 
-include $app_path . '/Actions/AuthActions.php';
+include $app_path . '/Routes/AuthRoutes.php';
 
-include $app_path . '/Actions/AppActions.php';
+include $app_path . '/Routes/AppRoutes.php';
+
+include $app_path . '/Routes/PortalRoutes.php';

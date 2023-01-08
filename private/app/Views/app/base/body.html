@@ -1,14 +1,17 @@
 <div class="sticky flex flex-row justify-between align-middle items-center h-16 px-5 border-b border-slate-800">
     <div>
-        <a href="/dashboard" class="px-5 py-3 font-semibold text-sm text-white rounded-full border border-transparent hover:border-slate-600 hover:bg-slate-800">Dashboard</a>
+        <a href="/dashboard" class="px-5 py-3 font-semibold text-sm text-white rounded-full border border-transparent hover:border-slate-600 hover:bg-slate-800">
+            Dashboard
+        </a>
         <a href="/customers" class="px-5 py-3 font-semibold text-sm text-white rounded-full border border-transparent hover:border-slate-600 hover:bg-slate-800">Customers</a>
-        <a href="#" class="px-5 py-3 font-semibold text-sm text-white rounded-full border border-transparent hover:border-slate-600 hover:bg-slate-800">Tickets</a>
-        <a href="#" class="px-5 py-3 font-semibold text-sm text-white rounded-full border border-transparent hover:border-slate-600 hover:bg-slate-800">Devices</a>
+        <a href="/tickets" class="px-5 py-3 font-semibold text-sm text-white rounded-full border border-transparent hover:border-slate-600 hover:bg-slate-800">Tickets</a>
+        <a href="/customers" class="px-5 py-3 font-semibold text-sm text-white rounded-full border border-transparent hover:border-slate-600 hover:bg-slate-800">Devices</a>
     </div>
     <div>
         <a href="#" class="px-5 py-3 font-semibold text-sm text-white rounded-full border border-transparent hover:border-slate-600 hover:bg-slate-800">{{ user.first_name }} {{ user.last_name }}</a>
     </div>
 </div>
-{% block content %}
+    {% block content %}
 
-{% endblock %}
+    {% endblock %}
+</div>

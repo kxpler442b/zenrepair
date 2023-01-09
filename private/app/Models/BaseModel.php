@@ -10,10 +10,12 @@ namespace App\Models;
 
 abstract class BaseModel
 {
-    protected $container;
+    protected $database;
 
-    public function __construct(\Psr\Container\ContainerInterface $container)
+    public function __construct(\App\Libraries\Database $database)
     {
-        $this->container = $container;
+        $this->database = $database;
     }
+
+    public function __destruct() {}
 }

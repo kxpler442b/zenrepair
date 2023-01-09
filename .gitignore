@@ -1,5 +1,5 @@
-node_modules
-/private/vendor
+/node_modules/
+/vendor/
 
 /pb_data
 /pb_migrations

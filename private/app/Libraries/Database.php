@@ -14,8 +14,11 @@ use PDOStatement;
 
 class Database
 {
+    public $customers;
+    
     protected $container;
     protected $settings;
+    protected $logger;
     
     protected $dbh;
     protected $stmt;
@@ -26,7 +29,10 @@ class Database
         $this->container = $container;
         $this->settings = $settings;
 
+        $this->createLogger();
         $this->connect();
+
+        $this->customers = new \App\Models\CustomerModel($this);
     }
 
     public function __destruct() {}
@@ -66,10 +72,21 @@ class Database
         return $this->result;
     }
 
+    public function getHandle() : PDO
+    {
+        return $this->dbh;
+    }
+
+    private function createLogger() : void
+    {
+        $this->logger = new \Monolog\Logger('Database');
+        $this->logger->pushHandler(new \Monolog\Handler\StreamHandler(LOG_PATH . '/database.log'));
+    }
+
     private function connect() : void
     {
-        $db_user = $this->settings['user'];
-        $db_pass = $this->settings['pass'];
+        $db_user = $this->settings['db_user'];
+        $db_pass = $this->settings['db_pass'];
 
         $db_host = $this->settings['db_host'];
         $db_name = $this->settings['db_name'];
@@ -77,10 +94,18 @@ class Database
 
         $dsn = 'mysql:dbname=' . $db_name . ';host=' . $db_host;
 
+        $this->logger->info('Attempting a connection using DSN: ' . $dsn . ' with user ' . $db_user);
+
         try {
+
             $this->dbh = new PDO($dsn, $db_user, $db_pass);
+            $this->logger->info('Connected to database successfully.');
+
         } catch (PDOException $e) {
+
             throw new PDOException($e->getMessage(), $e->getCode());
+            $this->logger->error($e->getMessage());
+
         }
     }
 }

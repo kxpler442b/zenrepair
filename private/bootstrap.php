@@ -10,7 +10,7 @@ $app_path = __DIR__ . '/app';
 
 include '../config/autoload.php';
 
-$container = new \Slim\Container($slim_config);
+$container = new \Slim\Container(SLIM_SETTINGS);
 
 require 'dependencies.php';
 

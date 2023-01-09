@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'kxpler442b/zenrepair',
-        'pretty_version' => '1.0.0+no-version-set',
-        'version' => '1.0.0.0',
-        'reference' => NULL,
+        'pretty_version' => 'dev-unstable',
+        'version' => 'dev-unstable',
+        'reference' => 'e032df7f444f130071d56ff8354df4620471ecf5',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -110,11 +110,20 @@
             'dev_requirement' => false,
         ),
         'kxpler442b/zenrepair' => array(
-            'pretty_version' => '1.0.0+no-version-set',
-            'version' => '1.0.0.0',
-            'reference' => NULL,
+            'pretty_version' => 'dev-unstable',
+            'version' => 'dev-unstable',
+            'reference' => 'e032df7f444f130071d56ff8354df4620471ecf5',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'monolog/monolog' => array(
+            'pretty_version' => '2.8.0',
+            'version' => '2.8.0.0',
+            'reference' => '720488632c590286b88b80e62aa3d3d551ad4a50',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../monolog/monolog',
             'aliases' => array(),
             'dev_requirement' => false,
         ),
@@ -182,6 +191,7 @@
             'dev_requirement' => false,
             'provided' => array(
                 0 => '1.0|2.0',
+                1 => '1.0.0 || 2.0.0 || 3.0.0',
             ),
         ),
         'slim/slim' => array(

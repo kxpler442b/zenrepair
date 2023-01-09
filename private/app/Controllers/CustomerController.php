@@ -19,20 +19,7 @@ class CustomerController extends BaseController
 {
     public function customers(Request $request, Response $response)
     {
-        $customers = [
-            0 => [
-                'id' => '0001',
-                'name' => 'Eugene Crabs',
-                'email' => 'eug.ene@gmail.com',
-                'mobile' => '07123456789'
-            ],
-            1 => [
-                'id' => '0002',
-                'name' => 'Bob Cratchit',
-                'email' => 'bob.cratchit@gmail.com',
-                'mobile' => '07123456789'
-            ],
-        ];
+        $customers = $this->database->customers->getAllCustomers();
 
         $twig_data = [
             'css_path' => CSS_PATH,

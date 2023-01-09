@@ -16,8 +16,12 @@ $css_path = $app_url . '/css';
 $assets_path = $app_url . '/assets';
 $js_path = $app_url . '/js';
 
+$log_path = __DIR__ . '/../logs';
+
 define('APP_URL', $app_url);
 
 define('CSS_PATH', $css_path);
 define('ASSETS_PATH', $assets_path);
 define('JS_PATH', $js_path);
+
+define('LOG_PATH', $log_path);

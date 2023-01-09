@@ -10,7 +10,7 @@
  * @author B Moss
  */
 
- $slim_settings = [
+$slim_settings = [
     "settings" => [
         'displayErrorDetails' => true,
         'determineRouteBeforeAppMiddleware' => false,
@@ -29,4 +29,4 @@
     ]
 ];
 
-return $slim_config;
+define('SLIM_SETTINGS', $slim_settings);

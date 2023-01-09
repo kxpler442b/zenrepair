@@ -21,7 +21,7 @@ $container['twig'] = function ($container) {
 };
 
 $container['database'] = function ($container) {
-    return new \App\Libraries\Database($container, $container['settings']['database']);
+    return new \App\Libraries\Database($container, DB_CONFIG);
 };
 
 $container['AuthController'] = function ($c) {

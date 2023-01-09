@@ -13,3 +13,5 @@
 require 'app.config.php';
 
 require 'slim.config.php';
+
+require 'database.config.php';

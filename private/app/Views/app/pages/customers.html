@@ -4,31 +4,25 @@
 </div>
 <div class="w-full border border-slate-700 rounded-md shadow-md">
     <table class="w-full table-auto">
-        <thead class="border-b border-gray-300 bg-gray-200">
+        <thead class="border-b border-slate-700 bg-slate-800">
             <tr>
-                <th width="5%" class="px-3 py-1 font-semibold text-md text-center">#</th>
-                <th width="12.5%" class="px-3 font-semibold text-md text-left">Received</th>
-                <th width="10%" class="px-3 font-semibold text-md text-left">Switch 0</th>
-                <th width="10%" class="px-3 font-semibold text-md text-left">Switch 1</th>
-                <th width="10%" class="px-3 font-semibold text-md text-left">Switch 2</th>
-                <th width="10%" class="px-3 font-semibold text-md text-left">Switch 3</th>
-                <th width="10%" class="px-3 font-semibold text-md text-left">Fan</th>
-                <th width="10%" class="px-3 font-semibold text-md text-left">Heater</th>
-                <th width="10%" class="px-3 font-semibold text-md text-left">Keypad</th>
+                <th width="5%" class="px-3 font-semibold text-md text-center">#</th>
+                <th width="12.5%" class="px-3 py-1 font-semibold text-md text-left">Customer Name</th>
+                <th width="10%" class="px-3 font-semibold text-md text-left">Email Address</th>
+                <th width="10%" class="px-3 font-semibold text-md text-left">Mobile Number</th>
+                <th width="10%" class="px-3 font-semibold text-md text-left">Created</th>
+                <th width="10%" class="px-3 font-semibold text-md text-left">Updated</th>
             </tr>
         </thead>
         <tbody>
-            {% for message in messages %}
+            {% for customer in customers %}
             <tr>
-                <td class="px-3 py-3 text-sm text-center border-b border-gray-300">{{ message.id }}</td>
-                <td class="px-3 py-3 text-sm border-b border-gray-300">{{ message.datetime_received }}</td>
-                <td class="px-3 text-sm border-b border-gray-300">{{ message.switch_1_state }}</td>
-                <td class="px-3 text-sm border-b border-gray-300">{{ message.switch_2_state }}</td>
-                <td class="px-3 text-sm border-b border-gray-300">{{ message.switch_3_state }}</td>
-                <td class="px-3 text-sm border-b border-gray-300">{{ message.switch_4_state }}</td>
-                <td class="px-3 text-sm border-b border-gray-300">{{ message.fan_direction }}</td>
-                <td class="px-3 text-sm border-b border-gray-300">{{ message.temperature }}</td>
-                <td class="px-3 text-sm border-b border-gray-300">{{ message.keypad_last_number_entered }}</td>
+                <td class="px-3 text-sm text-center">{{ customer.id }}</td>
+                <td class="px-3 py-4 text-sm ">{{ customer.first_name }} {{ customer.last_name }}</td>
+                <td class="px-3 text-sm ">{{ customer.email }}</td>
+                <td class="px-3 text-sm ">{{ customer.mobile_number }}</td>
+                <td class="px-3 text-sm ">{{ customer.created }}</td>
+                <td class="px-3 text-sm ">{{ customer.updated }}</td>
             </tr>
             {% endfor %}
         </tbody>

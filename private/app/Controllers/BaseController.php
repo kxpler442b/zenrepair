@@ -13,6 +13,9 @@ abstract class BaseController
     protected $container;
     protected $twig;
     protected $database;
+    protected $okta;
+    protected $validator;
+    protected $logger;
 
     protected $method;
     protected $params;
@@ -21,7 +24,10 @@ abstract class BaseController
     {
         $this->container = $container;
         $this->twig = $container->get('twig');
+        $this->logger = $container->get('logger');
         $this->database = $container->get('database');
+        $this->okta = $container->get('okta');
+        $this->validator = $container->get('validator');
 
         $this->method = 'GET';
         $this->params = [];

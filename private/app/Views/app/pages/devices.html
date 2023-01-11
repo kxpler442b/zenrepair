@@ -1,0 +1,31 @@
+<div class="flex flex-col justify-start align-middle items-center mx-48">
+<div class="w-full my-9">
+    <h1 class="font-bold text-3xl">Devices</h1>
+</div>
+<div class="w-full border border-slate-700 rounded-md shadow-md">
+    <table class="w-full table-auto">
+        <thead class="border-b border-slate-700 bg-slate-800">
+            <tr>
+                <th width="5%" class="px-3 font-semibold text-md text-center">#</th>
+                <th width="12.5%" class="px-3 py-1 font-semibold text-md text-left">Customer Name</th>
+                <th width="10%" class="px-3 font-semibold text-md text-left">Email Address</th>
+                <th width="10%" class="px-3 font-semibold text-md text-left">Mobile Number</th>
+                <th width="10%" class="px-3 font-semibold text-md text-left">Created</th>
+                <th width="10%" class="px-3 font-semibold text-md text-left">Updated</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for device in devices %}
+            <tr>
+                <td class="px-3 text-sm text-center">{{ device.id }}</td>
+                <td class="px-3 py-4 text-sm ">{{ device.first_name }} {{ device.last_name }}</td>
+                <td class="px-3 text-sm ">{{ device.email }}</td>
+                <td class="px-3 text-sm ">{{ device.mobile_number }}</td>
+                <td class="px-3 text-sm ">{{ device.created }}</td>
+                <td class="px-3 text-sm ">{{ device.updated }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+</div>

@@ -18,6 +18,6 @@ $slim = new \Slim\App($container);
 
 require 'routes.php';
 
-// session_start();
+session_start();
 
 $slim->run();

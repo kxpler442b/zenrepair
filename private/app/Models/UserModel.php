@@ -10,18 +10,24 @@ namespace App\Models;
 
 class UserModel extends BaseModel
 {
-    protected $sql;
-    protected $stmt;
-    protected $result;
-
     public function createUser()
     {
 
     }
 
-    public function getUser()
+    public function getUser(string $sanitised_email)
     {
+        $this->sql = 'SELECT id, email, password, mobile_number, first_name, last_name, created, updated, is_admin
+                        FROM zenrepair.users
+                        WHERE email = :email';
+        
+        $this->stmt = $this->database->prepareStatement($this->sql);
+        $this->stmt->bindParam(':email', $sanitised_email);
+        $this->stmt->execute();
 
+        $this->result = $this->database->fetchSingleRow($this->stmt);
+
+        return $this->result;
     }
 
     public function getAllUsers() : array

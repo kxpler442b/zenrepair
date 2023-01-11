@@ -14,4 +14,6 @@ require 'app.config.php';
 
 require 'slim.config.php';
 
+require 'okta.config.php';
+
 require 'database.config.php';

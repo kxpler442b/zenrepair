@@ -19,6 +19,11 @@ class CustomerController extends BaseController
 {
     public function customers(Request $request, Response $response)
     {
+        if (!$this->okta->checkAuthStatus())
+        {
+            return $response->withRedirect('/login');
+        }
+
         $customers = $this->database->customers->getAllCustomers();
 
         $twig_data = [

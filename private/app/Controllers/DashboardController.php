@@ -19,15 +19,16 @@ class DashboardController extends BaseController
 {
     public function dashboard(Request $request, Response $response)
     {
+        if (!$this->okta->checkAuthStatus())
+        {
+            return $response->withRedirect('/login');
+        }
+
         $twig_data = [
             'css_path' => CSS_PATH,
             'js_path' => JS_PATH,
             'assets_path' => ASSETS_PATH,
-            'title' => 'Dashboard',
-            'user' => [
-                'first_name' => 'Benjamin',
-                'last_name' => 'Moss'
-            ]
+            'title' => 'Dashboard'
         ];
 
         return $this->twig->render($response, '/app/dashboard_view.twig', $twig_data);

@@ -14,8 +14,10 @@ use PDOStatement;
 
 class Database
 {
+    public $users;
     public $customers;
-    
+    public $tickets;
+
     protected $container;
     protected $settings;
     protected $logger;
@@ -32,14 +34,16 @@ class Database
         $this->createLogger();
         $this->connect();
 
+        $this->users = new \App\Models\UserModel($this);
         $this->customers = new \App\Models\CustomerModel($this);
+        $this->tickets = new \App\Models\TicketModel($this);
     }
 
     public function __destruct() {}
 
     public function prepareStatement(string $sql) : PDOStatement
     {
-        $this->stmt = $this->dbh->prepare($sql);
+        $this->stmt = $this->dbh->prepare($sql, [PDO::ATTR_CURSOR => PDO::CURSOR_FWDONLY]);
         
         return $this->stmt;
     }
@@ -72,6 +76,20 @@ class Database
         return $this->result;
     }
 
+    public function executeStatement(PDOStatement $stmt)
+    {
+        try
+        {
+            $this->result = $stmt->execute();
+            return $this->result;
+        }
+        catch (PDOException $e)
+        {
+            throw new PDOException($e->getMessage());
+            $this->logger->error($e->getMessage());
+        }
+    }
+
     public function getHandle() : PDO
     {
         return $this->dbh;
@@ -99,6 +117,7 @@ class Database
         try {
 
             $this->dbh = new PDO($dsn, $db_user, $db_pass);
+            $this->dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             $this->logger->info('Connected to database successfully.');
 
         } catch (PDOException $e) {

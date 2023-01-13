@@ -12,9 +12,9 @@
 
 $app_url = dirname($_SERVER['SERVER_NAME']);
 
-$css_path = $app_url . '/css';
-$assets_path = $app_url . '/assets';
-$js_path = $app_url . '/js';
+$css_path = '/css';
+$assets_path = '/assets';
+$js_path = '/js';
 
 $log_path = __DIR__ . '/../logs';
 

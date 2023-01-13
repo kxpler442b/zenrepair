@@ -31,6 +31,6 @@ class DeviceController extends BaseController
             'title' => 'Devices'
         ];
 
-        return $this->twig->render($response, '/app/devices_view.twig', $twig_data);
+        return $this->twig->render($response, '/app/devices/devices_view.twig', $twig_data);
     }
 }

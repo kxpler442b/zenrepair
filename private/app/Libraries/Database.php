@@ -17,6 +17,7 @@ class Database
     public $users;
     public $customers;
     public $tickets;
+    public $crypt;
 
     protected $container;
     protected $settings;
@@ -30,6 +31,7 @@ class Database
     {
         $this->container = $container;
         $this->settings = $settings;
+        $this->crypt = new \App\Libraries\Crypto($this, CRYPT_OPTIONS);
 
         $this->createLogger();
         $this->connect();

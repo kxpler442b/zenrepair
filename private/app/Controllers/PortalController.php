@@ -23,14 +23,25 @@ class PortalController extends BaseController
             'css_path' => CSS_PATH,
             'js_path' => JS_PATH,
             'assets_path' => ASSETS_PATH,
-            'title' => 'Log In',
-            'company_name' => 'FixYourPhone'
+            'title' => 'Log In - Customer Portal'
         ];
 
-        return $this->twig->render($response, '/portal/login_view.twig', $twig_data);
+        return $this->twig->render($response, '/portal/auth/login_view.twig', $twig_data);
     }
 
-    public function login_handler(Request $request, Response $response)
+    public function portal_view(Request $request, Response $response)
+    {
+        $twig_data = [
+            'css_path' => CSS_PATH,
+            'js_path' => JS_PATH,
+            'assets_path' => ASSETS_PATH,
+            'title' => 'View - Customer Portal'
+        ];
+
+        return $this->twig->render($response, '/portal/portal_view.twig', $twig_data);
+    }
+
+    public function verify(Request $request, Response $response)
     {
         $this->params = $request->getParams();
 

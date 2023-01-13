@@ -1,15 +1,24 @@
-<div class="sticky flex flex-row justify-between align-middle items-center h-16 px-5 border-b border-slate-800">
+<div class="sticky flex flex-row justify-between align-middle items-center h-16 px-5 shadow-sm border-b border-zinc-300">
+    <div class="mr-5 px-1.5 rounded-sm shadow-sm bg-sky-600">
+        <h1 class="font-bold text-2xl text-white">RSMS</h1>
+    </div>
     <div>
-        <a href="/dashboard" class="px-5 py-3 font-semibold text-sm text-white rounded-full border border-transparent hover:border-slate-600 hover:bg-slate-800">
+        <a href="/dashboard" class="px-5 py-3 font-semibold text-sm text-zinc-700 rounded-full border border-transparent hover:border-zinc-300 hover:bg-zinc-100">
             Dashboard
         </a>
-        <a href="/customers" class="px-5 py-3 font-semibold text-sm text-white rounded-full border border-transparent hover:border-slate-600 hover:bg-slate-800">Customers</a>
-        <a href="/tickets" class="px-5 py-3 font-semibold text-sm text-white rounded-full border border-transparent hover:border-slate-600 hover:bg-slate-800">Tickets</a>
-        <a href="/devices" class="px-5 py-3 font-semibold text-sm text-white rounded-full border border-transparent hover:border-slate-600 hover:bg-slate-800">Devices</a>
+        <a href="/customers" class="px-5 py-3 font-semibold text-sm text-zinc-700 rounded-full border border-transparent hover:border-zinc-300 hover:bg-zinc-100">Customers</a>
+        <a href="/tickets" class="px-5 py-3 font-semibold text-sm text-zinc-700 rounded-full border border-transparent hover:border-zinc-300 hover:bg-zinc-100">Tickets</a>
+        <a href="/devices" class="px-5 py-3 font-semibold text-sm text-zinc-700 rounded-full border border-transparent hover:border-zinc-300 hover:bg-zinc-100">Devices</a>
     </div>
-    <div>
-        <a href="/settings/user" class="px-5 py-3 font-semibold text-sm text-white rounded-full border border-transparent hover:border-slate-600 hover:bg-slate-800">{{ user.first_name }} {{ user.last_name }}</a>
-    </div>
+    <div class="flex-grow"></div>
+    <a class="flex flex-row justify-evenly align-middle items-center" href="#">
+        <div class="mr-5">
+            <p class="font-semibold text-sm text-zinc-700 hover:text-zinc-900 hover:underline">technician@repairshop.com</p>
+        </div>
+        <div class="h-8 w-8 rounded-full shadow-sm bg-zinc-500">
+             
+        </div>
+    </a>
 </div>
     {% block content %}
 

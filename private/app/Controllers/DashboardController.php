@@ -31,6 +31,6 @@ class DashboardController extends BaseController
             'title' => 'Dashboard'
         ];
 
-        return $this->twig->render($response, '/app/dashboard_view.twig', $twig_data);
+        return $this->twig->render($response, '/app/dashboard/dashboard_view.twig', $twig_data);
     }
 }

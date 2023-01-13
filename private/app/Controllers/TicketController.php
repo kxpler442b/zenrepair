@@ -17,7 +17,7 @@ use \Slim\Http\Response;
 
 class TicketController extends BaseController
 {
-    public function tickets(Request $request, Response $response)
+    public function tickets_view(Request $request, Response $response)
     {
         if (!$this->okta->checkAuthStatus())
         {
@@ -34,6 +34,8 @@ class TicketController extends BaseController
             'tickets' => $tickets
         ];
 
-        return $this->twig->render($response, '/app/tickets_view.twig', $twig_data);
+        var_dump($tickets);
+
+        return $this->twig->render($response, '/app/tickets/tickets_view.twig', $twig_data);
     }
 }

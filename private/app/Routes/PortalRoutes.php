@@ -10,7 +10,9 @@
  * @author B Moss
  */
 
-$slim->get('/portal', \App\Controllers\PortalController::class . ':login_view')->setname('portal_view');
-$slim->post('/portal', \App\Controllers\PortalController::class . ':login_handler')->setname('portal_auth');
+$slim->get('/portal', \App\Controllers\PortalController::class . ':login_view')->setname('portal_login_view');
+$slim->post('/portal/verify', \App\Controllers\PortalController::class . ':verify')->setname('portal_verify');
+
+$slim->get('/portal/view', \App\Controllers\PortalController::class . ':portal_view')->setname('portal_view');
 
 $slim->get('/portal/logout', \App\Controllers\PortalController::class . ':logout')->setname('portal_logout');

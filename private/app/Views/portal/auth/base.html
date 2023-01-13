@@ -24,13 +24,15 @@
         <div class="h-40"></div>
         <div class="flex flex-col justify-center align-middle items-center w-1/5 p-5 rounded-lg shadow-lg bg-white">
             <div class="w-full text-left">
-                <h1 class="mb-1.5 font-bold text-2xl text-gray-900">Customer Portal</h1>
-                <p class="text-sm text-gray-500">{{ company_name }}'s Portal</p>
+                <h1 class="mb-1.5 font-bold text-2xl text-gray-900">Log In</h1>
+                <p class="text-sm text-gray-500">to continue to zenrepair.</p>
             </div>
             <div class="mt-7 w-full">
-                <form action="/portal" method="POST">
-                    <label for="username" class="font-semibold text-sm text-gray-900">Access Code</label><br>
-                    <input type="text" name="code" id="code" class="mb-5 w-full text-sm border-gray-400 rounded-md shadow-sm focus:ring-indigo-600"><br>
+                <form action="/login" method="POST">
+                    <label for="email" class="font-semibold text-sm text-gray-900">Email Address</label><br>
+                    <input type="text" name="email" id="email" class="mb-5 w-full text-sm border-gray-400 rounded-md shadow-sm focus:ring-indigo-600"><br>
+                    <label for="password" class="font-semibold text-sm text-gray-900">Password</label><br>
+                    <input type="password" name="password" id="password" class="mb-5 w-full text-sm border-gray-400 rounded-md shadow-sm focus:ring-indigo-600"><br>
                     <input type="submit" value="Log In" class="mt-5 py-2 w-full text-md text-white border-gray-400 rounded-md shadow-sm bg-indigo-600 hover:bg-indigo-900">
                 </form>
             </div>

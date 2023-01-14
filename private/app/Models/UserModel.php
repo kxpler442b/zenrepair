@@ -30,9 +30,9 @@ class UserModel extends BaseModel
         return $this->result;
     }
 
-    public function getAllUsers() : array
+    public function getAllUsers(string $cols) : array
     {
-        $this->sql = 'SELECT * FROM users';
+        $this->sql = 'SELECT '.$cols.' FROM zenrepair.users';
 
         $this->stmt = $this->database->prepareStatement($this->sql);
         $this->stmt->execute();

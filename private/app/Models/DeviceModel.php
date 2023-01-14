@@ -8,16 +8,16 @@ declare(strict_types = 1);
 
 namespace App\Models;
 
-class TicketModel extends BaseModel
+class DeviceModel extends BaseModel
 {
-    public function createTicket()
+    public function createdevice()
     {
 
     }
 
-    public function getTicket(string $id)
+    public function getDevice(string $id)
     {
-        $this->sql = 'SELECT * FROM zenrepair.tickets WHERE (id = :id)';
+        $this->sql = 'SELECT * FROM zenrepair.devices WHERE (id = :id)';
 
         $this->stmt = $this->database->prepareStatement($this->sql);
 
@@ -30,9 +30,9 @@ class TicketModel extends BaseModel
         return $this->result;
     }
 
-    public function getAllTickets() : array
+    public function getAllDevices(string $cols) : array
     {
-        $this->sql = 'SELECT * FROM zenrepair.tickets ORDER BY updated DESC';
+        $this->sql = 'SELECT '.$cols.' FROM zenrepair.devices ORDER BY updated DESC';
 
         $this->stmt = $this->database->prepareStatement($this->sql);
         $this->stmt->execute();
@@ -42,12 +42,12 @@ class TicketModel extends BaseModel
         return $this->result;
     }
 
-    public function updateTicket()
+    public function updateDevice()
     {
 
     }
 
-    public function deleteTicket()
+    public function deleteDevice()
     {
 
     }

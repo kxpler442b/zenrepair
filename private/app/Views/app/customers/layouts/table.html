@@ -1,4 +1,4 @@
-<div class="flex flex-col justify-start align-middle items-center mx-48">
+<div class="w-full flex flex-col justify-start align-middle items-center px-24">
 <div class="w-full my-9">
     <h1 class="font-bold text-3xl text-zinc-900">Customers</h1>
 </div>
@@ -15,9 +15,9 @@
     <div class="flex-grow"></div>
     <a href="/customers/create" class="px-5 py-2 font-semibold text-white text-sm rounded bg-sky-600 hover:bg-sky-700">New Customer</a>
 </div>
-<div class="w-full border border-zinc-300 rounded-lg shadow-sm">
+<div class="w-full border-x border-zinc-300 border-collapse shadow-sm">
     <table class="w-full table-auto">
-        <thead class="border-b border-zinc-300 bg-zinc-100">
+        <thead class="border-y border-zinc-300 bg-zinc-100">
             <tr>
                 <th class="py-3 px-3 font-semibold text-md text-zinc-700 text-left">Customer Name</th>
                 <th class="font-semibold text-md text-zinc-700 text-left">Email Address</th>
@@ -28,12 +28,12 @@
         </thead>
         <tbody>
             {% for customer in customers %}
-            <tr class="hover:bg-zinc-100">
+            <tr class="border-b border-zinc-300 bg-white hover:bg-zinc-100">
                 <td><a href="/customers/{{ customer.id }}" class="block w-full px-3 py-3 text-sm hover:text-sky-600">{{ customer.first_name }} {{ customer.last_name }}</a></td>
                 <td class="py-3 text-sm ">{{ customer.email_address }}</td>
                 <td class="py-3 text-sm ">{{ customer.mobile_number }}</td>
                 <td class="py-3 text-sm ">{{ customer.created }}</td>
-                <td class="py-3 text-sm ">{{ customer.updated }}</td>
+                <td class="py-3 text-sm">{{ customer.updated }}</td>
             </tr>
             {% endfor %}
         </tbody>

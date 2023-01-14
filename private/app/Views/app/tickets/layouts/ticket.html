@@ -1,5 +1,54 @@
 <div class="flex flex-col justify-start align-middle items-center mx-48">
-<div class="w-full my-9">
-    <h1 class="font-bold text-3xl text-zinc-900">{{ customer.first_name }} {{ customer.last_name }}</h1>
+<div class="w-1/2 my-9">
+    <h1 class="font-bold text-3xl text-zinc-900">{{ ticket.subject }}</h1>
+</div>
+<div class="w-1/2 flex flex-row justify-center align-middle items-center mb-9">
+    <a href="/tickets/update" class="px-5 py-2 font-semibold text-white text-sm rounded bg-sky-600 hover:bg-sky-700">Update Information</a>
+    <div class="flex-grow"></div>
+    <a href="/tickets/delete/{{ ticket.id }}" class="px-5 py-2 font-semibold text-white text-sm rounded bg-red-600 hover:bg-red-700">Delete Record</a>
+</div>
+<div class="w-1/2 border border-zinc-300 rounded-md shadow-md">
+    <table class="w-full table-auto">
+        <thead class="">
+            <tr>
+                <th width="35%" class=""></th>
+                <th width="65%" class=""></th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="border-b border-zinc-200">
+                <td class="px-3 py-3 text-md text-center">Ticket Subject</td>
+                <td class="px-3 py-3 text-md text-center">{{ ticket.subject }}</td>
+            </tr>
+            <tr class="border-b border-zinc-200">
+                <td class="px-3 py-3 text-md text-center">Status</td>
+                <td class="px-3 py-3 text-md text-center">{{ ticket.status }}</td>
+            </tr>
+            <tr class="border-b border-zinc-200">
+                <td class="px-3 py-3 text-md text-center">Assigned Technician</td>
+                <td class="px-3 py-3 text-md text-center">{{ ticket.assoc_user }}</td>
+            </tr>
+            <tr class="border-b border-zinc-200">
+                <td class="px-3 py-3 text-md text-center">Customer</td>
+                <td class="px-3 py-3 text-md text-center">{{ ticket.assoc_customer }}</td>
+            </tr>
+            <tr class="border-b border-zinc-200">
+                <td class="px-3 py-3 text-md text-center">Device</td>
+                <td class="px-3 py-3 text-md text-center">{{ ticket.assoc_device }}</td>
+            </tr>
+            <tr class="border-b border-zinc-200">
+                <td class="px-3 py-3 text-md text-center">Created</td>
+                <td class="px-3 py-3 text-md text-center">{{ ticket.created }}</td>
+            </tr>
+            <tr class="border-b border-zinc-200">
+                <td class="px-3 py-3 text-md text-center">Updated</td>
+                <td class="px-3 py-3 text-md text-center">{{ ticket.updated }}</td>
+            </tr>
+            <tr>
+                <td class="px-3 py-3 text-md text-center">Record ID</td>
+                <td class="px-3 py-3 text-md text-center">{{ ticket.id }}</td>
+            </tr>
+        </tbody>
+    </table>
 </div>
 </div>

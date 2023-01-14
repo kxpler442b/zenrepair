@@ -24,7 +24,7 @@ class CustomerController extends BaseController
             return $response->withRedirect('/login');
         }
 
-        $customers = $this->database->customers->getAllCustomers();
+        $customers = $this->database->customers->getAllCustomers('*');
 
         $twig_data = [
             'css_path' => CSS_PATH,

@@ -1,36 +1,48 @@
 <div class="flex flex-col justify-start align-middle items-center mx-48">
 <div class="w-1/2 my-9">
-    <h1 class="font-bold text-3xl text-zinc-900">{{ customer.first_name }} {{ customer.last_name }}</h1>
+    <h1 class="font-bold text-3xl text-zinc-900">{{ device.manufacturer }} {{ device.model }}</h1>
 </div>
 <div class="w-1/2 flex flex-row justify-center align-middle items-center mb-9">
-    <a href="/customers/update" class="px-5 py-2 font-semibold text-white text-sm rounded bg-sky-600 hover:bg-sky-700">Update Information</a>
+    <a href="/devices/update" class="px-5 py-2 font-semibold text-white text-sm rounded bg-sky-600 hover:bg-sky-700">Update Information</a>
     <div class="flex-grow"></div>
-    <a href="/customers/delete/{id}" class="px-5 py-2 font-semibold text-white text-sm rounded bg-red-600 hover:bg-red-700">Delete Record</a>
+    <a href="/devices/delete/{id}" class="px-5 py-2 font-semibold text-white text-sm rounded bg-red-600 hover:bg-red-700">Delete Record</a>
 </div>
 <div class="w-1/2 border border-zinc-300 rounded-md shadow-md">
     <table class="w-full table-auto">
-        <thead class="border-b border-zinc-300 bg-zinc-100">
+        <thead>
             <tr>
-                <th width="55%" class="px-3 py-2 font-semibold text-md text-zinc-700 text-center"></th>
-                <th width="45%" class="px-3 font-semibold text-md text-zinc-700 text-left"></th>
+                <th width="35%"></th>
+                <th width="65%"></th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td class="px-3 py-3 text-md text-center">First Name</td>
-                <td class="px-3 py-3 text-md text-center">{{ customer.first_name }}</td>
+                <td class="px-3 py-3 text-md text-center">Manufacturer</td>
+                <td class="px-3 py-3 text-md text-center">{{ device.manufacturer }}</td>
             </tr>
             <tr>
-                <td class="px-3 py-3 text-md text-center">Last Name</td>
-                <td class="px-3 py-3 text-md text-center">{{ customer.last_name }}</td>
+                <td class="px-3 py-3 text-md text-center">Model</td>
+                <td class="px-3 py-3 text-md text-center">{{ device.model }}</td>
             </tr>
             <tr>
-                <td class="px-3 py-3 text-md text-center">Email Address</td>
-                <td class="px-3 py-3 text-md text-center">{{ customer.email }}</td>
+                <td class="px-3 py-3 text-md text-center">Serial Number</td>
+                <td class="px-3 py-3 text-md text-center">{{ device.serial_number }}</td>
             </tr>
             <tr>
-                <td class="px-3 py-3 text-md text-center">Mobile Number</td>
-                <td class="px-3 py-3 text-md text-center">{{ customer.mobile_number }}</td>
+                <td class="px-3 py-3 text-md text-center">IMEI</td>
+                <td class="px-3 py-3 text-md text-center">{{ device.imei}}</td>
+            </tr>
+            <tr>
+                <td class="px-3 py-3 text-md text-center">Owner</td>
+                <td class="px-3 py-3 text-md text-center">{{ device.assoc_customer }}</td>
+            </tr>
+            <tr>
+                <td class="px-3 py-3 text-md text-center">Created</td>
+                <td class="px-3 py-3 text-md text-center">{{ device.created }}</td>
+            </tr>
+            <tr>
+                <td class="px-3 py-3 text-md text-center">Updated</td>
+                <td class="px-3 py-3 text-md text-center">{{ device.updated }}</td>
             </tr>
         </tbody>
     </table>

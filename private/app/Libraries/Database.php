@@ -17,6 +17,7 @@ class Database
     public $users;
     public $customers;
     public $tickets;
+    public $devices;
     public $crypt;
 
     protected $container;
@@ -39,6 +40,7 @@ class Database
         $this->users = new \App\Models\UserModel($this);
         $this->customers = new \App\Models\CustomerModel($this);
         $this->tickets = new \App\Models\TicketModel($this);
+        $this->devices = new \App\Models\DeviceModel($this);
     }
 
     public function __destruct() {}

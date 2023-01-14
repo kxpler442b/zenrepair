@@ -47,9 +47,9 @@ class CustomerModel extends BaseModel
         return $this->result;
     }
 
-    public function getAllCustomers() : array
+    public function getAllCustomers(string $cols) : array
     {
-        $this->sql = 'SELECT * FROM zenrepair.customers';
+        $this->sql = 'SELECT '.$cols.' FROM zenrepair.customers ORDER BY updated DESC';
 
         $this->stmt = $this->database->prepareStatement($this->sql);
         $this->stmt->execute();

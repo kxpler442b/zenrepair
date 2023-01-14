@@ -31,6 +31,8 @@ class DashboardController extends BaseController
             'title' => 'Dashboard'
         ];
 
+        var_dump(uniqid());
+
         return $this->twig->render($response, '/app/dashboard/dashboard_view.twig', $twig_data);
     }
 }

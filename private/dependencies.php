@@ -29,6 +29,16 @@ $container['logger'] = function ($container) {
     return $logger;
 };
 
+$container[\Doctrine\ORM\EntityManager::class] = function ($container): \Doctrine\ORM\EntityManager {
+    $settings = $container->get('settings');
+
+    $config = \Doctrine\ORM\ORMSetup::createAttributeMetadataConfiguration($settings['doctrine']['metadata_dirs'], $settings['doctrine']['dev_mode']);
+    
+    $connection = \Doctrine\DBAL\DriverManager::getConnection($settings['doctrine']['connection'], $config);
+
+    return new \Doctrine\ORM\EntityManager($connection, $config);
+};
+
 $container['database'] = function ($container) {
     return new \App\Libraries\Database($container, DB_CONFIG);
 };

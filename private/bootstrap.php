@@ -4,11 +4,11 @@
  * 
  */
 
-include '../vendor/autoload.php';
+include __DIR__ . '/../vendor/autoload.php';
 
 $app_path = __DIR__ . '/app';
 
-include '../config/autoload.php';
+include __DIR__ . '/../config/autoload.php';
 
 $container = new \Slim\Container(SLIM_SETTINGS);
 

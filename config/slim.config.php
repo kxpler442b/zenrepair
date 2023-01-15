@@ -10,10 +10,13 @@
  * @author B Moss
  */
 
+require 'database.config.php';
+
 $slim_settings = [
     "settings" => [
         'displayErrorDetails' => true,
         'determineRouteBeforeAppMiddleware' => false,
+        'doctrine' => $doctrine_settings,
         'twig' => [
             'views' => $app_path . '/Views',
             'settings' => [

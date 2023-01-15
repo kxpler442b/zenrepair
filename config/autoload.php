@@ -16,6 +16,4 @@ require 'slim.config.php';
 
 require 'okta.config.php';
 
-require 'database.config.php';
-
 require 'crypt.config.php';

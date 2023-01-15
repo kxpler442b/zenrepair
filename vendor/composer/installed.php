@@ -3,7 +3,7 @@
         'name' => 'kxpler442b/zenrepair',
         'pretty_version' => 'dev-unstable',
         'version' => 'dev-unstable',
-        'reference' => 'eee28e6189ae4bfe7ebb78dabd0ece431228d4eb',
+        'reference' => '5f9f8370ef79f711f5eb0ca0a8b73de163943a33',
         'type' => 'project',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -74,9 +74,9 @@
             'dev_requirement' => false,
         ),
         'doctrine/dbal' => array(
-            'pretty_version' => '3.5.2',
-            'version' => '3.5.2.0',
-            'reference' => '63e513cebbbaf96a6795e5c5ee34d205831bfc85',
+            'pretty_version' => '3.5.3',
+            'version' => '3.5.3.0',
+            'reference' => '88fa7e5189fd5ec6682477044264dc0ed4e3aa1e',
             'type' => 'library',
             'install_path' => __DIR__ . '/../doctrine/dbal',
             'aliases' => array(),
@@ -193,7 +193,7 @@
         'kxpler442b/zenrepair' => array(
             'pretty_version' => 'dev-unstable',
             'version' => 'dev-unstable',
-            'reference' => 'eee28e6189ae4bfe7ebb78dabd0ece431228d4eb',
+            'reference' => '5f9f8370ef79f711f5eb0ca0a8b73de163943a33',
             'type' => 'project',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
@@ -392,6 +392,7 @@
             'dev_requirement' => false,
             'provided' => array(
                 0 => '^1.0',
+                1 => '1.0|2.0',
             ),
         ),
         'psr/container' => array(
@@ -477,6 +478,7 @@
             'dev_requirement' => false,
             'provided' => array(
                 0 => '^1.0',
+                1 => '1.0|2.0',
             ),
         ),
         'ralouphie/getallheaders' => array(
@@ -505,6 +507,30 @@
             'install_path' => __DIR__ . '/../slim/twig-view',
             'aliases' => array(),
             'dev_requirement' => false,
+        ),
+        'symfony/cache' => array(
+            'pretty_version' => 'v5.4.18',
+            'version' => '5.4.18.0',
+            'reference' => 'a33fa08a3f37bb44b90e60b9028796d6b811f9ef',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../symfony/cache',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'symfony/cache-contracts' => array(
+            'pretty_version' => 'v2.5.2',
+            'version' => '2.5.2.0',
+            'reference' => '64be4a7acb83b6f2bf6de9a02cee6dad41277ebc',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../symfony/cache-contracts',
+            'aliases' => array(),
+            'dev_requirement' => false,
+        ),
+        'symfony/cache-implementation' => array(
+            'dev_requirement' => false,
+            'provided' => array(
+                0 => '1.0|2.0',
+            ),
         ),
         'symfony/console' => array(
             'pretty_version' => 'v5.4.17',
@@ -637,6 +663,15 @@
             'provided' => array(
                 0 => '2.3',
             ),
+        ),
+        'symfony/var-exporter' => array(
+            'pretty_version' => 'v5.4.17',
+            'version' => '5.4.17.0',
+            'reference' => '2adac0a9b55f9fb40b983b790509581dc3db0fff',
+            'type' => 'library',
+            'install_path' => __DIR__ . '/../symfony/var-exporter',
+            'aliases' => array(),
+            'dev_requirement' => false,
         ),
         'symfony/yaml' => array(
             'pretty_version' => 'v4.4.45',

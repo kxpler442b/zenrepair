@@ -1,25 +1,25 @@
 {
     "name": "kxpler442b/zenrepair",
-    "description": "Repair Shop Management System (RSMS) Project",
+    "description": "Repair Shop Management System (RSMS)",
     "type": "project",
     "license": "MIT",
     "autoload": {
         "psr-4": {
-            "Kxpler442b\\Zenrepair\\": "src/"
+            "App\\": "private/app/"
         }
     },
     "authors": [
         {
-            "name": "kxpler442b",
-            "email": "benmoss2002@fastmail.co.uk"
+            "name": "Benjamin Moss",
+            "email": "P2595849@my365.dmu.ac.uk"
         }
     ],
     "require": {
-        "slim/slim": "^4.11",
-        "slim/twig-view": "^3.3",
-        "php-di/slim-bridge": "^3.3",
-        "doctrine/dbal": "^3.5",
+        "slim/slim": "^3",
+        "slim/twig-view": "^2",
+        "monolog/monolog": "^3.2",
         "doctrine/orm": "^2.14",
+        "doctrine/dbal": "^3.5",
         "symfony/cache": "^6.2"
     }
 }

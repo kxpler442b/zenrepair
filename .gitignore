@@ -1,2 +1,6 @@
-/vendor
-/node_modules
+vendor/
+node_modules/
+
+var/cache/
+
+config/app.config.php

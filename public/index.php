@@ -1,13 +1,11 @@
 <?php
 
 /**
- * Single point of access
+ * Application Single Point of Entry (SPoE)
  * 
- * Author: B Moss
- * Email: <P2595849@my365.dmu.ac.uk>
- * Date: 15/01/23
+ * @author B Moss <P2595849@my365.dmu.ac.uk>
  * 
- * @author B Moss
+ * Date: 20/01/23
  */
 
-require_once __DIR__ . '/../bootstrap.php';
+require_once __DIR__ . '/../private/bootstrap.php';

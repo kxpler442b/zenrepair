@@ -1,20 +1,8 @@
 /** @type {import('tailwindcss').Config} */
-
-const defaultTheme = require('tailwindcss/defaultTheme');
-
 module.exports = {
-  content: [
-    './private/app/Views/**/*.{html,twig}'
-  ],
+  content: [],
   theme: {
-    extend: {
-      fontFamily: {
-        sans: ["'IBM Plex Sans'", ...defaultTheme.fontFamily.sans],
-        mono: ["'IBM Plex Mono'", ...defaultTheme.fontFamily.mono]
-      }
-    },
+    extend: {},
   },
-  plugins: [
-    require('@tailwindcss/forms')
-  ],
+  plugins: [],
 }

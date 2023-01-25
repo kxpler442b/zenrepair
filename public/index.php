@@ -1,11 +1,14 @@
 <?php
 
 /**
- * Application Single Point of Entry (SPoE)
+ * Application Single Point of Entry
  * 
  * @author B Moss <P2595849@my365.dmu.ac.uk>
- * 
- * Date: 20/01/23
+ * Date: 02/01/23
  */
 
-require_once __DIR__ . '/../private/bootstrap.php';
+$app = require __DIR__ . '/../bootstrap.php';
+
+require CONFIG_PATH . '/routes/routes.php';
+
+$app->run();

@@ -3,12 +3,14 @@
 /**
  * Application Single Point of Entry
  * 
- * @author B Moss <P2595849@my365.dmu.ac.uk>
+ * @author B Moss <P2595849@mydmu.ac.uk>
  * Date: 02/01/23
  */
 
-$app = require __DIR__ . '/../bootstrap.php';
+declare(strict_types = 1);
 
-require CONFIG_PATH . '/routes/routes.php';
+use Slim\App;
 
-$app->run();
+$container = require __DIR__ . '/../bootstrap.php';
+
+$container->get(App::class)->run();

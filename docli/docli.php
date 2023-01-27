@@ -20,11 +20,11 @@ use Doctrine\Migrations\Tools\Console\Command\StatusCommand;
 use Doctrine\Migrations\Tools\Console\Command\SyncMetadataCommand;
 use Doctrine\Migrations\Tools\Console\Command\UpToDateCommand;
 use Doctrine\Migrations\Tools\Console\Command\VersionCommand;
+use Doctrine\ORM\EntityManager;
 
-$app = require __DIR__ . '/../bootstrap.php';
-$container = $app->getContainer();
+$container = require __DIR__ . '/../bootstrap.php';
 
-$entityManager = $container->get('entityManager');
+$entityManager = $container->get(EntityManager::class);
 
 $config = new PhpFile('migrations.php');
 

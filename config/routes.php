@@ -19,6 +19,11 @@ use Slim\App;
 
 return function (App $app)
 {
+    $app->get('/', [AuthController::class, 'index']);
+    $app->get('/login', [AuthController::class, 'redirect']);
+    $app->get('/callback', [AuthController::class, 'callback']);
+    $app->get('/logout', [AuthController::class, 'logout']);
+
     $app->get('/dashboard', [DashboardController::class, 'dashboardView']);
 
     $app->get('/tickets', [TicketController::class, 'ticketsView']);

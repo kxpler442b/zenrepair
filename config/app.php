@@ -13,6 +13,13 @@ return [
     'displayErrorDetails' => true,
     'logErrors' => false,
     'logErrorDetails' => false,
+    'okta' => [
+        'client_id' => $_ENV['OKTA_CLIENT_ID'],
+        'client_secret' => $_ENV['OKTA_CLIENT_SECRET'],
+        'redirect_uri' => $_ENV['OKTA_REDIRECT_URI'],
+        'metadata_url' => $_ENV['OKTA_METADATA_URL'],
+        'api_base_url' => $_ENV['OKTA_API_BASE_URL']
+    ],
     'doctrine' => [
         'dev_mode' => true,
         'cache_dir' => STORAGE_PATH . '/cache/doctrine',

@@ -16,7 +16,7 @@
     ],
     "require": {
         "slim/slim": "4.*",
-        "guzzlehttp/psr7": "^2",
+        "slim/psr7": "^1.6",
         "doctrine/dbal": "^3.5",
         "doctrine/orm": "^2.14",
         "doctrine/migrations": "^3.5",

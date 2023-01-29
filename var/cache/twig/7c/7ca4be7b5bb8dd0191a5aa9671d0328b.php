@@ -27,8 +27,6 @@ class __TwigTemplate_964e510f9bd5bcfc418f2ad834ab655a extends Template
         $this->parent = false;
 
         $this->blocks = [
-            'navbar' => [$this, 'block_navbar'],
-            'content' => [$this, 'block_content'],
         ];
     }
 
@@ -60,39 +58,41 @@ class __TwigTemplate_964e510f9bd5bcfc418f2ad834ab655a extends Template
         echo twig_escape_filter($this->env, ($context["title"] ?? null), "html", null, true);
         echo "</title>
 </head>
-<body class=\"h-screen bg-zinc-50\">
-    <div class=\"h-full flex flex-col justify-start align-middle\">
-        ";
-        // line 21
-        $this->displayBlock('navbar', $context, $blocks);
-        // line 22
-        echo "
-        ";
-        // line 23
-        $this->displayBlock('content', $context, $blocks);
-        // line 24
-        echo "    </div>
+<body class=\"h-screen\">
+    <div class=\"h-full grid grid-cols-12 grid-flow-row bg-stone-50\">
+        <div class=\"col-span-2 flex flex-col justify-start align-middle border border-red-600\">
+            <div class=\"px-6 py-3 border border-red-600\">
+                <div class=\"w-fit px-1.5 rounded-md bg-sky-600\">
+                    <h1 class=\"font-bold text-2xl text-white\">RSMS</h1>
+                </div>
+            </div>
+            <div class=\"mx-3 my-3 border-b border-stone-200\"></div>
+            <div class=\"flex-grow border border-red-600\">
+                <ul>
+                    <li class=\"w-full my-3 py-3\"><a href=\"#\">Dashboard</a></li>
+                </ul>
+            </div>
+        </div>
+        <div class=\"col-span-10 flex flex-col flex-grow justify-center align-middle border border-red-600\">
+            <div class=\"flex flex-row justify-center align-middle px-3 py-1.5 border border-red-600\">
+                <form class=\"w-1/2\" action=\"#\" method=\"POST\">
+                    <input class=\"w-full text-md text-stone-900 rounded-lg border-none bg-stone-600/10\" type=\"text\" placeholder=\"Search tickets\">
+                </form>
+            </div>
+            <div class=\"flex flex-col flex-grow justify-start align-middle border border-red-600\">
+                #
+            </div>
+        </div>
+    </div>
 </body>
 
 <!-- HTMX -->
 <script src=\"";
-        // line 28
+        // line 48
         echo twig_escape_filter($this->env, ($context["js_path"] ?? null), "html", null, true);
         echo "/htmx.min.js\"></script>
 
 </html>";
-    }
-
-    // line 21
-    public function block_navbar($context, array $blocks = [])
-    {
-        $macros = $this->macros;
-    }
-
-    // line 23
-    public function block_content($context, array $blocks = [])
-    {
-        $macros = $this->macros;
     }
 
     public function getTemplateName()
@@ -107,7 +107,7 @@ class __TwigTemplate_964e510f9bd5bcfc418f2ad834ab655a extends Template
 
     public function getDebugInfo()
     {
-        return array (  93 => 23,  87 => 21,  80 => 28,  74 => 24,  72 => 23,  69 => 22,  67 => 21,  60 => 17,  55 => 15,  39 => 1,);
+        return array (  92 => 48,  58 => 17,  53 => 15,  37 => 1,);
     }
 
     public function getSourceContext()

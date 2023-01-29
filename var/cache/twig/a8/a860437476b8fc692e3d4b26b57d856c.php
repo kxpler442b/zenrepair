@@ -60,36 +60,34 @@ class __TwigTemplate_40e32d58083e519a11549cb6bc0687b3 extends Template
         echo twig_escape_filter($this->env, ($context["title"] ?? null), "html", null, true);
         echo "</title>
 </head>
-<body class=\"h-screen\">
-    <div class=\"h-full flex flex-row justify-start align-middle bg-zinc-100\">
-        ";
-        // line 21
+<body class=\"bg-stone-100\">
+    ";
+        // line 20
         $this->displayBlock('navbar', $context, $blocks);
-        // line 22
+        // line 21
         echo "
-        ";
-        // line 23
+    ";
+        // line 22
         $this->displayBlock('content', $context, $blocks);
-        // line 24
-        echo "    </div>
-</body>
+        // line 23
+        echo "</body>
 
 <!-- HTMX -->
 <script src=\"";
-        // line 28
+        // line 26
         echo twig_escape_filter($this->env, ($context["js_path"] ?? null), "html", null, true);
         echo "/htmx.min.js\"></script>
 
 </html>";
     }
 
-    // line 21
+    // line 20
     public function block_navbar($context, array $blocks = [])
     {
         $macros = $this->macros;
     }
 
-    // line 23
+    // line 22
     public function block_content($context, array $blocks = [])
     {
         $macros = $this->macros;
@@ -107,7 +105,7 @@ class __TwigTemplate_40e32d58083e519a11549cb6bc0687b3 extends Template
 
     public function getDebugInfo()
     {
-        return array (  93 => 23,  87 => 21,  80 => 28,  74 => 24,  72 => 23,  69 => 22,  67 => 21,  60 => 17,  55 => 15,  39 => 1,);
+        return array (  91 => 22,  85 => 20,  78 => 26,  73 => 23,  71 => 22,  68 => 21,  66 => 20,  60 => 17,  55 => 15,  39 => 1,);
     }
 
     public function getSourceContext()

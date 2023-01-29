@@ -21,7 +21,6 @@ use App\Config;
 
 use function DI\create;
 
-
 return [
     App::class => function (ContainerInterface $container)
     {

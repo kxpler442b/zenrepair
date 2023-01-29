@@ -16,16 +16,31 @@ use Psr\Http\Message\ResponseInterface as Response;
 
 class TicketController extends Controller
 {
-    public function ticketView(Request $request, Response $response)
+    public function ticketsView(Request $request, Response $response) : Response
     {
         $twig_data = [
             'css_path' => CSS_URI,
             'title' => 'Tickets - RSMS',
             'category' => [
-                'name' => 'Tickets'
+                'url' => 'tickets',
+                'singularName' => 'Ticket'
             ]
         ];
 
         return $this->render($response, '/category_view.twig', $twig_data);
+    }
+
+    public function createTicketView(Request $request, Response $response) : Response
+    {
+        $twig_data = [
+            'css_path' => CSS_URI,
+            'title' => 'Tickets - RSMS',
+            'category' => [
+                'url' => 'tickets',
+                'singularName' => 'Ticket'
+            ]
+        ];
+
+        return $this->render($response, '/create_view.twig', $twig_data);
     }
 }

@@ -34,8 +34,10 @@ class __TwigTemplate_6d8da248de8b8ad39587a7a548b228dc extends Template
     {
         $macros = $this->macros;
         // line 1
-        echo "<div class=\"flex flex-col flex-grow justify-start align-middle px-6 py-3\">
-    <h1 class=\"text-3xl text-zinc-900 font-bold\">Dashboard</h1>
+        echo "<div class=\"flex flex-col justify-center align-middle px-80 pt-3\">
+    <div class=\"my-3\">
+        <h1 class=\"text-3xl text-zinc-900 font-bold\">Overview</h1>
+    </div>
 </div>";
     }
 

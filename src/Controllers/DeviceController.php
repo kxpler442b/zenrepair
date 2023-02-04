@@ -19,7 +19,8 @@ class DeviceController extends Controller
     public function devicesView(Request $request, Response $response)
     {
         $twig_data = [
-            'css_path' => CSS_URI,
+            'css_path' => CSS_URL,
+            'assets_path' => ASSETS_URL,
             'title' => 'Devices - RSMS',
             'category' => [
                 'url' => 'devices',

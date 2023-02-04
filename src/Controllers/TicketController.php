@@ -19,11 +19,19 @@ class TicketController extends Controller
     public function ticketsView(Request $request, Response $response) : Response
     {
         $twig_data = [
-            'css_path' => CSS_URI,
+            'css_path' => CSS_URL,
+            'assets_path' => ASSETS_URL,
             'title' => 'Tickets - RSMS',
             'category' => [
                 'url' => 'tickets',
-                'singularName' => 'Ticket'
+                'singularName' => 'Ticket',
+                'table' => [
+                    'headers' => ['Subject', 'Status', 'Technician', 'Customer', 'Device', 'Date Created', 'Last Updated'],
+                    'rows' => [
+                        0 => ['Screen Replacement', 'In Progress', 'Benjamin Moss', 'Eugene Krabs', 'iPhone 7', '01-01-2023 12:00', '01-01-2023 12:00'],
+                        1 => ['Battery Replacement', 'Not Started', 'Benjamin Moss', 'Kermit Frog', 'iPhone 6s', '01-01-2023 12:00', '01-01-2023 12:00']
+                    ]
+                ]
             ]
         ];
 
@@ -33,7 +41,8 @@ class TicketController extends Controller
     public function createTicketView(Request $request, Response $response) : Response
     {
         $twig_data = [
-            'css_path' => CSS_URI,
+            'css_path' => CSS_URL,
+            'assets_path' => ASSETS_URL,
             'title' => 'Tickets - RSMS',
             'category' => [
                 'url' => 'tickets',

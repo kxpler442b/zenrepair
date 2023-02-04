@@ -54,9 +54,12 @@ return [
     Twig::class => function ()
     {
         $twig = Twig::create(VIEWS_PATH, [
+            'debug' => true,
             'cache' => STORAGE_PATH . '/cache/twig',
             'auto_reload' => true
         ]);
+
+        $twig->addExtension(new \Twig\Extension\DebugExtension());
 
         return $twig;
     },

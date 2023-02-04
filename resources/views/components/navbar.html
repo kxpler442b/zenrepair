@@ -1,20 +1,55 @@
-<div class="sticky top-0 h-32 px-80 flex flex-col justify-center align-middle items-center shadow-sm border-b border-stone-300 bg-white/30 backdrop-blur-md">
-    <div class="w-full h-24 flex flex-row justify-center align-middle items-center">
-        <div class="px-3 py-1 rounded-md shadow-md bg-stone-600">
-            <h1 class="text-2xl text-stone-50 font-bold">RSMS</h1>
+<div class="z-0 h-full col-span-2 bg-stone-900">
+    <div class="h-full flex flex-col justify-start align-middle">
+        <div class="px-6 py-6">
+            <img class="h-5" src="{{ assets_path }}/rsms_logo_v2.svg">
+        </div>
+        <div class="p-3">
+            <ul>
+                <li>
+                    <a href="/dashboard" class="w-full mb-1.5 px-3 py-1.5 flex flex-row justify-start align-middle items-center text-sm text-white rounded-md hover:bg-stone-700">
+                        <svg class="h-5 w-5 mr-2.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25"></path>
+                        </svg>
+                        <span>Home</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/tickets" class="w-full mb-1.5 px-3 py-1.5 flex flex-row justify-start align-middle items-center text-sm text-white rounded-md hover:bg-stone-700">
+                        <svg class="h-5 w-5 mr-2.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M16.5 6v.75m0 3v.75m0 3v.75m0 3V18m-9-5.25h5.25M7.5 15h3M3.375 5.25c-.621 0-1.125.504-1.125 1.125v3.026a2.999 2.999 0 010 5.198v3.026c0 .621.504 1.125 1.125 1.125h17.25c.621 0 1.125-.504 1.125-1.125v-3.026a2.999 2.999 0 010-5.198V6.375c0-.621-.504-1.125-1.125-1.125H3.375z"></path>
+                        </svg>
+                        <span>Tickets</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/customers" class="w-full mb-1.5 px-3 py-1.5 flex flex-row justify-start align-middle items-center text-sm text-white rounded-md hover:bg-stone-700">
+                        <svg class="h-5 w-5 mr-2.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 003.741-.479 3 3 0 00-4.682-2.72m.94 3.198l.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0112 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 016 18.719m12 0a5.971 5.971 0 00-.941-3.197m0 0A5.995 5.995 0 0012 12.75a5.995 5.995 0 00-5.058 2.772m0 0a3 3 0 00-4.681 2.72 8.986 8.986 0 003.74.477m.94-3.197a5.971 5.971 0 00-.94 3.197M15 6.75a3 3 0 11-6 0 3 3 0 016 0zm6 3a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0zm-13.5 0a2.25 2.25 0 11-4.5 0 2.25 2.25 0 014.5 0z"></path>
+                        </svg>
+                        <span>Customers</span>
+                    </a>
+                </li>
+                <li>
+                    <a href="/devices" class="w-full mb-1.5 px-3 py-1.5 flex flex-row justify-start align-middle items-center text-sm text-white rounded-md hover:bg-stone-700">
+                        <svg class="h-5 w-5 mr-2.5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                            <path stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18.75h3"></path>
+                        </svg>
+                        <span>Devices</span>
+                    </a>
+                </li>
+            </ul>
         </div>
         <div class="flex-grow"></div>
-        <div class="flex flex-row justify-center items-center">
-            <h1 class="pr-3 font-semibold text-sm text-stone-700">Joe Bloggs</h1>
-            <div class="h-8 w-8 rounded-full bg-stone-600">
-                
+        <div class="h-12 mb-3 px-3 flex flex-row justify-start align-middle">
+            <div class="h-full w-12 mr-1.5 p-1">
+                <div class="h-full w-full rounded-full shadow-md bg-white"></div>
+            </div>
+            <div class="flex flex-col flex-grow justify-center align-middle">
+                <div class="">
+                    <h3 class="font-bold text-sm text-white">Benjamin Moss</h3>
+                    <p class="text-xs text-stone-200">ben.moss@email.com</p>
+                </div>
             </div>
         </div>
-    </div>
-    <div class="w-full flex flex-row justify-left align-middle items-center flex-grow">
-        <a href="/dashboard" class="px-3 pt-1.5 pb-2 font-bold text-stone-600 text-md rounded-t-sm border-b border-transparent hover:border-stone-600 hover:bg-stone-200">Dashboard</a>
-        <a href="/tickets" class="px-3 pt-1.5 pb-2 font-bold text-stone-600 text-md rounded-t-sm border-b border-transparent hover:border-stone-600 hover:bg-stone-200">Tickets</a>
-        <a href="/customers" class="px-3 pt-1.5 pb-2 font-bold text-stone-600 text-md rounded-t-sm border-b border-transparent hover:border-stone-600 hover:bg-stone-200">Customers</a>
-        <a href="/devices" class="px-3 pt-1.5 pb-2 font-bold text-stone-600 text-md rounded-t-sm border-b border-transparent hover:border-stone-600 hover:bg-stone-200">Devices</a>
     </div>
 </div>

@@ -1,6 +1,40 @@
-<div class="flex flex-col justify-center align-middle px-80 pt-3">
+<div class="col-span-10 flex flex-col justify-start align-middle rounded-tl-lg rounded-bl-lg px-9 py-6 shadow-lg border border-stone-700 bg-stone-800">
     <div class="my-3">
-        <h1 class="text-3xl text-zinc-900 font-bold">{{ category.singularName }}s</h1>
+        <h1 class="text-3xl text-white font-bold">{{ category.singularName }}s</h1>
+    </div>
+    <div class="my-3 flex flex-row justify-start align-middle items-center">
+        <div class="mr-3 p-5 flex flex-col justify-center align-center items-start border border-stone-700 rounded-md shadow-md">
+            <div class="">
+                <h2 class="text-stone-300 text-xs font-bold">Not Started</h2>
+            </div>
+            <div class="">
+                <h1 class="text-white text-4xl">1,000</h1>
+            </div>
+        </div>
+        <div class="mr-3 p-5 flex flex-col justify-center align-center items-start border border-stone-700 rounded-md shadow-md">
+            <div class="">
+                <h2 class="text-stone-300 text-xs font-bold">Opened</h2>
+            </div>
+            <div class="">
+                <h1 class="text-white text-4xl">1,000</h1>
+            </div>
+        </div>
+        <div class="mr-3 p-5 flex flex-col justify-center align-center items-start border border-stone-700 rounded-md shadow-md">
+            <div class="">
+                <h2 class="text-stone-300 text-xs font-bold">In Progress</h2>
+            </div>
+            <div class="">
+                <h1 class="text-white text-4xl">1,000</h1>
+            </div>
+        </div>
+        <div class="mr-3 p-5 flex flex-col justify-center align-center items-start border border-stone-700 rounded-md shadow-md">
+            <div class="">
+                <h2 class="text-stone-300 text-xs font-bold">Closed</h2>
+            </div>
+            <div class="">
+                <h1 class="text-white text-4xl">1,000</h1>
+            </div>
+        </div>
     </div>
     <div class="my-3">
         <div class="flex flex-row justify-center align-middle items-center w-full">
@@ -14,23 +48,27 @@
                 </form>
             </div>
             <div class="flex-grow"></div>
-            <a href="/{{ category.url }}/create" class="px-5 py-2 text-white font-semibold text-sm rounded bg-zinc-600 hover:bg-zinc-700">New {{ category.singularName }}</a>
+            <a href="/{{ category.url }}/create" class="px-5 py-2 text-white hover:text-stone-100 font-semibold text-sm rounded bg-stone-600 hover:bg-stone-700">New {{ category.singularName }}</a>
         </div>
     </div>
     <div class="my-3">
-        <div class="w-full border-x border-gray-300 shadow-sm">
+        <div class="w-full">
             <table class="w-full table-auto">
-                <thead class="border-y border-gray-300 bg-stone-200">
+                <thead class="border-b border-stone-700">
                     <tr>
-                        <th class="px-3 py-1.5 font-semibold text-md text-left">Header0</th>
-                        <th class="px-3 py-1.5 font-semibold text-md text-left">Header1</th>
+                        {% for header in category.table.headers %}
+                            <th class="px-3 py-3 text-white text-md text-left">{{ header }}</th>
+                        {% endfor %}
                     </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td class="px-3 py-3 text-sm border-b border-gray-300 bg-stone-50">Data0</td>
-                        <td class="px-3 py-3 text-sm border-b border-gray-300 bg-stone-50">Data1</td>
+                    {% for row in category.table.rows %}
+                    <tr class="hover:bg-stone-600">
+                        {% for data in row %}
+                            <td class="px-3 py-5 text-white text-sm border-b border-stone-700">{{ data }}</td>
+                        {% endfor %}
                     </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>

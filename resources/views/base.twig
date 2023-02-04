@@ -16,10 +16,12 @@
 
     <title>{{ title }}</title>
 </head>
-<body class="bg-stone-100">
-    {% block navbar %}{% endblock %}
+<body class="h-screen bg-stone-900">
+    <div class="h-full grid grid-cols-12 gap-none grid-flow-col grid-rows-1">
+        {% block navbar %}{% endblock %}
 
-    {% block content %}{% endblock %}
+        {% block content %}{% endblock %}
+    </div>
 </body>
 
 <!-- HTMX -->

@@ -12,4 +12,5 @@ define('CONFIG_PATH', __DIR__ . '/../config');
 define('STORAGE_PATH', __DIR__ . '/../var');
 define('VIEWS_PATH', __DIR__ . '/../resources/views');
 
-define('CSS_URI', '/css');
+define('CSS_URL', '/css');
+define('ASSETS_URL', '/assets');

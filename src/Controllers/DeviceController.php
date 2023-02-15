@@ -28,6 +28,6 @@ class DeviceController extends Controller
             ]
         ];
 
-        return $this->render($response, '/category_view.twig', $twig_data);
+        return $this->render($response, '/table_view.twig', $twig_data);
     }
 }

@@ -11,19 +11,12 @@ declare(strict_types = 1);
 
 namespace App\Controllers;
 
-use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Container\ContainerInterface;
+use Psr\Http\Message\RequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
+use Slim\Views\Twig;
 
-class DashboardController extends Controller
+class DashboardController
 {
-    public function dashboardView(Request $request, Response $response)
-    {
-        $twig_data = [
-            'css_path' => CSS_URL,
-            'assets_path' => ASSETS_URL,
-            'title' => 'Dashboard - RSMS'
-        ];
-
-        return $this->render($response, '/dashboard_view.twig', $twig_data);
-    }
+    
 }

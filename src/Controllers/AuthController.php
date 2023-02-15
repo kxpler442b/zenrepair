@@ -1,86 +1,65 @@
 <?php
 
 /**
- * Base controller class.
+ * Authentication Controller.
  * 
  * @author B Moss <P2595849@mydmu.ac.uk>
- * Date: 02/01/23
+ * Date: 11/02/23
  */
 
 declare(strict_types = 1);
 
 namespace App\Controllers;
 
-use App\Config;
 use App\Services\AuthService;
-
-use Slim\Psr7\Request;
-use Slim\Psr7\Response;
+use App\Services\UserService;
 use Psr\Container\ContainerInterface;
+use Psr\Http\Message\ServerRequestInterface as Request;
+use Psr\Http\Message\ResponseInterface as Response;
+use Slim\Views\Twig;
 
 class AuthController
 {
-    protected ContainerInterface $container;
-    protected AuthService $authService;
+    private readonly ContainerInterface $container;
+    private readonly UserService $userService;
+    private readonly AuthService $authService;
+    private readonly Twig $twig;
 
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-        $this->authService = new AuthService($this, $container->get(Config::class));
+        $this->userService = $container->get(UserService::class);
+        $this->authService = $container->get(AuthService::class);
+        $this->twig = $container->get(Twig::class);
     }
 
     public function __destruct() {}
 
-    public function getContainer() : ContainerInterface
-    {
-        return $this->container;
-    }
-
     public function index(Request $request, Response $response) : Response
     {
-        return $response
-            ->withHeader('Location', '/login')
-            ->withStatus(302);
+        $twig_data = [
+            'css_url' => CSS_URL,
+            'assets_url' => ASSETS_URL,
+            'title' => 'Log In - RSMS'
+        ];
+
+        return $this->twig->render($response, 'auth_view.twig', $twig_data);
     }
 
-    public function redirect(Request $request, Response $response) : Response
+    public function authUser(Request $request, Response $response) : Response
     {
-        $_SESSION['state'] = bin2hex(random_bytes(5));
-        $url = $this->authService->buildAuthorizeUrl($_SESSION['state']);
+        $email = $_POST['email'];
+        $password = $_POST['password'];
 
-        var_dump($url);
-
-        return $response
-            ->withHeader('Location', $url)
-            ->withStatus(302);
-    }
-
-    public function callback(Request $request, Response $response) : Response
-    {
-        $result = $this->authService->authorizeUser();
-        
-        if (isset($result['error']))
+        if ($this->authService->authUserByPassword($email, $password))
         {
-            // $this->logger->error($result['error']);
-
-            return $response
-                ->withHeader('Location', '/login')
-                ->withStatus(302);
+            return $response->withHeader('Location', '/tickets')
+                            ->withStatus(302);
         }
-        else 
+        else
         {
-            return $response
-                ->withHeader('Location', '/dashboard')
-                ->withStatus(302);
+            return $response->withHeader('Location', '/')
+                            ->withStatus(302);
         }
-    }
-
-    public function logout(Request $request, Response $response) : Response
-    {
-        session_destroy();
-
-        return $response
-                ->withHeader('Location', '/login')
-                ->withStatus(302);
     }
 }

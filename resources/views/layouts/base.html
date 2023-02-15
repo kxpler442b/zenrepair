@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta author="Benjamin Moss">
+    <meta author="Benjamin Moss"
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,22 +9,16 @@
     <!-- Source Pro Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:wght@400;700&family=Source+Sans+Pro:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Source+Code+Pro:ital,wght@0,400;0,600;0,800;1,400&family=Source+Sans+Pro:ital,wght@0,400;0,600;0,700;0,900;1,400&display=swap" rel="stylesheet">
 
     <!-- Tailwind CSS -->
     <link rel="stylesheet" type="text/css" href="{{ css_path }}/output.css">
 
     <title>{{ title }}</title>
 </head>
-<body class="h-screen bg-stone-900">
-    <div class="h-full grid grid-cols-12 gap-none grid-flow-col grid-rows-1">
-        {% block navbar %}{% endblock %}
+<body class="bg-stone-100">
+    {% block navbar %} {% endblock %}
 
-        {% block content %}{% endblock %}
-    </div>
+    {% block content %} {% endblock %}
 </body>
-
-<!-- HTMX -->
-<script src="{{ js_path }}/htmx.min.js"></script>
-
 </html>

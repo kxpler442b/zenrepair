@@ -13,6 +13,4 @@ use Slim\App;
 
 $container = require __DIR__ . '/../bootstrap.php';
 
-session_start();
-
 $container->get(App::class)->run();

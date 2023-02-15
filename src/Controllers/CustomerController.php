@@ -26,15 +26,15 @@ class CustomerController extends Controller
                 'url' => 'customers',
                 'singularName' => 'Customer',
                 'table' => [
-                    'headers' => ['First Name', 'Last Name', 'Email', 'Mobile', 'Date Created', 'Last Updated'],
+                    'headers' => ['Name', 'Email', 'Mobile', 'Date Created', 'Last Updated'],
                     'rows' => [
-                        0 => ['Eugene', 'Krabs', 'eugene.krabs@email.com', '07123456789', '01-01-2023 12:00', '01-01-2023 12:00'],
-                        1 => ['Kermit', 'Frog', 'kermit.frog@email.com', '07123456789', '01-01-2023 12:00', '01-01-2023 12:00'],
+                        '63e52f0bb89e9' => ['Joe Bloggs', ['eugene.krabs@email.com', '07123456789', '01-01-2023 12:00', '01-01-2023 12:00']],
+                        '63e52f0bb89a1' => ['Jane Bloggs', ['kermit.frog@email.com', '07123456789', '01-01-2023 12:00', '01-01-2023 12:00']]
                     ]
                 ]
             ]
         ];
 
-        return $this->render($response, '/category_view.twig', $twig_data);
+        return $this->render($response, '/table_view.twig', $twig_data);
     }
 }

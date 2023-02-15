@@ -15,6 +15,7 @@ use Slim\Views\Twig;
 use Doctrine\DBAL\DriverManager;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\ORMSetup;
+use \Doctrine\DBAL\Types\Type;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Container\ContainerInterface;
 use App\Config;
@@ -42,6 +43,8 @@ return [
     ),
     EntityManager::class => function (Config $config)
     {
+        Type::addType('uuid', 'Ramsey\Uuid\Doctrine\UuidType');
+
         $orm_config = ORMSetup::createAttributeMetadataConfiguration(
             (array) $config->get('doctrine.entity_dir'),
             $config->get('doctrine.dev_mode')

@@ -10,9 +10,10 @@
 use Dotenv\Dotenv;
 
 require __DIR__ . '/vendor/autoload.php';
-require __DIR__ . '/config/constants.php';
 
 $dotenv = Dotenv::createImmutable(__DIR__);
 $dotenv->load();
+
+require __DIR__ . '/config/constants.php';
 
 return require CONFIG_PATH . '/container/container.php';

@@ -10,17 +10,18 @@
 declare(strict_types = 1);
 
 use Slim\App;
-use Slim\Factory\AppFactory;
-use Slim\Views\Twig;
-use Doctrine\DBAL\DriverManager;
-use Doctrine\ORM\EntityManager;
-use Doctrine\ORM\ORMSetup;
-use \Doctrine\DBAL\Types\Type;
-use Psr\Http\Message\ResponseFactoryInterface;
-use Psr\Container\ContainerInterface;
 use App\Config;
-
+use Slim\Views\Twig;
 use function DI\create;
+use Doctrine\ORM\ORMSetup;
+use Slim\Factory\AppFactory;
+use \Doctrine\DBAL\Types\Type;
+use Doctrine\ORM\EntityManager;
+use Doctrine\DBAL\DriverManager;
+use Psr\Container\ContainerInterface;
+use SlimSession\Helper as SessionHelper;
+
+use Psr\Http\Message\ResponseFactoryInterface;
 
 return [
     App::class => function (ContainerInterface $container)
@@ -67,4 +68,5 @@ return [
         return $twig;
     },
     ResponseFactoryInterface::class => fn(App $app) => $app->getResponseFactory(),
+    SessionHelper::class => function () {}
 ];

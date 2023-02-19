@@ -1,0 +1,17 @@
+<table class="w-full table-auto">
+    <thead>
+        {% for header in table.headers %}
+            <th class="px-4 py-3 text-left text-sm text-stone-600 font-bold border-y border-stone-200 bg-stone-100">{{ header }}</th>
+        {% endfor %}
+    </thead>
+    <tbody class="divide-y divide-stone-200">
+        {% for key, item in table.rows %}
+        <tr class="hover:bg-stone-100">
+            <td class="px-4 py-5 text-stone-700 text-sm border-collapse"><a class="hover:underline" href="{{ controller.base_url }}/view/{{ key }}">{{ item[0] }}</a></td>
+            {% for key, value in item[1] %}
+                <td class="px-4 py-5 text-stone-700 text-sm border-collapse">{{ value }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>

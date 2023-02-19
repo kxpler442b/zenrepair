@@ -9,8 +9,6 @@
 
 declare(strict_types = 1);
 
-use Ramsey\Uuid\Doctrine\UuidType;
-
 return [
     'displayErrorDetails' => true,
     'logErrors' => false,
@@ -19,16 +17,21 @@ return [
         'dev_mode' => true,
         'cache_dir' => STORAGE_PATH . '/cache/doctrine',
         'entity_dir' => [APP_PATH . '/Domain'],
-        'types' => [
-            UuidType::NAME => UuidType::class,
-        ],
         'connection' => [
             'driver' => 'pdo_mysql',
-            'host' => $_ENV['DB_HOST'],
-            'port' => $_ENV['DB_PORT'],
-            'dbname' => $_ENV['DB_NAME'],
-            'user' => $_ENV['DB_USER'],
-            'password' => $_ENV['DB_PASS']
+            'host' => $_ENV['MARIADB_HOST'],
+            'port' => $_ENV['MARIADB_PORT'],
+            'dbname' => $_ENV['MARIADB_DATABASE'],
+            'user' => $_ENV['MARIADB_USER'],
+            'password' => $_ENV['MARIADB_PASSWORD']
         ]
+    ],
+    'session' => [
+
+    ],
+    'redis' => [
+        'host' => $_ENV['REDIS_HOST'],
+        'port' => $_ENV['REDIS_PORT'],
+        'password' => $_ENV['REDIS_PASSWORD']
     ]
 ];

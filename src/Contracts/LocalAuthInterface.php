@@ -13,7 +13,7 @@ namespace App\Contracts;
 
 use App\Domain\User;
 
-interface UserAuthInterface
+interface LocalAuthInterface
 {
     public function authUserByPassword(string $email, string $password);
 

@@ -1,10 +1,11 @@
 <?php
 
 /**
- * Tickets Controller.
+ * Example controller layout.
  * 
- * @author B Moss <P2595849@mydmu.ac.uk>
- * Date: 02/01/23
+ * @author Benjamin Moss <p2595849@my365.dmu.ac.uk>
+ * 
+ * Date: 17/02/23
  */
 
 declare(strict_types = 1);
@@ -12,58 +13,92 @@ declare(strict_types = 1);
 namespace App\Controllers;
 
 use App\Services\TicketService;
-use Psr\Container\ContainerInterface;
 use Slim\Views\Twig;
-use Psr\Http\Message\ServerRequestInterface as Request;
-use Psr\Http\Message\ResponseInterface as Response;
+use Psr\Container\ContainerInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 class TicketController
 {
     private readonly ContainerInterface $container;
-    private readonly Twig $twig;
     private readonly TicketService $ticketService;
+    private readonly Twig $twig;
 
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-        $this->twig = $container->get(Twig::class);
         $this->ticketService = $container->get(TicketService::class);
+        $this->twig = $container->get(Twig::class);
     }
 
-    public function tableView(Request $request, Response $response) : Response
+    public function __destruct() {}
+
+    public function index(RequestInterface $request, ResponseInterface $response)
     {
         $twig_data = [
-            'css_path' => CSS_URL,
-            'assets_path' => ASSETS_URL,
+            'css_url' => CSS_URL,
+            'assets_url' => ASSETS_URL,
+            'htmx_url' => HTMX_URL,
             'title' => 'Tickets - RSMS',
-            'context' => [
+            'controller' => [
+                'base_url' => '/tickets',
                 'name' => 'ticket',
                 'Name' => 'Ticket'
-            ],
-            'table' => [
-                'headers' => ['Subject', 'Status', 'Technician', 'Customer', 'Device', 'Date Created', 'Last Updated'],
-                'rows' => [
-                    '63e52f0bb89e9' => ['Screen Replacement', ['In Progress', 'Benjamin Moss', 'Eugene Krabs', 'iPhone 7', '01-01-2023 12:00', '01-01-2023 12:00']],
-                    '63e52f0bb89a1' => ['Battery Replacement', ['Not Started', 'Benjamin Moss', 'Kermit Frog', 'iPhone 6s', '01-01-2023 12:00', '01-01-2023 12:00']]
-                ]
             ]
         ];
 
         return $this->twig->render($response, '/table_view.twig', $twig_data);
     }
 
-    public function createTicketView(Request $request, Response $response) : Response
+    public function createView(RequestInterface $request, ResponseInterface $response)
     {
         $twig_data = [
-            'css_path' => CSS_URL,
-            'assets_path' => ASSETS_URL,
+            'css_url' => CSS_URL,
+            'assets_url' => ASSETS_URL,
+            'htmx_url' => HTMX_URL,
             'title' => 'Tickets - RSMS',
-            'category' => [
-                'url' => 'tickets',
-                'singularName' => 'Ticket'
+            'controller' => [
+                'base_url' => '/tickets',
+                'name' => 'ticket',
+                'Name' => 'Ticket'
             ]
         ];
 
         return $this->twig->render($response, '/create_view.twig', $twig_data);
+    }
+
+    public function getTable(RequestInterface $request, ResponseInterface $response)
+    {
+        $rows = [];
+        $tickets = $this->ticketService->getAll();
+
+        foreach($tickets as &$ticket)
+        {
+            $rows[$ticket->getId()->toString()] = array($ticket->getSubject(), [$ticket->getStatus(), 'null', 'null', 'null', $ticket->getCreated()->format('d-m-Y'), $ticket->getUpdated()->format('d-m-Y H:i:s')]);
+        }
+
+        $twig_data = [
+            'controller' => [
+                'base_url' => '/customers',
+                'name' => 'ticket',
+                'Name' => 'Customer'
+            ],
+            'table' => [
+                'headers' => ['Subject', 'Status', 'Created By', 'Device', 'Customer', 'Date Created', 'Last Updated'],
+                'rows' => $rows
+            ]
+        ];
+
+        return $this->twig->render($response, '/frags/table.html', $twig_data);
+    }
+
+    public function update(RequestInterface $request, ResponseInterface $response)
+    {
+        
+    }
+
+    public function delete(RequestInterface $request, ResponseInterface $response)
+    {
+        
     }
 }

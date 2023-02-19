@@ -27,7 +27,7 @@ class UserService implements UserProviderInterface
 
     public function __destruct() {}
 
-    public function createUser(array $data)
+    public function create(array $data) : void
     {
         $user = new User;
 
@@ -41,20 +41,28 @@ class UserService implements UserProviderInterface
         $user->setUpdated();
 
         $this->em->persist($user);
-        $this->em->flush($user);
+        $this->em->flush();
     }
 
-    public function getById(UuidInterface $uuid)
+    public function getById(UuidInterface $id): User
     {
-        $this->em->find(User::class, $uuid);
-
-        return $this;
+        return $this->em->find(User::class, $id);
     }
 
-    public function getByEmail(string $email)
+    public function getByEmail(string $email): User
     {
-        $this->em->find(User::class, $email);
+        return $this->em->getRepository(User::class)->findOneBy(['email' => $email]);
+    }
 
-        return $this;
+    public function update(UuidInterface $id, array $data): void
+    {
+        $customer = $this->em->find(User::class, $id);
+
+        $customer->setFirstName($data['first_name']);
+    }
+
+    public function delete(UuidInterface $id): void
+    {
+        
     }
 }

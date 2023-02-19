@@ -13,11 +13,11 @@ namespace App\Services;
 
 use App\Domain\User;
 use App\Domain\Customer;
-use App\Contracts\UserAuthInterface;
+use App\Contracts\LocalAuthInterface;
 
 use Doctrine\ORM\EntityManager;
 
-class UserAuthService implements UserAuthInterface
+class LocalAuthService implements LocalAuthInterface
 {
     private readonly EntityManager $em;
 

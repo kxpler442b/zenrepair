@@ -9,6 +9,7 @@
 
 declare(strict_types = 1);
 
+use App\Controllers\ApiController;
 use Slim\App;
 use App\Controllers\AuthController;
 use App\Controllers\DeviceController;
@@ -17,26 +18,54 @@ use Slim\Routing\RouteCollectorProxy;
 
 use App\Controllers\CustomerController;
 use App\Controllers\DashboardController;
+use App\Controllers\DebugController;
 
 return function (App $app)
 {
-    $app->group('', function (RouteCollectorProxy $auth) {
-        $auth->get('/', [AuthController::class, 'index']);
-        $auth->post('/', [AuthController::class, 'authUser']);
+    $app->group('/', function (RouteCollectorProxy $auth) {
+        $auth->get('', [AuthController::class, 'index']);
+        $auth->post('', [AuthController::class, 'authUser']);
         $auth->get('/logout', [AuthController::class, 'logout']);
     });
 
-    $app->get('/dashboard', [DashboardController::class, 'dashboardView']);
+    $app->group('/dashboard', function (RouteCollectorProxy $dashboard) {
+        $dashboard->get('', [DashboardController::class, 'index']);
+    });
 
     $app->group('/tickets', function (RouteCollectorProxy $tickets) {
-        $tickets->get('', [TicketController::class, 'tableView']);
+        $tickets->get('', [TicketController::class, 'index']);
+
         $tickets->get('/create', [TicketController::class, 'createView']);
         $tickets->post('/create/{id}', [TicketController::class, 'createTicket']);
+
         $tickets->get('/view/{id}', [TicketController::class, 'ticketView']);
+        $tickets->get('/get/table', [TicketController::class, 'getTable']);
+
         $tickets->post('/delete/{id}', [TicketController::class, 'deleteTicket']);
     });
 
-    $app->get('/customers', [CustomerController::class, 'customersView']);
+    $app->group('/customers', function (RouteCollectorProxy $customers) {
+        $customers->get('', [CustomerController::class, 'index']);
 
-    $app->get('/devices', [DeviceController::class, 'devicesView']);
+        $customers->get('/create', [CustomerController::class, 'viewCreate']);
+        $customers->post('/create', [CustomerController::class, 'create']);
+
+        $customers->get('/view/{id}', [CustomerController::class, 'viewCustomer']);
+        $customers->get('/get/table', [CustomerController::class, 'getTable']);
+        $customers->get('/get/record/{id}', [CustomerController::class, 'getRecord']);
+
+        $customers->post('/delete/{id}', [CustomerController::class, 'deleteTicket']);
+    });
+
+    $app->group('/devices', function (RouteCollectorProxy $devices) {
+        $devices->get('', [DeviceController::class, 'index']);
+
+        $devices->get('/create', [DeviceController::class, 'createView']);
+        $devices->post('/create', [DeviceController::class, 'createDevice']);
+        
+        $devices->get('/view/{id}', [DeviceController::class, 'deviceView']);
+        $devices->get('/get/table', [DeviceController::class, 'getTable']);
+        
+        $devices->post('/delete/{id}', [DeviceController::class, 'deleteDevice']);
+    });
 };

@@ -1,26 +1,27 @@
 <?php
 
 /**
- * User Provider Interface.
+ * Customer provider interface.
  * 
  * @author B Moss <P2595849@mydmu.ac.uk>
- * Date: 09/02/23
+ * 
+ * Date: 15/02/23
  */
 
 declare(strict_types = 1);
 
 namespace App\Contracts;
 
-use App\Domain\User;
+use App\Domain\Customer;
 use Ramsey\Uuid\Rfc4122\UuidInterface;
 
-interface UserProviderInterface
+interface CustomerProviderInterface
 {
     public function create(array $data) : void;
 
-    public function getById(string $uuid) : User;
+    public function getById(string $id) : Customer;
 
-    public function getByEmail(string $email) : User;
+    public function getByEmail(string $email) : Customer;
 
     public function update(UuidInterface $id, array $data) : void;
 

@@ -1,7 +1,10 @@
-<div class="px-64 z-0 relative flex flex-row justify-center align-middle items-center">
-    <div class="w-full py-3 flex flex-col justify-center align-middle items-center">
-        <div class="w-full my-3">
-            <h2 class="text-teal-600 text-3xl font-bold">Create a new {{ category.singularName }}</h2>
-        </div>
+<div class="h-full px-8 py-6 z-0 flex flex-col justify-start align-middle items-center rounded-tl-xl bg-white overflow-y-scroll">
+    <div class="w-full mb-2">
+        <h2 class="text-slate-800 text-3xl font-bold">Create new {{ controller.Name }}</h2>
+    </div>
+    <div class="w-full">
+        <form method="POST">
+            <input type="text" name="" class="w-1/2 py-2 text-sm text-stone-600 border-stone-200 rounded-md focus:ring-sky-600 focus:border-sky-600">
+        </form>
     </div>
 </div>

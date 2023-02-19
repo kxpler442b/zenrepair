@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Tickets Service.
+ * Ticket Service.
  * 
  * @author B Moss <P2595849@mydmu.ac.uk>
  * Date: 02/01/23
@@ -13,37 +13,55 @@ namespace App\Services;
 
 use App\Domain\Ticket;
 use Doctrine\ORM\EntityManager;
+use Ramsey\Uuid\Rfc4122\UuidInterface;
 
 class TicketService
 {
-    private readonly EntityManager $entityManager;
+    private readonly EntityManager $em;
 
-    public function __construct(EntityManager $entityManager)
+    public function __construct(EntityManager $em)
     {
-        $this->entityManager = $entityManager;
+        $this->em = $em;
     }
 
     public function __destruct() {}
 
-    public function create(string $subject)
+    public function create(array $data): void
     {
-        $ticket = new Ticket();
+        $ticket = new Ticket;
 
-        $ticket->setSubject($subject);
+        $ticket->setSubject($data['status']);
+        $ticket->setStatus($data['status'] ?? 0);
+        $ticket->setUser($data['user']);
+        $ticket->setCustomer($data['customer']);
+        $ticket->setDevice($data['device']);
+        $ticket->setCreated();
+        $ticket->setUpdated();
+        
+        $this->em->persist($ticket);
+        $this->em->flush();
+
     }
 
-    public function getTicketById(string $id)
+    public function getById(string $id): Ticket
     {
-        $this->entityManager->find(Ticket::class, $id);
+        return $this->em->find(Ticket::class, $id);
     }
 
-    public function update()
+    public function getAll() : array
     {
-
+        return $this->em->getRepository(Ticket::class)->findAll();
     }
 
-    public function delete()
+    public function update(string $id, array $data): void
     {
+        $ticket = $this->em->find(Ticket::class, $id);
 
+        $ticket->setSubject($data['subject']);
+    }
+
+    public function delete(UuidInterface $id): void
+    {
+        
     }
 }

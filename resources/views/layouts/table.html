@@ -1,37 +1,31 @@
-<div class="px-64 z-0 relative flex flex-row justify-center align-middle items-center">
-    <div class="w-full py-3 flex flex-col justify-center align-middle items-center">
-        <div class="w-full my-3">
-            <h2 class="text-teal-600 text-3xl font-bold">{{ context.Name }}s</h2>
-        </div>
-        <div class="w-full my-3 flex flex-row justify-start align-middle items-center">
-            <a class="mr-3 pl-3 pr-4 py-2 inline-flex flex-row justify-evenly align-middle items-center text-sm text-white bg-teal-600 hover:bg-teal-700" href="/{{ category.url }}/create">
+<div class="h-full px-8 py-6 z-0 flex flex-col justify-start align-middle items-center rounded-tl-xl bg-white overflow-y-scroll">
+    <div class="w-full mb-2">
+        <h2 class="text-slate-900 text-3xl font-bold">{{ controller.Name }}s</h2>
+    </div>
+    <div class="w-full my-3 border border-stone-200 bg-white rounded-md shadow-sm">
+        <div class="w-full my-3 px-4 flex flex-row justify-start align-middle items-center">
+            <div class="flex-grow">
+                <form method="POST">
+                    <input class="w-1/2 py-2 text-sm text-stone-600 border-stone-200 rounded-md focus:ring-violet-600 focus:border-violet-600" type="text" placeholder="Search {{ controller.Name }}s">
+                </form>
+            </div>
+            <a class="pl-3 pr-4 py-2 inline-flex flex-row justify-evenly align-middle items-center text-sm text-white rounded-md bg-violet-600 hover:bg-violet-700" href="{{ controller.base_url }}/create">
                 <svg class="mr-3 h-5 w-5" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path d="M12 4.5v15m7.5-7.5h-15" stroke-linecap="round" stroke-linejoin="round"></path>
                 </svg>
-                New {{ context.name }}
+                New {{ controller.name }}
             </a>
-            <div class="flex-grow">
-                <form method="POST">
-                    <input class="py-2 text-sm text-stone-600 border-stone-200 focus:ring-teal-600 focus:border-teal-600" type="text" placeholder="Search {{ category.url }}">
-                </form>
-            </div>
         </div>
-        <div class="w-full my-3 border-x border-stone-300 bg-white shadow-sm">
+        <div hx-get="{{ controller.base_url }}/get/table" hx-trigger="load" hx-swap="outerHTML">
+            <!-- Load table fragment with HTMX -->
             <table class="w-full table-auto">
                 <thead>
-                    {% for header in table.headers %}
-                        <th class="px-3 py-3 text-left text-sm text-teal-600 font-bold border-y border-stone-300 bg-stone-100">{{ header }}</th>
-                    {% endfor %}
+                    <th class="px-4 py-3 text-left text-sm text-stone-600 font-bold border-y border-stone-200 bg-stone-100"></th>
                 </thead>
-                <tbody>
-                    {% for key, item in table.rows %}
-                    <tr class="hover:bg-stone-200">
-                        <td class="px-3 py-5 text-stone-700 text-sm border-b border-stone-300"><a class="hover:underline" href="/{{ category.url }}/{{ key }}">{{ item[0] }}</a></td>
-                        {% for key, value in item[1] %}
-                            <td class="px-3 py-5 text-stone-700 text-sm border-b border-stone-300">{{ value }}</td>
-                        {% endfor %}
+                <tbody class="divide-y divide-stone-200">
+                    <tr class="hover:bg-stone-100">
+                        <td class="px-4 py-5 text-stone-700 text-sm border-collapse"></td>
                     </tr>
-                    {% endfor %}
                 </tbody>
             </table>
         </div>

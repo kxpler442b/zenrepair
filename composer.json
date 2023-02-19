@@ -25,6 +25,7 @@
         "vlucas/phpdotenv": "^5.5",
         "slim/twig-view": "^3.3",
         "symfony/cache": "^6.2",
-        "ramsey/uuid-doctrine": "^2.0"
+        "ramsey/uuid-doctrine": "^2.0",
+        "bryanjhv/slim-session": "~4.0"
     }
 }

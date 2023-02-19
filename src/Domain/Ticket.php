@@ -23,7 +23,8 @@ use Doctrine\ORM\Mapping\OneToOne;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\UuidInterface;
 
-use DateTimeImmutable;
+use DateTime;
+use Doctrine\Common\Collections\Collection;
 
 #[Entity, Table(name: 'tickets')]
 class Ticket
@@ -42,29 +43,22 @@ class Ticket
     #[Column(name:'notes', type:'json')]
     private string $notes;
 
-    #[Column(name: 'user')]
     #[ManyToOne(targetEntity: User::class, inversedBy: 'tickets')]
     private User|null $user;
 
-    #[Column(name: 'customer')]
     #[ManyToOne(targetEntity: Customer::class, inversedBy: 'tickets')]
     private Customer|null $customer;
 
-    #[Column(name: 'device')]
     #[OneToOne(targetEntity: Device::class, inversedBy: 'ticket')]
-    private Device|null $device;
+    private Collection|null $device;
 
     #[Column(name:'created', type:'datetime')]
-    private DateTimeImmutable $created;
+    private DateTime $created;
 
     #[Column(name:'updated', type:'datetime')]
-    private DateTimeImmutable $updated;
+    private DateTime $updated;
 
-    public function __construct()
-    {
-        $this->created = new DateTimeImmutable('now');
-        $this->updated = new DateTimeImmutable('now');
-    }
+    public function __construct() {}
 
     public function getId() : UuidInterface | string
     {
@@ -121,7 +115,7 @@ class Ticket
         $this->customer = $customer;
     }
 
-    public function getDevice() : Device
+    public function getDevice() : Collection
     {
         return $this->device;
     }
@@ -131,13 +125,35 @@ class Ticket
         $this->device = $device;
     }
 
-    public function getCreated() : DateTimeImmutable
+    /**
+     * Get the value of created
+     */ 
+    public function getCreated() : DateTime
     {
         return $this->created;
     }
 
-    public function getUpdated() : DateTimeImmutable
+    /**
+     * Set the value of created
+     */ 
+    public function setCreated() : void
+    {
+        $this->created = new DateTime('now');
+    }
+
+    /**
+     * Get the value of updated
+     */ 
+    public function getUpdated() : DateTime
     {
         return $this->updated;
+    }
+
+    /**
+     * Set the value of updated
+     */ 
+    public function setUpdated() : void
+    {
+        $this->updated = new DateTime('now');
     }
 }

@@ -10,14 +10,20 @@
 declare(strict_types = 1);
 
 use Slim\App;
-use Slim\Views\TwigMiddleware;
-use Slim\Views\Twig;
 use App\Config;
+use Slim\Views\Twig;
+use Slim\Middleware\Session;
+use Slim\Views\TwigMiddleware;
 
 return function (App $app)
 {
     $container = $app->getContainer();
-    // $config = $container->get(Config::class);
+    $config = $container->get(Config::class);
 
     $app->add(TwigMiddleware::create($app, $container->get(Twig::class)));
+    $app->add(new Session([
+        'name' => 'rsms',
+        'autorefresh' => true,
+        'lifetime' => '1 hour'
+    ]));
 };

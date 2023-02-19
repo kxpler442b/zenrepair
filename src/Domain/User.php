@@ -23,6 +23,8 @@ use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Ramsey\Uuid\UuidInterface;
 
 use DateTime;
+use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping\JoinTable;
 
 #[Entity, Table(name: 'users')]
 class User
@@ -50,9 +52,8 @@ class User
     #[Column(name: 'is_admin', type: 'boolean')]
     private bool $is_admin;
 
-    #[Column(name:'tickets', nullable: true)]
     #[OneToMany(targetEntity: Ticket::class, mappedBy: 'user')]
-    private Ticket $tickets;
+    private Collection|null $tickets;
 
     #[Column(name:'created', type:'datetime')]
     private DateTime $created;
@@ -190,7 +191,7 @@ class User
     /**
      * Get the value of tickets
      */ 
-    public function getTickets() : Ticket
+    public function getTickets() : Collection
     {
         return $this->tickets;
     }
@@ -217,8 +218,6 @@ class User
 
     /**
      * Set the value of created
-     *
-     * @return  self
      */ 
     public function setCreated() : void
     {
@@ -235,8 +234,6 @@ class User
 
     /**
      * Set the value of updated
-     *
-     * @return  self
      */ 
     public function setUpdated() : void
     {

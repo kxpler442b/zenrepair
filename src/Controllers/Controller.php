@@ -17,7 +17,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-class DashboardController
+abstract class Controller
 {
     private readonly ContainerInterface $container;
     private readonly Twig $twig;
@@ -36,15 +36,10 @@ class DashboardController
             'css_url' => CSS_URL,
             'assets_url' => ASSETS_URL,
             'htmx_url' => HTMX_URL,
-            'title' => 'Dashboard - RSMS',
-            'controller' => [
-                'base_url' => '/dashboard',
-                'name' => 'dashboard',
-                'Name' => 'Dashboard'
-            ]
+            'title' => 'Example'
         ];
 
-        return $this->twig->render($response, '/dashboard_view.twig', $twig_data);
+        return $this->twig->render($response, '/example_view.twig', $twig_data);
     }
 
     public function create(RequestInterface $request, ResponseInterface $response)

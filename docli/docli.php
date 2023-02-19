@@ -26,7 +26,7 @@ $container = require __DIR__ . '/../bootstrap.php';
 
 $entityManager = $container->get(EntityManager::class);
 
-$config = new PhpFile('migrations.php');
+$config = new PhpFile(__DIR__ . '/migrations.php');
 
 $dependencyFactory = DependencyFactory::fromEntityManager($config, new ExistingEntityManager($entityManager));
 

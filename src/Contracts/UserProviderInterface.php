@@ -12,7 +12,6 @@ declare(strict_types = 1);
 namespace App\Contracts;
 
 use App\Domain\User;
-use Ramsey\Uuid\Rfc4122\UuidInterface;
 
 interface UserProviderInterface
 {
@@ -22,7 +21,7 @@ interface UserProviderInterface
 
     public function getByEmail(string $email) : User;
 
-    public function update(UuidInterface $id, array $data) : void;
+    public function update(string $id, array $data) : void;
 
-    public function delete(UuidInterface $id) : void;
+    public function delete(string $id) : void;
 }

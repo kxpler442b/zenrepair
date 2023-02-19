@@ -23,7 +23,7 @@ interface CustomerProviderInterface
 
     public function getByEmail(string $email) : Customer;
 
-    public function update(UuidInterface $id, array $data) : void;
+    public function update(string $id, array $data) : void;
 
-    public function delete(UuidInterface $id) : void;
+    public function delete(string $id) : void;
 }

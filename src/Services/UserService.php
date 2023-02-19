@@ -44,7 +44,7 @@ class UserService implements UserProviderInterface
         $this->em->flush();
     }
 
-    public function getById(UuidInterface $id): User
+    public function getById(string $id): User
     {
         return $this->em->find(User::class, $id);
     }
@@ -54,14 +54,14 @@ class UserService implements UserProviderInterface
         return $this->em->getRepository(User::class)->findOneBy(['email' => $email]);
     }
 
-    public function update(UuidInterface $id, array $data): void
+    public function update(string $id, array $data): void
     {
         $customer = $this->em->find(User::class, $id);
 
         $customer->setFirstName($data['first_name']);
     }
 
-    public function delete(UuidInterface $id): void
+    public function delete(string $id): void
     {
         
     }

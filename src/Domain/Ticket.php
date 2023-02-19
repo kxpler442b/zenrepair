@@ -3,7 +3,8 @@
 /**
  * Ticket entity mapping.
  * 
- * @author B Moss <P2595849@mydmu.ac.uk>
+ * @author B Moss <p2595849@mydmu.ac.uk>
+ * 
  * Date: 02/01/23
  */
 
@@ -11,20 +12,20 @@ declare(strict_types = 1);
 
 namespace App\Domain;
 
-use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\Table;
-use Doctrine\ORM\Mapping\Id;
-use Doctrine\ORM\Mapping\Column;
-use Doctrine\ORM\Mapping\GeneratedValue;
-use Doctrine\ORM\Mapping\CustomIdGenerator;
-use Doctrine\ORM\Mapping\ManyToOne;
-use Doctrine\ORM\Mapping\OneToOne;
-
-use Ramsey\Uuid\Doctrine\UuidGenerator;
-use Ramsey\Uuid\UuidInterface;
-
 use DateTime;
+use Doctrine\ORM\Mapping\Id;
+use Ramsey\Uuid\UuidInterface;
+use Doctrine\ORM\Mapping\Table;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\OneToOne;
+use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\OneToMany;
+use Ramsey\Uuid\Doctrine\UuidGenerator;
+use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping\CustomIdGenerator;
+use Doctrine\Common\Collections\ArrayCollection;
 
 #[Entity, Table(name: 'tickets')]
 class Ticket
@@ -34,14 +35,14 @@ class Ticket
     #[CustomIdGenerator(class: UuidGenerator::class)]
     private UuidInterface|string $id;
 
-    #[Column(name:'subject', type:'string')]
-    private string $subject;
+    #[Column(name:'title', type:'string')]
+    private string $title;
 
     #[Column(name:'status', type:'integer')]
     private int $status;
 
-    #[Column(name:'notes', type:'json')]
-    private string $notes;
+    #[OneToMany(targetEntity: Note::class, mappedBy: 'ticket')]
+    private Collection|null $notes;
 
     #[ManyToOne(targetEntity: User::class, inversedBy: 'tickets')]
     private User|null $user;
@@ -50,7 +51,7 @@ class Ticket
     private Customer|null $customer;
 
     #[OneToOne(targetEntity: Device::class, inversedBy: 'ticket')]
-    private Collection|null $device;
+    private Device|null $device;
 
     #[Column(name:'created', type:'datetime')]
     private DateTime $created;
@@ -58,69 +59,113 @@ class Ticket
     #[Column(name:'updated', type:'datetime')]
     private DateTime $updated;
 
-    public function __construct() {}
+    public function __construct() 
+    {
+        $this->notes = new ArrayCollection();
+    }
 
-    public function getId() : UuidInterface | string
+    public function __destruct() {}
+
+    /**
+     * Get the value of id
+     */ 
+    public function getId()
     {
         return $this->id;
     }
 
-    public function getSubject() : string
+    /**
+     * Get the value of title
+     */ 
+    public function getTitle() : string
     {
-        return $this->subject;
+        return $this->title;
     }
 
-    public function setSubject(string $subject)
+    /**
+     * Set the value of title
+     */ 
+    public function setTitle(string $title) : void
     {
-        $this->subject = $subject;
+        $this->title = $title;
     }
 
+    /**
+     * Get the value of status
+     */ 
     public function getStatus() : int
     {
         return $this->status;
     }
 
-    public function setStatus(string $status)
+    /**
+     * Set the value of status
+     */ 
+    public function setStatus(int $status = 0)
     {
         $this->status = $status;
     }
 
-    public function getNotes() : string
+    /**
+     * Get the value of notes
+     */ 
+    public function getNotes() : Collection
     {
         return $this->notes;
     }
 
-    public function setNotes(string $notes)
+    /**
+     * Set the value of notes
+     */ 
+    public function setNotes($notes)
     {
-        
+        $this->notes = $notes;
     }
 
+    /**
+     * Get the value of user
+     */ 
     public function getUser() : User
     {
         return $this->user;
     }
 
+    /**
+     * Set the value of user
+     */ 
     public function setUser(User $user) : void
     {
         $this->user = $user;
     }
 
+    /**
+     * Get the value of customer
+     */ 
     public function getCustomer() : Customer
     {
         return $this->customer;
     }
 
-    public function setCustomer(Customer $customer) : void
+    /**
+     * Set the value of customer
+     */ 
+    public function setCustomer($customer) : void
     {
         $this->customer = $customer;
     }
 
-    public function getDevice() : Collection
+    /**
+     * Get the value of device
+     */ 
+    public function getDevice() : Device
     {
         return $this->device;
     }
 
-    public function setDevice(Device $device) : void
+    /**
+     * Set the value of device
+     */ 
+    public function setDevice(Device $device)
     {
         $this->device = $device;
     }

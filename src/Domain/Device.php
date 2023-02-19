@@ -11,21 +11,17 @@ declare(strict_types = 1);
 
 namespace App\Domain;
 
-use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\Table;
+use DateTime;
 use Doctrine\ORM\Mapping\Id;
+use Ramsey\Uuid\UuidInterface;
+use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\OneToOne;
+use Doctrine\ORM\Mapping\ManyToOne;
+use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\CustomIdGenerator;
-use Doctrine\ORM\Mapping\ManyToOne;
-use Doctrine\ORM\Mapping\OneToOne;
-
-use Ramsey\Uuid\Doctrine\UuidGenerator;
-use Ramsey\Uuid\UuidInterface;
-
-use DateTime;
-use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\PersistentCollection;
 
 #[Entity, Table(name: 'devices')]
 class Device
@@ -53,7 +49,7 @@ class Device
     #[ManyToOne(targetEntity: Customer::class, inversedBy: 'devices')]
     private Customer|null $customer;
 
-    #[OneToOne(targetEntity: Ticket::class, inversedBy: 'device')]
+    #[OneToOne(targetEntity: Ticket::class, mappedBy: 'device')]
     private Ticket|null $ticket;
 
     #[Column(name:'created', type:'datetime')]

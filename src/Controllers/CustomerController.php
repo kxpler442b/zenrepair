@@ -85,6 +85,18 @@ class CustomerController
         $this->customerService->create($customer);
     }
 
+    public function getCreator(RequestInterface $request, ResponseInterface $response) : ResponseInterface
+    {
+        $twig_data = [
+            'controller' => [
+                'base_url' => BASE_URL . '/customer',
+                'Name' => 'Customer'
+            ],
+        ];
+
+        return $this->twig->render($response, '/frags/creator/customer.twig', $twig_data);
+    }
+
     public function getTable(RequestInterface $request, ResponseInterface $response)
     {
         $rows = [];
@@ -107,7 +119,7 @@ class CustomerController
             ]
         ];
 
-        return $this->twig->render($response, '/frags/table.html', $twig_data);
+        return $this->twig->render($response, '/frags/read/table.html', $twig_data);
     }
 
     public function getRecord(RequestInterface $request, ResponseInterface $response, array $args) : ResponseInterface
@@ -125,7 +137,7 @@ class CustomerController
             ]
         ];
 
-        return $this->twig->render($response, '/frags/customer.html', $twig_data);
+        return $this->twig->render($response, '/frags/read/customer.html', $twig_data);
     }
 
     public function update(RequestInterface $request, ResponseInterface $response)

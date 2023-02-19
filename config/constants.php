@@ -26,3 +26,4 @@ define('VIEWS_PATH', __DIR__ . '/../resources/views');
 define('CSS_URL', '/css');
 define('ASSETS_URL', '/assets');
 define('HTMX_URL', '/htmx/htmx.min.js');
+define('HYPR_URL', '/htmx/hyperscript.min.js');

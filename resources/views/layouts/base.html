@@ -9,24 +9,25 @@
     <!-- Google Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Overpass:ital,wght@0,400;0,700;0,900;1,400;1,900&display=swap" rel="stylesheet">  
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">  
 
     <!-- Tailwind CSS -->
     <link rel="stylesheet" type="text/css" href="{{ css_url }}/output.css">
 
     <title>{{ title }}</title>
 </head>
-<body class="h-screen bg-slate-900">
+<body class="h-screen">
     <div class="h-full flex flex-row justify-start align-middle items-center">
         {% block navbar %} {% endblock %}
 
-        <div class="h-full pt-2 flex-grow overflow-y-scroll">
-            {% block content %} {% endblock %}
-        </div>
+        {% block content %} {% endblock %}
     </div>
 </body>
 
 <!-- HTMX -->
 <script src="{{ htmx_url }}"></script>
+
+<!-- HyperScript -->
+<script src="https://unpkg.com/hyperscript.org@0.9.7"></script>
 
 </html>

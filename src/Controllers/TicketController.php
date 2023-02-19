@@ -39,6 +39,7 @@ class TicketController
             'css_url' => CSS_URL,
             'assets_url' => ASSETS_URL,
             'htmx_url' => HTMX_URL,
+            'hypr_url' => HYPR_URL,
             'title' => 'Tickets - RSMS',
             'controller' => [
                 'base_url' => '/tickets',
@@ -56,6 +57,7 @@ class TicketController
             'css_url' => CSS_URL,
             'assets_url' => ASSETS_URL,
             'htmx_url' => HTMX_URL,
+            'hypr_url' => HYPR_URL,
             'title' => 'Tickets - RSMS',
             'controller' => [
                 'base_url' => '/tickets',
@@ -65,6 +67,18 @@ class TicketController
         ];
 
         return $this->twig->render($response, '/create_view.twig', $twig_data);
+    }
+
+    public function getCreateForm(RequestInterface $request, ResponseInterface $response) : ResponseInterface
+    {
+        $twig_data = [
+            'controller' => [
+                'base_url' => BASE_URL . '/tickets',
+                'Name' => 'Ticket'
+            ],
+        ];
+
+        return $this->twig->render($response, '/frags/creator/ticket.twig', $twig_data);
     }
 
     public function getTable(RequestInterface $request, ResponseInterface $response)
@@ -89,7 +103,7 @@ class TicketController
             ]
         ];
 
-        return $this->twig->render($response, '/frags/table.html', $twig_data);
+        return $this->twig->render($response, '/frags/read/table.html', $twig_data);
     }
 
     public function update(RequestInterface $request, ResponseInterface $response)

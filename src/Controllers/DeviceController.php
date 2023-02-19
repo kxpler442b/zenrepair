@@ -71,7 +71,7 @@ class DeviceController
             ]
         ];
 
-        return $this->twig->render($response, '/frags/table.html', $twig_data);
+        return $this->twig->render($response, '/frags/read/table.html', $twig_data);
     }
 
     public function update(RequestInterface $request, ResponseInterface $response)

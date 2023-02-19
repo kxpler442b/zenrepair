@@ -13,7 +13,6 @@ namespace App\Services;
 
 use App\Domain\Ticket;
 use Doctrine\ORM\EntityManager;
-use Ramsey\Uuid\Rfc4122\UuidInterface;
 
 class TicketService
 {
@@ -30,7 +29,7 @@ class TicketService
     {
         $ticket = new Ticket;
 
-        $ticket->setSubject($data['status']);
+        $ticket->setTitle($data['status']);
         $ticket->setStatus($data['status'] ?? 0);
         $ticket->setUser($data['user']);
         $ticket->setCustomer($data['customer']);
@@ -60,7 +59,7 @@ class TicketService
         $ticket->setSubject($data['subject']);
     }
 
-    public function delete(UuidInterface $id): void
+    public function delete(string $id): void
     {
         
     }

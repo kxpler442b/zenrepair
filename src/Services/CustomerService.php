@@ -63,14 +63,14 @@ class CustomerService implements CustomerProviderInterface
         return $customers;
     }
 
-    public function update(UuidInterface $id, array $data): void
+    public function update(string $id, array $data): void
     {
         $customer = $this->em->find(Customer::class, $id);
 
         $customer->setFirstName($data['first_name']);
     }
 
-    public function delete(UuidInterface $id): void
+    public function delete(string $id): void
     {
         
     }

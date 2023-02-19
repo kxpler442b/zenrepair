@@ -36,6 +36,7 @@ return function (App $app)
         $tickets->get('', [TicketController::class, 'index']);
 
         $tickets->get('/create', [TicketController::class, 'createView']);
+        $tickets->get('/get/creator', [TicketController::class, 'getCreateForm']);
         $tickets->post('/create/{id}', [TicketController::class, 'createTicket']);
 
         $tickets->get('/view/{id}', [TicketController::class, 'ticketView']);
@@ -48,6 +49,7 @@ return function (App $app)
         $customers->get('', [CustomerController::class, 'index']);
 
         $customers->get('/create', [CustomerController::class, 'viewCreate']);
+        $customers->get('/get/creator', [CustomerContoller::class, 'getCreator']);
         $customers->post('/create', [CustomerController::class, 'create']);
 
         $customers->get('/view/{id}', [CustomerController::class, 'viewCustomer']);

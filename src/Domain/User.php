@@ -11,20 +11,18 @@ declare(strict_types = 1);
 
 namespace App\Domain;
 
-use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\Table;
-use Doctrine\ORM\Mapping\Id;
-use Doctrine\ORM\Mapping\Column;
-use Doctrine\ORM\Mapping\GeneratedValue;
-use Doctrine\ORM\Mapping\CustomIdGenerator;
-use Doctrine\ORM\Mapping\OneToMany;
-
-use Ramsey\Uuid\Doctrine\UuidGenerator;
-use Ramsey\Uuid\UuidInterface;
-
 use DateTime;
+use Doctrine\ORM\Mapping\Id;
+use Ramsey\Uuid\UuidInterface;
+use Doctrine\ORM\Mapping\Table;
+use Doctrine\ORM\Mapping\Column;
+use Doctrine\ORM\Mapping\Entity;
+use Doctrine\ORM\Mapping\ManyToOne;
+use Doctrine\ORM\Mapping\OneToMany;
+use Ramsey\Uuid\Doctrine\UuidGenerator;
+use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping\JoinTable;
+use Doctrine\ORM\Mapping\CustomIdGenerator;
 
 #[Entity, Table(name: 'users')]
 class User
@@ -52,8 +50,14 @@ class User
     #[Column(name: 'is_admin', type: 'boolean')]
     private bool $is_admin;
 
+    #[ManyToOne(targetEntity: Group::class, inversedBy: 'users')]
+    private Collection|null $group;
+
     #[OneToMany(targetEntity: Ticket::class, mappedBy: 'user')]
     private Collection|null $tickets;
+
+    #[OneToMany(targetEntity: Note::class, mappedBy: 'author')]
+    private Collection|null $notes;
 
     #[Column(name:'created', type:'datetime')]
     private DateTime $created;
@@ -66,6 +70,22 @@ class User
     public function getId() : UuidInterface | string
     {
         return $this->id;
+    }
+
+    /**
+     * Get the value of group
+     */ 
+    public function getGroup() : Collection|null
+    {
+        return $this->group;
+    }
+
+    /**
+     * Set the value of group
+     */ 
+    public function setGroup(Group $group) : void
+    {
+        $this->group = $group;
     }
 
     /**
@@ -204,6 +224,26 @@ class User
     public function setTickets(Ticket $tickets)
     {
         $this->tickets = $tickets;
+
+        return $this;
+    }
+
+    /**
+     * Get the value of notes
+     */ 
+    public function getNotes()
+    {
+        return $this->notes;
+    }
+
+    /**
+     * Set the value of notes
+     *
+     * @return  self
+     */ 
+    public function setNotes($notes)
+    {
+        $this->notes = $notes;
 
         return $this;
     }

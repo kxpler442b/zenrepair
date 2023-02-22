@@ -11,8 +11,8 @@ declare(strict_types = 1);
 
 namespace App\Controllers;
 
+use App\Contracts\AuthInterface;
 use App\Services\LocalAuthService;
-use App\Services\UserService;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ServerRequestInterface as Request;
 use Psr\Http\Message\ResponseInterface as Response;
@@ -21,15 +21,13 @@ use Slim\Views\Twig;
 class AuthController
 {
     private readonly ContainerInterface $container;
-    private readonly UserService $userService;
     private readonly LocalAuthService $authService;
     private readonly Twig $twig;
 
     public function __construct(ContainerInterface $container)
     {
         $this->container = $container;
-        $this->userService = $container->get(UserService::class);
-        $this->authService = $container->get(LocalAuthService::class);
+        $this->authService = $container->get(AuthInterface::class);
         $this->twig = $container->get(Twig::class);
     }
 

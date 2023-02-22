@@ -12,21 +12,20 @@ declare(strict_types = 1);
 namespace App\Services;
 
 use App\Domain\User;
-use App\Domain\Customer;
-use App\Contracts\LocalAuthInterface;
-
 use Doctrine\ORM\EntityManager;
+use App\Contracts\AuthInterface;
+use App\Contracts\SessionInterface;
 
-class LocalAuthService implements LocalAuthInterface
+class LocalAuthService implements AuthInterface
 {
     private readonly EntityManager $em;
+    private readonly SessionInterface $session;
 
-    public function __construct(EntityManager $em)
+    public function __construct(EntityManager $em, SessionInterface $session)
     {
         $this->em = $em;
+        $this->session = $session;
     }
-
-    public function __destruct() {}
 
     public function authUserByPassword(string $email, string $password) : bool
     {
@@ -44,8 +43,10 @@ class LocalAuthService implements LocalAuthInterface
         }
     }
 
-    public function checkUserAuthStatus(User $user)
+    public function checkUserAuthStatus(string $id) : bool
     {
-        
+        $user = $this->em->getRepository(User::class)->findOneBy(['id' => $id]);
+
+        return $user->getId() === $id;
     }
 }

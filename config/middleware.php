@@ -11,8 +11,9 @@ declare(strict_types = 1);
 
 use Slim\App;
 use App\Config;
+use App\Middleware\LocalAuthMiddleware;
+use App\Middleware\SessionMiddleware;
 use Slim\Views\Twig;
-use Slim\Middleware\Session;
 use Slim\Views\TwigMiddleware;
 
 return function (App $app)
@@ -21,9 +22,6 @@ return function (App $app)
     $config = $container->get(Config::class);
 
     $app->add(TwigMiddleware::create($app, $container->get(Twig::class)));
-    $app->add(new Session([
-        'name' => 'rsms',
-        'autorefresh' => true,
-        'lifetime' => '1 hour'
-    ]));
+    $app->add(SessionMiddleware::class);
+    $app->add(LocalAuthMiddleware::class);
 };

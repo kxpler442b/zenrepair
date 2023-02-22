@@ -9,16 +9,14 @@
 
 declare(strict_types = 1);
 
-use App\Controllers\ApiController;
 use Slim\App;
 use App\Controllers\AuthController;
 use App\Controllers\DeviceController;
 use App\Controllers\TicketController;
 use Slim\Routing\RouteCollectorProxy;
-
 use App\Controllers\CustomerController;
 use App\Controllers\DashboardController;
-use App\Controllers\DebugController;
+use App\Middleware\LocalAuthMiddleware;
 
 return function (App $app)
 {
@@ -30,13 +28,12 @@ return function (App $app)
 
     $app->group('/dashboard', function (RouteCollectorProxy $dashboard) {
         $dashboard->get('', [DashboardController::class, 'index']);
-    });
+    })->add(AuthMiddleware::class);
 
     $app->group('/tickets', function (RouteCollectorProxy $tickets) {
         $tickets->get('', [TicketController::class, 'index']);
 
-        $tickets->get('/create', [TicketController::class, 'createView']);
-        $tickets->get('/get/creator', [TicketController::class, 'getCreateForm']);
+        $tickets->get('/get/creator', [TicketController::class, 'getCreator']);
         $tickets->post('/create/{id}', [TicketController::class, 'createTicket']);
 
         $tickets->get('/view/{id}', [TicketController::class, 'ticketView']);
@@ -48,8 +45,7 @@ return function (App $app)
     $app->group('/customers', function (RouteCollectorProxy $customers) {
         $customers->get('', [CustomerController::class, 'index']);
 
-        $customers->get('/create', [CustomerController::class, 'viewCreate']);
-        $customers->get('/get/creator', [CustomerContoller::class, 'getCreator']);
+        $customers->get('/get/creator', [CustomerController::class, 'getCreator']);
         $customers->post('/create', [CustomerController::class, 'create']);
 
         $customers->get('/view/{id}', [CustomerController::class, 'viewCustomer']);

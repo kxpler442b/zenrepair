@@ -69,7 +69,7 @@ class TicketController
         return $this->twig->render($response, '/create_view.twig', $twig_data);
     }
 
-    public function getCreateForm(RequestInterface $request, ResponseInterface $response) : ResponseInterface
+    public function getCreator(RequestInterface $request, ResponseInterface $response) : ResponseInterface
     {
         $twig_data = [
             'controller' => [

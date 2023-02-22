@@ -11,11 +11,9 @@ declare(strict_types = 1);
 
 namespace App\Contracts;
 
-use App\Domain\User;
-
-interface LocalAuthInterface
+interface AuthInterface
 {
     public function authUserByPassword(string $email, string $password);
 
-    public function checkUserAuthStatus(User $user);
+    public function checkUserAuthStatus(string $id) : bool;
 }

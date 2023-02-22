@@ -27,7 +27,9 @@ return [
         ]
     ],
     'session' => [
-
+        'secure' => true,
+        'httponly' => true,
+        'samesite' => 'lax'
     ],
     'redis' => [
         'host' => $_ENV['REDIS_HOST'],

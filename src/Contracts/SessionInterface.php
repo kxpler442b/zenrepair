@@ -25,7 +25,7 @@ interface SessionInterface
 
     public function store(string $key, mixed $value) : void;
 
-    public function delete(string $key) : void;
+    public function exists(string $key) : bool;
 
-    public function exists(string $key) : void;
+    public function delete(string $key) : void;
 }

@@ -22,11 +22,25 @@ class SessionMiddleware implements MiddlewareInterface
 {
     private readonly SessionInterface $session;
 
-    public function __construct(SessionInterface $session)
-    {
+    public function __construct(SessionInterface $session) {
         $this->session = $session;
     }
 
+    public static function create(SessionInterface $session)
+    {
+        return new self(
+            $session
+        );
+    }
+
+    /**
+     * Session Middlware Process
+     *
+     * @param ServerRequestInterface $request
+     * @param RequestHandlerInterface $handler
+     * 
+     * @return ResponseInterface
+     */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler) : ResponseInterface
     {
         $this->session->start();

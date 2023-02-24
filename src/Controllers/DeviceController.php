@@ -12,6 +12,7 @@ declare(strict_types = 1);
 
 namespace App\Controllers;
 
+use App\Contracts\SessionInterface;
 use Slim\Views\Twig;
 use App\Services\DeviceService;
 use Psr\Container\ContainerInterface;
@@ -20,28 +21,41 @@ use Psr\Http\Message\ResponseInterface;
 
 class DeviceController
 {
-    private readonly ContainerInterface $container;
     private readonly DeviceService $deviceService;
+    private readonly SessionInterface $session;
     private readonly Twig $twig;
 
+    /**
+     * Constructor method.
+     *
+     * @param ContainerInterface $container
+     */
     public function __construct(ContainerInterface $container)
     {
-        $this->container = $container;
         $this->deviceService = $container->get(DeviceService::class);
+        $this->session = $container->get(SessionInterface::class);
         $this->twig = $container->get(Twig::class);
     }
 
     public function __destruct() {}
 
-    public function index(RequestInterface $request, ResponseInterface $response)
+    /**
+     * Full table view.
+     *
+     * @param RequestInterface $request
+     * @param ResponseInterface $response
+     * 
+     * @return ResponseInterface
+     */
+    public function index(RequestInterface $request, ResponseInterface $response) : ResponseInterface
     {
         $twig_data = [
             'css_url' => CSS_URL,
             'assets_url' => ASSETS_URL,
             'htmx_url' => HTMX_URL,
-            'title' => 'Devices - RSMS',
+            'title' => 'Customers - RSMS',
             'controller' => [
-                'base_url' => '/devices',
+                'base_url' => BASE_URL . '/devices',
                 'name' => 'device',
                 'Name' => 'Device'
             ]
@@ -50,18 +64,49 @@ class DeviceController
         return $this->twig->render($response, '/table_view.twig', $twig_data);
     }
 
-    public function create(RequestInterface $request, ResponseInterface $response)
+    public function viewRecord(RequestInterface $request, ResponseInterface $response, array $args) : ResponseInterface
     {
+        $id = $args['id'];
+        $device = $this->deviceService->getById($id);
 
+        $twig_data = [
+            'css_url' => CSS_URL,
+            'assets_url' => ASSETS_URL,
+            'htmx_url' => HTMX_URL,
+            'title' => 'Customers - RSMS',
+            'record' => [
+                'id' => $id,
+                'display_name' => $device->getManufacturer().' '.$device->getModel()
+            ],
+            'controller' => [
+                'base_url' => BASE_URL . '/devices',
+            ]
+        ];
+
+        return $this->twig->render($response, 'record_view.twig', $twig_data);
     }
 
-    public function getTable(RequestInterface $request, ResponseInterface $response)
+    public function getCreator(RequestInterface $request, ResponseInterface $response) : ResponseInterface
+    {
+        $twig_data = [
+            'controller' => [
+                'base_url' => BASE_URL . '/devices',
+                'Name' => 'Device'
+            ],
+        ];
+
+        return $this->twig->render($response, '/frags/creators/device.twig', $twig_data);
+    }
+
+    public function getTable(RequestInterface $request, ResponseInterface $response) : ResponseInterface
     {
         $device = $this->deviceService->getById('8560a131-f3de-4a7f-8738-8c6c30f1db10');
 
         $twig_data = [
             'controller' => [
-                'name' => 'device'
+                'base_url' => BASE_URL . '/devices',
+                'name' => 'device',
+                'Name' => 'Device'
             ],
             'table' => [
                 'headers' => ['Serial', 'Manufacturer', 'Model', 'IMEI', 'Locator', 'Owner', 'Date Created', 'Last Updated'],
@@ -71,7 +116,7 @@ class DeviceController
             ]
         ];
 
-        return $this->twig->render($response, '/frags/read/table.html', $twig_data);
+        return $this->twig->render($response, '/frags/tables/table.html', $twig_data);
     }
 
     public function update(RequestInterface $request, ResponseInterface $response)

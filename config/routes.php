@@ -23,12 +23,14 @@ return function (App $app)
     $app->group('/', function (RouteCollectorProxy $auth) {
         $auth->get('', [AuthController::class, 'index']);
         $auth->post('', [AuthController::class, 'authUser']);
-        $auth->get('/logout', [AuthController::class, 'logout']);
+        $auth->get('logout', [AuthController::class, 'logout']);
+
+        $auth->get('debug', [AuthController::class, 'debug0']);
     });
 
     $app->group('/dashboard', function (RouteCollectorProxy $dashboard) {
         $dashboard->get('', [DashboardController::class, 'index']);
-    })->add(AuthMiddleware::class);
+    });
 
     $app->group('/tickets', function (RouteCollectorProxy $tickets) {
         $tickets->get('', [TicketController::class, 'index']);
@@ -61,7 +63,7 @@ return function (App $app)
         $devices->get('/create', [DeviceController::class, 'createView']);
         $devices->post('/create', [DeviceController::class, 'createDevice']);
         
-        $devices->get('/view/{id}', [DeviceController::class, 'deviceView']);
+        $devices->get('/view/{id}', [DeviceController::class, 'viewRecord']);
         $devices->get('/get/table', [DeviceController::class, 'getTable']);
         
         $devices->post('/delete/{id}', [DeviceController::class, 'deleteDevice']);

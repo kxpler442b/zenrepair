@@ -12,32 +12,51 @@ declare(strict_types = 1);
 
 namespace App\Middleware;
 
+use Slim\App;
+use Slim\Views\Twig;
+use App\Contracts\AuthInterface;
 use App\Contracts\SessionInterface;
-use Psr\Http\Message\ResponseFactoryInterface;
+use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
 
 class LocalAuthMiddleware implements MiddlewareInterface
 {
-    //private readonly ResponseFactoryInterface $responseFactory;
-    //private readonly SessionInterface $session;
+    private readonly ResponseFactoryInterface $responseFactory;
+    private readonly AuthInterface $auth;
+    private readonly SessionInterface $session;
+    private readonly Twig $twig;
 
-    public function __construct(ResponseFactoryInterface $responseFactory, SessionInterface $session)
+    public function __construct(ResponseFactoryInterface $responseFactory, AuthInterface $auth, SessionInterface $session, Twig $twig)
     {
         $this->responseFactory = $responseFactory;
+        $this->auth = $auth;
+        $this->twig = $twig;
         $this->session = $session;
+    }
+
+    public static function create(App $app, ContainerInterface $container)
+    {
+        return new self(
+            $app->getResponseFactory(ResponseFactoryInterface::class),
+            $container->get(AuthInterface::class),
+            $container->get(SessionInterface::class),
+            $container->get(Twig::class)
+        );
     }
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler) : ResponseInterface
     {
-        if($this->session->exists['user_id'])
+        $user = $this->auth->verify();
+
+        if($user)
         {
             return $handler->handle($request);
         }
 
-        return $this->responseFactory->createResponse(302)
-                                    ->withHeader('Location', '/');
+        return $this->responseFactory->createResponse(302)->withHeader('Location', '/');
     }
 }

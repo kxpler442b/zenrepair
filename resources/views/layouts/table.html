@@ -1,15 +1,15 @@
-<div class="h-full px-8 py-6 z-0 flex flex-grow flex-col justify-start align-middle items-center bg-white overflow-y-auto">
+<div class="h-full px-8 py-6 z-0 flex flex-grow flex-col justify-start align-middle items-center overflow-y-auto">
     <div class="w-full mb-2">
         <h2 class="text-sky-600 text-2xl font-bold">{{ controller.Name }}s</h2>
     </div>
-    <div class="w-full my-3 border border-stone-200 bg-white rounded-md shadow-sm">
-        <div class="w-full my-3 px-4 flex flex-row justify-start align-middle items-center">
+    <div class="w-full my-3 box-shadow-black border border-black bg-white">
+        <div class="w-full p-4 flex flex-row justify-start align-middle items-center">
             <div class="flex-grow">
                 <form method="POST">
-                    <input class="w-1/2 py-2 text-sm text-stone-600 border-stone-200 rounded-md focus:ring-sky-600 focus:border-sky-600" type="text" placeholder="Search {{ controller.Name }}s">
+                    <input class="w-1/2 py-2 text-sm text-black border-black focus:ring-sky-600 focus:border-sky-600" type="text" placeholder="Search {{ controller.Name }}s">
                 </form>
             </div>
-            <button hx-get="{{ controller.base_url }}/get/creator" hx-target="body" hx-swap="beforeend" class="pl-3 pr-4 py-2 inline-flex flex-row justify-evenly align-middle items-center text-sm text-white rounded-md bg-sky-600 hover:bg-sky-700">
+            <button hx-get="{{ controller.base_url }}/get/creator" hx-target="body" hx-swap="beforeend" class="pl-3 pr-4 py-2 inline-flex flex-row justify-evenly align-middle items-center text-sm text-white bg-sky-600 hover:bg-sky-700">
                 <svg class="mr-3 h-5 w-5" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                     <path d="M12 4.5v15m7.5-7.5h-15" stroke-linecap="round" stroke-linejoin="round"></path>
                 </svg>
@@ -20,11 +20,11 @@
             <!-- Load table fragment with HTMX -->
             <table class="w-full table-auto animate-pulse">
                 <thead>
-                    <th class="px-4 py-3 text-left text-sm text-stone-600 font-bold border-y border-stone-200 bg-stone-100"><div class="h-2 w-8 bg-stone-600 rounded"></div></th>
-                    <th class="px-4 py-3 text-left text-sm text-stone-600 font-bold border-y border-stone-200 bg-stone-100"><div class="h-2 w-20 bg-stone-600 rounded"></div></th>
-                    <th class="px-4 py-3 text-left text-sm text-stone-600 font-bold border-y border-stone-200 bg-stone-100"><div class="h-2 w-12 bg-stone-600 rounded"></div></th>
-                    <th class="px-4 py-3 text-left text-sm text-stone-600 font-bold border-y border-stone-200 bg-stone-100"><div class="h-2 w-8 bg-stone-600 rounded"></div></th>
-                    <th class="px-4 py-3 text-left text-sm text-stone-600 font-bold border-y border-stone-200 bg-stone-100"><div class="h-2 w-8 bg-stone-600 rounded"></div></th>
+                    <th class="px-4 py-3 text-left text-sm text-stone-600 font-bold border-y border-black bg-stone-100"><div class="h-2 w-8 bg-stone-600 rounded"></div></th>
+                    <th class="px-4 py-3 text-left text-sm text-stone-600 font-bold border-y border-black bg-stone-100"><div class="h-2 w-20 bg-stone-600 rounded"></div></th>
+                    <th class="px-4 py-3 text-left text-sm text-stone-600 font-bold border-y border-black bg-stone-100"><div class="h-2 w-12 bg-stone-600 rounded"></div></th>
+                    <th class="px-4 py-3 text-left text-sm text-stone-600 font-bold border-y border-black bg-stone-100"><div class="h-2 w-8 bg-stone-600 rounded"></div></th>
+                    <th class="px-4 py-3 text-left text-sm text-stone-600 font-bold border-y border-black bg-stone-100"><div class="h-2 w-8 bg-stone-600 rounded"></div></th>
                 </thead>
                 <tbody class="divide-y divide-stone-200">
                     <tr class="hover:bg-stone-100">

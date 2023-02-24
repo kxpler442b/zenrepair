@@ -20,20 +20,31 @@ use Psr\Http\Message\ResponseInterface;
 
 class CustomerController
 {
-    private readonly ContainerInterface $container;
     private readonly CustomerService $customerService;
     private readonly Twig $twig;
 
+    /**
+     * Constructor method.
+     *
+     * @param ContainerInterface $container
+     */
     public function __construct(ContainerInterface $container)
     {
-        $this->container = $container;
         $this->customerService = $container->get(CustomerService::class);
         $this->twig = $container->get(Twig::class);
     }
 
     public function __destruct() {}
 
-    public function index(RequestInterface $request, ResponseInterface $response)
+    /**
+     * Full table view.
+     *
+     * @param RequestInterface $request
+     * @param ResponseInterface $response
+     * 
+     * @return ResponseInterface
+     */
+    public function index(RequestInterface $request, ResponseInterface $response) : ResponseInterface
     {
         $twig_data = [
             'css_url' => CSS_URL,
@@ -50,7 +61,7 @@ class CustomerController
         return $this->twig->render($response, '/table_view.twig', $twig_data);
     }
 
-    public function viewCustomer(RequestInterface $request, ResponseInterface $response, array $args)
+    public function viewCustomer(RequestInterface $request, ResponseInterface $response, array $args) : ResponseInterface
     {
         $id = $args['id'];
         $customer = $this->customerService->getById($id);
@@ -72,19 +83,6 @@ class CustomerController
         return $this->twig->render($response, 'record_view.twig', $twig_data);
     }
 
-    public function viewCreate(RequestInterface $request, ResponseInterface $response)
-    {
-        $customer = [
-            'email' => $_POST['email'],
-            'password' => $_POST['password'],
-            'first_name' => $_POST['first_name'],
-            'last_name' => $_POST['last_name'],
-            'mobile' => $_POST['mobile']
-        ];
-
-        $this->customerService->create($customer);
-    }
-
     public function getCreator(RequestInterface $request, ResponseInterface $response) : ResponseInterface
     {
         $twig_data = [
@@ -94,10 +92,28 @@ class CustomerController
             ],
         ];
 
-        return $this->twig->render($response, '/frags/creator/customer.twig', $twig_data);
+        return $this->twig->render($response, '/frags/creators/customer.twig', $twig_data);
     }
 
-    public function getTable(RequestInterface $request, ResponseInterface $response)
+    public function getRecord(RequestInterface $request, ResponseInterface $response, array $args) : ResponseInterface
+    {
+        $customer = $this->customerService->getById($args['id']);
+
+        $twig_data = [
+            'controller' => [
+                'base_url' => BASE_URL . '/customers'
+            ],
+            'record' => [
+                'id' => $customer->getId(),
+                'first_name' => $customer->getFirstName(),
+                'last_name' => $customer->getLastName()
+            ]
+        ];
+
+        return $this->twig->render($response, '/frags/tables/customer.html', $twig_data);
+    }
+
+    public function getTable(RequestInterface $request, ResponseInterface $response) : ResponseInterface
     {
         $rows = [];
         $customers = $this->customerService->getAll();
@@ -119,25 +135,7 @@ class CustomerController
             ]
         ];
 
-        return $this->twig->render($response, '/frags/read/table.html', $twig_data);
-    }
-
-    public function getRecord(RequestInterface $request, ResponseInterface $response, array $args) : ResponseInterface
-    {
-        $customer = $this->customerService->getById($args['id']);
-
-        $twig_data = [
-            'controller' => [
-                'base_url' => BASE_URL . '/customers'
-            ],
-            'record' => [
-                'id' => $customer->getId(),
-                'first_name' => $customer->getFirstName(),
-                'last_name' => $customer->getLastName()
-            ]
-        ];
-
-        return $this->twig->render($response, '/frags/read/customer.html', $twig_data);
+        return $this->twig->render($response, '/frags/tables/table.html', $twig_data);
     }
 
     public function update(RequestInterface $request, ResponseInterface $response)

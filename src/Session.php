@@ -51,33 +51,38 @@ class Session implements SessionInterface
         session_write_close();
     }
 
-    public function isActive(): bool
+    public function isActive() : bool
     {
         return session_status() === PHP_SESSION_ACTIVE;
     }
 
-    public function get(string $key, mixed $default = 'null'): mixed
+    public function get(string $key, mixed $default = 'null') : mixed
     {
-        return array_key_exists($key, $_SESSION) ? $_SESSION[$key] : $default;
+        return $_SESSION[$key];
     }
 
-    public function regenerate(): bool
+    public function regenerate() : bool
     {
         return session_regenerate_id();
     }
 
-    public function store(string $key, mixed $value): void
+    public function store(string $key, mixed $value) : void
     {
         $_SESSION[$key] = $value;
     }
 
-    public function exists(string $key): bool
+    public function exists(string $key) : bool
     {
         return array_key_exists($key, $_SESSION);
     }
 
-    public function delete(string $key): void
+    public function delete(string $key) : void
     {
         unset($_SESSION[$key]);
+    }
+
+    public function clear() : void
+    {
+        session_destroy();
     }
 }

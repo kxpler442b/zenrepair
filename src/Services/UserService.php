@@ -14,7 +14,6 @@ namespace App\Services;
 use App\Contracts\UserProviderInterface;
 use App\Domain\User;
 use Doctrine\ORM\EntityManager;
-use Ramsey\Uuid\Rfc4122\UuidInterface;
 
 class UserService implements UserProviderInterface
 {

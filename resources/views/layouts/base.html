@@ -6,19 +6,21 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Google Fonts -->
+    <!-- Space Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">  
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">  
 
     <!-- Tailwind CSS -->
     <link rel="stylesheet" type="text/css" href="{{ css_url }}/output.css">
 
     <title>{{ title }}</title>
 </head>
-<body class="h-screen">
+<body class="h-screen bg-stone-50">
     <div class="h-full flex flex-row justify-start align-middle items-center">
-        {% block navbar %} {% endblock %}
+        <div class="h-full p-2">
+            {% block navbar %} {% endblock %}
+        </div>
 
         {% block content %} {% endblock %}
     </div>

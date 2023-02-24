@@ -8,7 +8,7 @@
     .box-shadow-black {
         box-shadow: 0.125rem 0.125rem 0px 0px #000; 
     };
-    .box-shadow-sky-600 {
-        box-shadow: 0.125rem 0.125rem 0px 0px #0284c7; 
-    }
+    .poop {
+        box-shadow: 0.125rem 0.125rem 0px 0px #f00; 
+    };
 }

@@ -1,0 +1,10 @@
+{% extends "/frags/creator/base.html" %}
+
+{% block tabs %}
+    <button href="#" class="w-full mx-2 py-2 font-semibold text-center text-sm text-sky-600 border border-sky-600 bg-sky-50">Customer Details</button>
+	<button href="#" class="w-full mx-2 py-2 text-center text-sm border border-black/50 text-black/50">Assign a Device</button>
+{% endblock %}
+
+{% block form %}
+    {% include "/frags/creator/customer/details.html" %}
+{% endblock %}

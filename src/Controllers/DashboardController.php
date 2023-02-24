@@ -12,6 +12,8 @@ declare(strict_types = 1);
 
 namespace App\Controllers;
 
+use App\Contracts\AuthInterface;
+use App\Contracts\SessionInterface;
 use Slim\Views\Twig;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\RequestInterface;
@@ -19,24 +21,41 @@ use Psr\Http\Message\ResponseInterface;
 
 class DashboardController
 {
-    private readonly ContainerInterface $container;
+    private readonly SessionInterface $session;
     private readonly Twig $twig;
+    private readonly AuthInterface $auth;
 
     public function __construct(ContainerInterface $container)
     {
-        $this->container = $container;
+        $this->auth = $container->get(AuthInterface::class);
+
         $this->twig = $container->get(Twig::class);
+        $this->session = $container->get(SessionInterface::class);
     }
 
     public function __destruct() {}
 
-    public function index(RequestInterface $request, ResponseInterface $response)
+    /**
+     * User dashboard view.
+     *
+     * @param RequestInterface $request
+     * @param ResponseInterface $response
+     * 
+     * @return ResponseInterface
+     */
+    public function index(RequestInterface $request, ResponseInterface $response) : ResponseInterface
     {
+        var_dump($this->auth->getUser());
+
         $twig_data = [
             'css_url' => CSS_URL,
             'assets_url' => ASSETS_URL,
             'htmx_url' => HTMX_URL,
             'title' => 'Dashboard - RSMS',
+            'user' => [
+                'id' => $this->session->get('user_id'),
+                'info' => $this->session->get('user_info')
+            ],
             'controller' => [
                 'base_url' => '/dashboard',
                 'name' => 'dashboard',

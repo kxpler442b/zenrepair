@@ -20,20 +20,31 @@ use Psr\Http\Message\ResponseInterface;
 
 class TicketController
 {
-    private readonly ContainerInterface $container;
     private readonly TicketService $ticketService;
     private readonly Twig $twig;
 
+    /**
+     * Constructor method.
+     *
+     * @param ContainerInterface $container
+     */
     public function __construct(ContainerInterface $container)
     {
-        $this->container = $container;
         $this->ticketService = $container->get(TicketService::class);
         $this->twig = $container->get(Twig::class);
     }
 
     public function __destruct() {}
 
-    public function index(RequestInterface $request, ResponseInterface $response)
+    /**
+     * Full table view.
+     *
+     * @param RequestInterface $request
+     * @param ResponseInterface $response
+     * 
+     * @return ResponseInterface
+     */
+    public function index(RequestInterface $request, ResponseInterface $response) : ResponseInterface
     {
         $twig_data = [
             'css_url' => CSS_URL,
@@ -78,10 +89,10 @@ class TicketController
             ],
         ];
 
-        return $this->twig->render($response, '/frags/creator/ticket.twig', $twig_data);
+        return $this->twig->render($response, '/frags/creators/ticket.twig', $twig_data);
     }
 
-    public function getTable(RequestInterface $request, ResponseInterface $response)
+    public function getTable(RequestInterface $request, ResponseInterface $response) : ResponseInterface
     {
         $rows = [];
         $tickets = $this->ticketService->getAll();
@@ -103,7 +114,7 @@ class TicketController
             ]
         ];
 
-        return $this->twig->render($response, '/frags/read/table.html', $twig_data);
+        return $this->twig->render($response, '/frags/tables/table.html', $twig_data);
     }
 
     public function update(RequestInterface $request, ResponseInterface $response)

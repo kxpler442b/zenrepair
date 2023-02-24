@@ -1,0 +1,23 @@
+<div id="creator" hx-trigger="load" _="on closeModal remove me" class="fixed top-0 bottom-0 left-0 right-0 z-50 bg-black/10 backdrop-blur-md flex flex-col justify-start align-middle items-center transition-opacity ease-in-out duration-150">
+	<div class="absolute -z-50 top-0 bottom-0 left-0 right-0" _="on click trigger closeModal"></div>
+	<div class="w-1/2 mt-16 box-shadow-black border border-black bg-white">
+		<div class="w-full p-6 rounded-tl rounded-tr border-collapse">
+			<h1 class="font-bold text-xl text-sky-600">New {{ controller.Name }}</h1>
+			<p class="text-sm text-stone-400">Create a new {{ controller.name }}.</p>
+		</div>
+		<div class="w-full px-2 flex flex-row justify-center align-middle items-center">
+			{% block tabs %} {% endblock %}
+		</div>
+		<div class="w-full px-64 py-8">
+			{% block form %} {% endblock %}
+		</div>
+		<div class="w-full px-2 py-4 flex flex-row justify-end align-middle items-center border-t border-black bg-stone-100">
+			<button _="on click trigger closeModal" class="mx-2 px-4 py-2 inline-flex flex-row justify-evenly align-middle items-center text-sm text-red-600 border border-red-300 bg-red-50 hover:text-red-700 hover:border-red-300 hover:bg-red-200">
+				Cancel
+			</button>
+			<a class="mx-2 px-4 py-2 inline-flex flex-row justify-evenly align-middle items-center text-sm text-white bg-sky-600 hover:bg-sky-700" href="{{ controller.base_url }}/create">
+				Next
+			</a>
+		</div>
+	</div>
+</div>

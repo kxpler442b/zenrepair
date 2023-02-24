@@ -11,9 +11,19 @@ declare(strict_types = 1);
 
 namespace App\Contracts;
 
+use App\Domain\User;
+
 interface AuthInterface
 {
-    public function authUserByPassword(string $email, string $password);
+    public function verify() : bool;
 
-    public function checkUserAuthStatus(string $id) : bool;
+    public function attemptAuth(string $email, string $password) : bool;
+
+    public function auth(User $user) : void;
+
+    public function getUser() : User|null;
+
+    public function checkPassword(string $password, string $hash) : bool;
+
+    public function deauth() : void;
 }

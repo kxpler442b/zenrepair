@@ -11,29 +11,42 @@ declare(strict_types = 1);
 
 namespace App\Controllers;
 
-use App\Contracts\AuthInterface;
-use App\Services\LocalAuthService;
-use Psr\Container\ContainerInterface;
-use Psr\Http\Message\ServerRequestInterface as Request;
-use Psr\Http\Message\ResponseInterface as Response;
 use Slim\Views\Twig;
+use App\Contracts\AuthInterface;
+use App\Contracts\SessionInterface;
+use Psr\Container\ContainerInterface;
+use Psr\Http\Message\RequestInterface;
+use Psr\Http\Message\ResponseInterface;
 
 class AuthController
 {
-    private readonly ContainerInterface $container;
-    private readonly LocalAuthService $authService;
+    private readonly AuthInterface $auth;
+    private readonly SessionInterface $session;
     private readonly Twig $twig;
 
+    /**
+     * Constructor method.
+     *
+     * @param ContainerInterface $container
+     */
     public function __construct(ContainerInterface $container)
     {
-        $this->container = $container;
-        $this->authService = $container->get(AuthInterface::class);
+        $this->auth = $container->get(AuthInterface::class);
+        $this->session = $container->get(SessionInterface::class);
         $this->twig = $container->get(Twig::class);
     }
 
     public function __destruct() {}
 
-    public function index(Request $request, Response $response) : Response
+    /**
+     * Local authentication view.
+     *
+     * @param Request $request
+     * @param Response $response
+     * 
+     * @return ResponseInterface
+     */
+    public function index(RequestInterface $request, ResponseInterface $response) : ResponseInterface
     {
         $twig_data = [
             'css_url' => CSS_URL,
@@ -44,14 +57,14 @@ class AuthController
         return $this->twig->render($response, 'auth_view.twig', $twig_data);
     }
 
-    public function authUser(Request $request, Response $response) : Response
+    public function authUser(RequestInterface $request, ResponseInterface $response) : ResponseInterface
     {
         $email = $_POST['email'];
         $password = $_POST['password'];
 
-        if ($this->authService->authUserByPassword($email, $password))
+        if ($this->auth->attemptAuth($email, $password))
         {
-            return $response->withHeader('Location', '/tickets')
+            return $response->withHeader('Location', '/dashboard')
                             ->withStatus(302);
         }
         else
@@ -59,5 +72,13 @@ class AuthController
             return $response->withHeader('Location', '/')
                             ->withStatus(302);
         }
+    }
+
+    public function logout(RequestInterface $request, ResponseInterface $response) : ResponseInterface
+    {
+        $this->auth->deauth();
+
+        return $response->withHeader('Location', '/')
+                        ->withStatus(302);
     }
 }

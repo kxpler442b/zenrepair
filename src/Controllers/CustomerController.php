@@ -106,7 +106,9 @@ class CustomerController
             'record' => [
                 'id' => $customer->getId(),
                 'first_name' => $customer->getFirstName(),
-                'last_name' => $customer->getLastName()
+                'last_name' => $customer->getLastName(),
+                'email' => $customer->getEmail(),
+                'mobile' => $customer->getMobile()
             ]
         ];
 
@@ -120,7 +122,7 @@ class CustomerController
 
         foreach($customers as &$customer)
         {
-            $rows[$customer->getId()->toString()] = array($customer->getFirstName().' '.$customer->getLastName(), [$customer->getEmail(), $customer->getMobile(), ':-)', $customer->getCreated()->format('d-m-Y'), $customer->getUpdated()->format('d-m-Y H:i:s')]);
+            $rows[$customer->getId()->toString()] = array($customer->getFirstName().' '.$customer->getLastName(), [$customer->getEmail(), $customer->getMobile(), $customer->getCreated()->format('d-m-Y'), $customer->getUpdated()->format('d-m-Y H:i:s')]);
         }
 
         $twig_data = [
@@ -130,7 +132,7 @@ class CustomerController
                 'Name' => 'Customer'
             ],
             'table' => [
-                'headers' => ['Name', 'Email', 'Mobile', 'Devices', 'Date Created', 'Last Updated'],
+                'headers' => ['Name', 'Email', 'Mobile', 'Date Created', 'Last Updated'],
                 'rows' => $rows
             ]
         ];

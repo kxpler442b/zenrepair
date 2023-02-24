@@ -17,9 +17,9 @@ interface UserProviderInterface
 {
     public function create(array $data) : void;
 
-    public function getById(string $uuid) : User;
+    public function getById(string $uuid) : User|null;
 
-    public function getByEmail(string $email) : User;
+    public function getByEmail(string $email) : User|null;
 
     public function update(string $id, array $data) : void;
 

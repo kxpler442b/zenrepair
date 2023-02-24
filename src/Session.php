@@ -81,7 +81,7 @@ class Session implements SessionInterface
         unset($_SESSION[$key]);
     }
 
-    public function clear() : void
+    public function destroy(): void
     {
         session_destroy();
     }

@@ -24,6 +24,6 @@ return function (App $app)
 
     $app->add(TwigMiddleware::create($app, $container->get(Twig::class)));
     $app->add(SessionMiddleware::create($container->get(SessionInterface::class)));
-    $app->add(LocalAuthMiddleware::create($app, $container));
+    // $app->add(LocalAuthMiddleware::create($app, $container));
     $app->addBodyParsingMiddleware();
 };

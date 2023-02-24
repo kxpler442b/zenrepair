@@ -15,9 +15,9 @@ use App\Domain\User;
 
 interface AuthInterface
 {
-    public function verify() : bool;
+    public function verify();
 
-    public function attemptAuth(string $email, string $password) : bool;
+    public function attemptAuth(string $email, string $password);
 
     public function auth(User $user) : void;
 

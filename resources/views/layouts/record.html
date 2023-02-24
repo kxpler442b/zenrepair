@@ -1,9 +1,9 @@
-<div class="h-full px-8 py-6 z-0 flex flex-grow flex-col justify-start align-middle items-center rounded-tl-xl bg-white overflow-y-auto">
+<div class="h-full px-8 py-6 z-0 flex flex-grow flex-col justify-start align-middle items-center overflow-y-auto">
     <div class="w-full mb-2">
         <h2 class="text-sky-600 text-2xl font-bold">{{ record.display_name }}</h2>
     </div>
     <div class="w-full my-3 box-shadow-black border border-black bg-white">
-        <div class="w-full p-4 flex flex-row justify-start align-middle items-center border-b border-black">
+        <div class="w-full p-4 flex flex-row justify-start align-middle items-center">
             <form class="w-1/3 mr-4" method="POST">
                 <input type="text" name="search" id="search" placeholder="Search this record..." class="form-input w-full text-sm border border-black hover:ring-sky-600 hover:border-sky-600">
             </form>
@@ -29,7 +29,24 @@
         </div>
         <div hx-get="{{ controller.base_url }}/get/record/{{ record.id }}" hx-trigger="load" hx-swap="outerHTML">
             <!-- Load table fragment with HTMX -->
-            :-)
+            <table class="w-full table-auto animate-pulse">
+                <thead>
+                    <th class="px-4 py-3 text-left text-sm text-stone-600 font-bold border-y border-black bg-stone-100"><div class="h-2 w-8 bg-stone-600 rounded"></div></th>
+                    <th class="px-4 py-3 text-left text-sm text-stone-600 font-bold border-y border-black bg-stone-100"><div class="h-2 w-20 bg-stone-600 rounded"></div></th>
+                    <th class="px-4 py-3 text-left text-sm text-stone-600 font-bold border-y border-black bg-stone-100"><div class="h-2 w-12 bg-stone-600 rounded"></div></th>
+                    <th class="px-4 py-3 text-left text-sm text-stone-600 font-bold border-y border-black bg-stone-100"><div class="h-2 w-8 bg-stone-600 rounded"></div></th>
+                    <th class="px-4 py-3 text-left text-sm text-stone-600 font-bold border-y border-black bg-stone-100"><div class="h-2 w-8 bg-stone-600 rounded"></div></th>
+                </thead>
+                <tbody class="divide-y divide-stone-200">
+                    <tr class="hover:bg-stone-100">
+                        <td class="px-4 py-5 text-stone-700 text-sm border-collapse"><div class="h-2 bg-stone-300 rounded"></div></td>
+                        <td class="px-4 py-5 text-stone-700 text-sm border-collapse"><div class="h-2 bg-stone-300 rounded"></div></td>
+                        <td class="px-4 py-5 text-stone-700 text-sm border-collapse"><div class="h-2 bg-stone-300 rounded"></div></td>
+                        <td class="px-4 py-5 text-stone-700 text-sm border-collapse"><div class="h-2 bg-stone-300 rounded"></div></td>
+                        <td class="px-4 py-5 text-stone-700 text-sm border-collapse"><div class="h-2 bg-stone-300 rounded"></div></td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>

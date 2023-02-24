@@ -28,4 +28,6 @@ interface SessionInterface
     public function exists(string $key) : bool;
 
     public function delete(string $key) : void;
+
+    public function destroy() : void;
 }

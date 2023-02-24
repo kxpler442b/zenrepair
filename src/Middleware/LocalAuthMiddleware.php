@@ -52,8 +52,14 @@ class LocalAuthMiddleware implements MiddlewareInterface
     {
         $user = $this->auth->verify();
 
-        if($user)
+        if($user !== null)
         {
+            $this->twig->getEnvironment()->addGlobal('user_info', [
+                'first_name' => $user->getFirstName(),
+                'last_name' => $user->getLastName(),
+                'email' => $user->getEmail()
+            ]);
+
             return $handler->handle($request);
         }
 

@@ -1,17 +1,52 @@
-<h2 class="font-bold text-slate-800 text-lg">Overview</h2>
-<table class="table-auto">
-    <thead>
-        <th></th>
-        <th></th>
-    </thead>
-    <tbody>
-        <tr>
-            <td>ID:</td>
-            <td>{{ record.id }}</td>
-        </tr>
-        <tr>
-            <td>Customer Name:</td>
-            <td>{{ record.display_name }}</td>          
-        </tr>
-    </tbody>
-</table>
+<div>
+    <div class="col-span-4 p-2 font-bold text-stone-600 border-y border-black bg-stone-100">
+        <h3>Contact Details</h3>
+    </div>
+    <div class="w-full">
+        <table class="w-full my-2 table-auto">
+            <thead>
+                <th class="w-64"></th>
+                <th></th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="p-2 font-bold">First Name:</td>
+                    <td>{{ record.first_name }}</td>
+                </tr>
+                <tr>
+                    <td class="p-2 font-bold">Last Name:</td>
+                    <td>{{ record.last_name }}</td>
+                </tr>
+                <tr>
+                    <td class="p-2 font-bold">Email Address:</td>
+                    <td>{{ record.email }}</td>
+                </tr>
+                <tr>
+                    <td class="p-2 font-bold">Mobile Number:</td>
+                    <td>{{ record.mobile }}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="col-span-4 p-2 font-bold text-stone-600 border-y border-black bg-stone-100">
+        <h3>Registered Devices</h3>
+    </div>
+    <div class="w-full">
+        <table class="w-full my-2 table-auto">
+            <thead>
+                <th class="w-64"></th>
+                <th></th>
+            </thead>
+            <tbody>
+                <tr>
+                    <td class="p-2 font-bold">Example Device 1</td>
+                    <td>1234567890</td>
+                </tr>
+                <tr>
+                    <td class="p-2 font-bold">Example Device 2</td>
+                    <td>0987654321</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>

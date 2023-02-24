@@ -43,12 +43,12 @@ class UserService implements UserProviderInterface
         $this->em->flush();
     }
 
-    public function getById(string $id): User
+    public function getById(string $id): User|null
     {
         return $this->em->find(User::class, $id);
     }
 
-    public function getByEmail(string $email): User
+    public function getByEmail(string $email): User|null
     {
         return $this->em->getRepository(User::class)->findOneBy(['email' => $email]);
     }

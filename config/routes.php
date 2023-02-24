@@ -30,42 +30,44 @@ return function (App $app)
 
     $app->group('/dashboard', function (RouteCollectorProxy $dashboard) {
         $dashboard->get('', [DashboardController::class, 'index']);
-    });
+    })->add(LocalAuthMiddleware::class);
 
     $app->group('/tickets', function (RouteCollectorProxy $tickets) {
         $tickets->get('', [TicketController::class, 'index']);
 
         $tickets->get('/get/creator', [TicketController::class, 'getCreator']);
+        $tickets->get('/get/creator/next', [TicketController::class, 'getCreatorNext']);
         $tickets->post('/create/{id}', [TicketController::class, 'createTicket']);
 
         $tickets->get('/view/{id}', [TicketController::class, 'ticketView']);
         $tickets->get('/get/table', [TicketController::class, 'getTable']);
 
         $tickets->post('/delete/{id}', [TicketController::class, 'deleteTicket']);
-    });
+    })->add(LocalAuthMiddleware::class);
 
     $app->group('/customers', function (RouteCollectorProxy $customers) {
         $customers->get('', [CustomerController::class, 'index']);
+        $customers->get('/get/table', [CustomerController::class, 'getTable']);
 
         $customers->get('/get/creator', [CustomerController::class, 'getCreator']);
         $customers->post('/create', [CustomerController::class, 'create']);
 
         $customers->get('/view/{id}', [CustomerController::class, 'viewCustomer']);
-        $customers->get('/get/table', [CustomerController::class, 'getTable']);
         $customers->get('/get/record/{id}', [CustomerController::class, 'getRecord']);
 
         $customers->post('/delete/{id}', [CustomerController::class, 'deleteTicket']);
-    });
+    })->add(LocalAuthMiddleware::class);
 
     $app->group('/devices', function (RouteCollectorProxy $devices) {
         $devices->get('', [DeviceController::class, 'index']);
+        $devices->get('/get/table', [DeviceController::class, 'getTable']);
 
         $devices->get('/create', [DeviceController::class, 'createView']);
         $devices->post('/create', [DeviceController::class, 'createDevice']);
         
         $devices->get('/view/{id}', [DeviceController::class, 'viewRecord']);
-        $devices->get('/get/table', [DeviceController::class, 'getTable']);
+        $devices->get('/get/record/{id}', [DeviceController::class, 'getRecord']);
         
         $devices->post('/delete/{id}', [DeviceController::class, 'deleteDevice']);
-    });
+    })->add(LocalAuthMiddleware::class);
 };

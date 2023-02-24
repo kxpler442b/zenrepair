@@ -1,11 +1,16 @@
-{% extends "/frags/creator/base.html" %}
+{% extends "/frags/creators/base.html" %}
 
 {% block tabs %}
-    <a href="{{ controller.base_url }}/get/creator" class="w-1/3 py-2 font-semibold text-center text-sm text-sky-600 border-b-2 border-sky-600 bg-sky-50">Ticket Details</a>
-	<a href="#" class="w-1/3 py-2 font-semibold text-center text-sm text-sky-600/50 border-b border-stone-200">Assign a Customer</a>
-	<a href="#" class="w-1/3 py-2 font-semibold text-center text-sm text-sky-600/50 border-b border-stone-200">Assign a Device</a>
+    <button class="w-full mx-2 py-2 font-semibold text-center text-sm text-sky-600 border border-sky-600 bg-sky-50">Ticket Details</button>
+	<button class="w-full mx-2 py-2 text-center text-sm border border-black/50 text-black/50">Assign a Customer</button>
+	<button class="w-full mx-2 py-2 text-center text-sm border border-black/50 text-black/50">Assign a Device</button>
 {% endblock %}
 
 {% block form %}
-    {% include "/frags/creator/ticket/details.html" %}
+    {% if creator.state is same as 0 %}
+        {% include "/frags/creators/ticket/details.html" %}
+    {% endif %}
+    {% if creator.state is same as 1 %}
+        {% include "/frags/creators/ticket/assign_customer.html" %}
+    {% endif %}
 {% endblock %}

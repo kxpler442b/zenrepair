@@ -14,6 +14,7 @@ namespace App\Controllers;
 use Slim\Views\Twig;
 use App\Contracts\AuthInterface;
 use App\Contracts\SessionInterface;
+use App\Contracts\UserProviderInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -21,7 +22,7 @@ use Psr\Http\Message\ResponseInterface;
 class AuthController
 {
     private readonly AuthInterface $auth;
-    private readonly SessionInterface $session;
+    private readonly UserProviderInterface $userProvider;
     private readonly Twig $twig;
 
     /**
@@ -32,7 +33,7 @@ class AuthController
     public function __construct(ContainerInterface $container)
     {
         $this->auth = $container->get(AuthInterface::class);
-        $this->session = $container->get(SessionInterface::class);
+        $this->userProvider = $container->get(UserProviderInterface::class);
         $this->twig = $container->get(Twig::class);
     }
 

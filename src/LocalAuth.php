@@ -38,16 +38,34 @@ class LocalAuth implements AuthInterface
 
     public function __destruct() {}
 
-    public function verify() : bool
+    public function verify()
     {
-        return true;
+        if ($this->user !== null) {
+            return $this->user;
+        }
+
+        $userId = $this->session->get('user_id');
+
+        if (! $userId) {
+            return null;
+        }
+
+        $user = $this->userProvider->getById($userId);
+
+        if (!$user) {
+            return null;
+        }
+
+        $this->user = $user;
+
+        return $this->user;
     }
 
-    public function attemptAuth(string $email, string $password): bool
+    public function attemptAuth(string $email, string $password)
     {
         $user = $this->userProvider->getByEmail($email);
 
-        if($user = null || !$this->checkPassword($password, $user->getPassword()))
+        if($user === null || !$this->checkPassword($password, $user->getPassword()))
         {
             return false;
         }
@@ -89,7 +107,7 @@ class LocalAuth implements AuthInterface
 
     public function deauth(): void
     {
-        $this->session->clear();
+        $this->session->destroy();
         $this->session->regenerate();
 
         $this->user = null;

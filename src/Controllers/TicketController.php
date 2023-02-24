@@ -12,8 +12,9 @@ declare(strict_types = 1);
 
 namespace App\Controllers;
 
-use App\Services\TicketService;
 use Slim\Views\Twig;
+use App\Services\TicketService;
+use App\Contracts\SessionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
@@ -21,6 +22,7 @@ use Psr\Http\Message\ResponseInterface;
 class TicketController
 {
     private readonly TicketService $ticketService;
+    private readonly SessionInterface $session;
     private readonly Twig $twig;
 
     /**
@@ -31,6 +33,7 @@ class TicketController
     public function __construct(ContainerInterface $container)
     {
         $this->ticketService = $container->get(TicketService::class);
+        $this->session = $container->get(SessionInterface::class);
         $this->twig = $container->get(Twig::class);
     }
 
@@ -82,7 +85,39 @@ class TicketController
 
     public function getCreator(RequestInterface $request, ResponseInterface $response) : ResponseInterface
     {
+        if(!$this->session->exists('creator_state'))
+        {
+            $this->session->store('creator_state', 0);
+        }
+
+        var_dump($this->session->get('creator_state'));
+
         $twig_data = [
+            'creator' => [
+                'state' => $this->session->get('creator_state')
+            ],
+            'controller' => [
+                'base_url' => BASE_URL . '/tickets',
+                'Name' => 'Ticket'
+            ],
+        ];
+
+        return $this->twig->render($response, '/frags/creators/ticket.twig', $twig_data);
+    }
+
+    public function getCreatorNext(RequestInterface $request, ResponseInterface $response) : ResponseInterface
+    {
+        if(!$this->session->exists('creator_state'))
+        {
+            $this->session->store('creator_state', 0);
+        }
+
+        var_dump($this->session->get('creator_state'));
+
+        $twig_data = [
+            'creator' => [
+                'state' => $this->session->get('creator_state')
+            ],
             'controller' => [
                 'base_url' => BASE_URL . '/tickets',
                 'Name' => 'Ticket'

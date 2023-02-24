@@ -98,6 +98,34 @@ class DeviceController
         return $this->twig->render($response, '/frags/creators/device.twig', $twig_data);
     }
 
+    public function getRecord(RequestInterface $request, ResponseInterface $response, array $args) : ResponseInterface
+    {
+        $device = $this->deviceService->getById($args['id']);
+        $owner = $device->getCustomer();
+
+        $twig_data = [
+            'controller' => [
+                'base_url' => BASE_URL . '/customers'
+            ],
+            'record' => [
+                'id' => $device->getId(),
+                'manufacturer' => $device->getManufacturer(),
+                'model' => $device->getModel(),
+                'serial' => $device->getSerial(),
+                'imei' => $device->getImei(),
+                'owner' => [
+                    'name' => $owner->getFirstName().' '.$owner->getLastName()
+                ],
+                'ticket' => [
+                    'id' => '7b249ecb-58a5-4571-bb70-ed2281b38ac3',
+                    'subject' => 'Screen Replacement'
+                ]
+            ]
+        ];
+
+        return $this->twig->render($response, '/frags/tables/device.html', $twig_data);
+    }
+
     public function getTable(RequestInterface $request, ResponseInterface $response) : ResponseInterface
     {
         $device = $this->deviceService->getById('8560a131-f3de-4a7f-8738-8c6c30f1db10');

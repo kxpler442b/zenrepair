@@ -45,17 +45,11 @@ class DashboardController
      */
     public function index(RequestInterface $request, ResponseInterface $response) : ResponseInterface
     {
-        var_dump($this->auth->getUser());
-
         $twig_data = [
             'css_url' => CSS_URL,
             'assets_url' => ASSETS_URL,
             'htmx_url' => HTMX_URL,
             'title' => 'Dashboard - RSMS',
-            'user' => [
-                'id' => $this->session->get('user_id'),
-                'info' => $this->session->get('user_info')
-            ],
             'controller' => [
                 'base_url' => '/dashboard',
                 'name' => 'dashboard',

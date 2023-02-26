@@ -12,6 +12,7 @@ declare(strict_types = 1);
 
 namespace App\Controllers;
 
+use App\Contracts\CustomerProviderInterface;
 use Slim\Views\Twig;
 use App\Services\CustomerService;
 use Psr\Container\ContainerInterface;
@@ -20,7 +21,7 @@ use Psr\Http\Message\ResponseInterface;
 
 class CustomerController
 {
-    private readonly CustomerService $customerService;
+    private readonly CustomerService $customerProvider;
     private readonly Twig $twig;
 
     /**
@@ -30,7 +31,7 @@ class CustomerController
      */
     public function __construct(ContainerInterface $container)
     {
-        $this->customerService = $container->get(CustomerService::class);
+        $this->customerProvider = $container->get(CustomerProviderInterface::class);
         $this->twig = $container->get(Twig::class);
     }
 
@@ -58,13 +59,13 @@ class CustomerController
             ]
         ];
 
-        return $this->twig->render($response, '/table_view.twig', $twig_data);
+        return $this->twig->render($response, '/basic_view.twig', $twig_data);
     }
 
     public function viewCustomer(RequestInterface $request, ResponseInterface $response, array $args) : ResponseInterface
     {
         $id = $args['id'];
-        $customer = $this->customerService->getById($id);
+        $customer = $this->customerProvider->getById($id);
 
         $twig_data = [
             'css_url' => CSS_URL,
@@ -92,12 +93,20 @@ class CustomerController
             ],
         ];
 
-        return $this->twig->render($response, '/frags/creators/customer.twig', $twig_data);
+        return $this->twig->render($response, '/fragments/creators/customer.twig', $twig_data);
     }
 
     public function getRecord(RequestInterface $request, ResponseInterface $response, array $args) : ResponseInterface
     {
-        $customer = $this->customerService->getById($args['id']);
+        $customer = $this->customerProvider->getById($args['id']);
+
+        $rows = [];
+        $devices = $customer->getDevices();
+
+        foreach($devices as &$device)
+        {
+            $rows[$device->getId()->toString()] = array($device->getSerial(), [$device->getImei() ?? 'Empty', $device->getManufacturer(), $device->getModel(), $device->getCustomer()->getFirstName(), $device->getCreated()->format('d-m-Y'), $device->getUpdated()->format('d-m-Y H:i:s')]);
+        }
 
         $twig_data = [
             'controller' => [
@@ -109,21 +118,31 @@ class CustomerController
                 'last_name' => $customer->getLastName(),
                 'email' => $customer->getEmail(),
                 'mobile' => $customer->getMobile()
+            ],
+            'table' => [
+                'headers' => ['Serial', 'IMEI', 'Manufacturer', 'Model', 'Owner', 'Date Created', 'Last Updated'],
+                'rows' => $rows
             ]
         ];
 
-        return $this->twig->render($response, '/frags/tables/customer.html', $twig_data);
+        return $this->twig->render($response, '/fragments/tables/customer.html', $twig_data);
     }
 
-    public function getTable(RequestInterface $request, ResponseInterface $response) : ResponseInterface
+    public function getList(RequestInterface $request, ResponseInterface $response) : ResponseInterface
     {
-        $rows = [];
-        $customers = $this->customerService->getAll();
+        $customers = [];
+        $customerArray = $this->customerProvider->getAll();
 
-        foreach($customers as &$customer)
+        foreach($customerArray as &$customer)
         {
-            $rows[$customer->getId()->toString()] = array($customer->getFirstName().' '.$customer->getLastName(), [$customer->getEmail(), $customer->getMobile(), $customer->getCreated()->format('d-m-Y'), $customer->getUpdated()->format('d-m-Y H:i:s')]);
-        }
+            $customers[$customer->getId()->toString()] = array(
+                'name' => $customer->getFirstName().' '.$customer->getLastName(),
+                'email' => $customer->getEmail(),
+                'mobile' => $customer->getMobile(),
+                'created' => $customer->getCreated()->format('d-m-Y'),
+                'last_updated' => $customer->getUpdated()->format('d-m-Y H:i:s')
+            );
+        };
 
         $twig_data = [
             'controller' => [
@@ -131,13 +150,10 @@ class CustomerController
                 'name' => 'customer',
                 'Name' => 'Customer'
             ],
-            'table' => [
-                'headers' => ['Name', 'Email', 'Mobile', 'Date Created', 'Last Updated'],
-                'rows' => $rows
-            ]
+            'customers' => $customers
         ];
 
-        return $this->twig->render($response, '/frags/tables/table.html', $twig_data);
+        return $this->twig->render($response, '/fragments/lists/customers.html', $twig_data);
     }
 
     public function update(RequestInterface $request, ResponseInterface $response)

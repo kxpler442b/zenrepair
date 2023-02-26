@@ -35,6 +35,7 @@ class UserService implements UserProviderInterface
         $user->setFirstName($data['first_name']);
         $user->setLastName($data['last_name']);
         $user->setMobile($data['mobile']);
+        $user->setGroup($data['group']);
         $user->setIsAdmin($data['is_admin']);
         $user->setCreated();
         $user->setUpdated();

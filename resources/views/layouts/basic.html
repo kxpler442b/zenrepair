@@ -1,0 +1,13 @@
+{% block head %} {% endblock %}
+
+<body class="h-screen bg-stone-100">
+    <div class="h-full grid grid-rows-3 grid-cols-12">
+        {% block navbar %} {% endblock %}
+
+        {% block table %} {% endblock %}
+
+        {% block content %} {% endblock %}
+    </div>
+</body>
+
+{% block tail %} {% endblock %}

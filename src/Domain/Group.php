@@ -43,6 +43,9 @@ class Group
     #[OneToMany(targetEntity: User::class, mappedBy: 'group')]
     private Collection|null $users;
 
+    #[OneToMany(targetEntity: Customer::class, mappedBy: 'group')]
+    private Collection|null $customers;
+
     #[Column(name: 'created', type: 'datetime')]
     private DateTime $created;
 

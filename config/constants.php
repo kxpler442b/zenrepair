@@ -7,7 +7,7 @@
  * Date: 02/01/23
  */
 
-if($_ENV['USE_SSL'] == 0)
+if($_ENV['SERVER_SSL'] == 0)
 {
     $prefix = 'http://';
 }
@@ -16,7 +16,7 @@ else
     $prefix = 'https://';
 }
 
-define('BASE_URL', $prefix . $_ENV['DOMAIN'] . ':' . $_ENV['PORT']);
+define('BASE_URL', $prefix . $_ENV['SERVER_DOMAIN'] . ':' . $_ENV['PORT']);
 
 define('APP_PATH', __DIR__ . '/../src');
 define('CONFIG_PATH', __DIR__ . '/../config');

@@ -8,8 +8,12 @@
     {% include "/components/navbar.html" %}
 {% endblock %}
 
+{% block table %}
+    {% include "/components/list.html" %}
+{% endblock %}
+
 {% block content %}
-    {% include "/layouts/dashboard.html" %}
+    {% include "/layouts/record.html" %}
 {% endblock %}
 
 {% block tail %}

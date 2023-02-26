@@ -28,24 +28,25 @@
             </tbody>
         </table>
     </div>
-    <div class="col-span-4 p-2 font-bold text-stone-600 border-y border-black bg-stone-100">
+    <div class="col-span-4 p-2 font-bold text-stone-600 border-t border-black bg-stone-100">
         <h3>Registered Devices</h3>
     </div>
     <div class="w-full">
-        <table class="w-full my-2 table-auto">
+        <table class="w-full table-auto">
             <thead>
-                <th class="w-64"></th>
-                <th></th>
+                {% for header in table.headers %}
+                    <th class="px-4 py-3 text-left text-sm text-stone-600 font-bold border-y border-black bg-stone-100">{{ header }}</th>
+                {% endfor %}
             </thead>
-            <tbody>
-                <tr>
-                    <td class="p-2 font-bold">Example Device 1</td>
-                    <td>1234567890</td>
+            <tbody class="divide-y divide-black">
+                {% for key, item in table.rows %}
+                <tr class="hover:bg-sky-50">
+                    <td class="px-4 py-5 text-stone-700 text-sm border-collapse"><a class="hover:underline hover:text-sky-600" href="{{ controller.base_url }}/view/{{ key }}">{{ item[0] }}</a></td>
+                    {% for key, value in item[1] %}
+                        <td class="px-4 py-5 text-stone-700 text-sm border-collapse">{{ value }}</td>
+                    {% endfor %}
                 </tr>
-                <tr>
-                    <td class="p-2 font-bold">Example Device 2</td>
-                    <td>0987654321</td>
-                </tr>
+                {% endfor %}
             </tbody>
         </table>
     </div>

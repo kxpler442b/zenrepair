@@ -31,7 +31,7 @@ class GroupService
         $group = new Group();
 
         $group->setName($data['name']);
-        $group->setPrivLevel($data['name'] ?? 2);
+        $group->setPrivLevel($data['priv_level'] ?? 2);
         $group->setCreated();
         $group->setUpdated();
 

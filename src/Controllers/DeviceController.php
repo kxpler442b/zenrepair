@@ -12,17 +12,16 @@ declare(strict_types = 1);
 
 namespace App\Controllers;
 
-use App\Contracts\SessionInterface;
 use Slim\Views\Twig;
 use App\Services\DeviceService;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use App\Contracts\DeviceProviderInterface;
 
 class DeviceController
 {
-    private readonly DeviceService $deviceService;
-    private readonly SessionInterface $session;
+    private readonly DeviceService $deviceProvider;
     private readonly Twig $twig;
 
     /**
@@ -32,8 +31,7 @@ class DeviceController
      */
     public function __construct(ContainerInterface $container)
     {
-        $this->deviceService = $container->get(DeviceService::class);
-        $this->session = $container->get(SessionInterface::class);
+        $this->deviceProvider = $container->get(DeviceProviderInterface::class);
         $this->twig = $container->get(Twig::class);
     }
 
@@ -61,13 +59,13 @@ class DeviceController
             ]
         ];
 
-        return $this->twig->render($response, '/table_view.twig', $twig_data);
+        return $this->twig->render($response, '/basic_view.twig', $twig_data);
     }
 
     public function viewRecord(RequestInterface $request, ResponseInterface $response, array $args) : ResponseInterface
     {
         $id = $args['id'];
-        $device = $this->deviceService->getById($id);
+        $device = $this->deviceProvider->getById($id);
 
         $twig_data = [
             'css_url' => CSS_URL,
@@ -95,17 +93,17 @@ class DeviceController
             ],
         ];
 
-        return $this->twig->render($response, '/frags/creators/device.twig', $twig_data);
+        return $this->twig->render($response, '/fragments/creators/device.twig', $twig_data);
     }
 
     public function getRecord(RequestInterface $request, ResponseInterface $response, array $args) : ResponseInterface
     {
-        $device = $this->deviceService->getById($args['id']);
+        $device = $this->deviceProvider->getById($args['id']);
         $owner = $device->getCustomer();
 
         $twig_data = [
             'controller' => [
-                'base_url' => BASE_URL . '/customers'
+                'base_url' => BASE_URL . '/devices'
             ],
             'record' => [
                 'id' => $device->getId(),
@@ -123,28 +121,38 @@ class DeviceController
             ]
         ];
 
-        return $this->twig->render($response, '/frags/tables/device.html', $twig_data);
+        return $this->twig->render($response, '/fragments/tables/device.html', $twig_data);
     }
 
-    public function getTable(RequestInterface $request, ResponseInterface $response) : ResponseInterface
+    public function getList(RequestInterface $request, ResponseInterface $response) : ResponseInterface
     {
-        $device = $this->deviceService->getById('8560a131-f3de-4a7f-8738-8c6c30f1db10');
+        $devices = [];
+        $deviceArray = $this->deviceProvider->getAll();
+
+        foreach($deviceArray as &$device)
+        {
+            $ticketStatus = 'NULL';
+            $customer = $device->getCustomer();
+
+            $devices[$device->getId()->toString()] = array(
+                'name' => $device->getManufacturer().' '.$device->getModel(),
+                'status' => $ticketStatus,
+                'serial' => $device->getSerial(),
+                'owner' => $customer->getFirstName().' '.$customer->getLastName(),
+                'last_updated' => $device->getUpdated()->format('d-m-Y H:i:s')
+            );
+        }
 
         $twig_data = [
             'controller' => [
-                'base_url' => BASE_URL . '/devices',
+                'base_url' => '/devices',
                 'name' => 'device',
-                'Name' => 'Device'
+                'Name' => 'Customer'
             ],
-            'table' => [
-                'headers' => ['Serial', 'Manufacturer', 'Model', 'IMEI', 'Locator', 'Owner', 'Date Created', 'Last Updated'],
-                'rows' => [
-                    $device->getId()->toString() => [$device->getSerial(), [$device->getModel(), $device->getManufacturer(), $device->getImei(), $device->getLocator(), ':-)', $device->getCreated()->format('d-m-Y'), $device->getUpdated()->format('d-m-Y H:i:s')]]
-                ]
-            ]
+            'devices' => $devices
         ];
 
-        return $this->twig->render($response, '/frags/tables/table.html', $twig_data);
+        return $this->twig->render($response, '/fragments/lists/devices.html', $twig_data);
     }
 
     public function update(RequestInterface $request, ResponseInterface $response)

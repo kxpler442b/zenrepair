@@ -12,11 +12,10 @@ declare(strict_types = 1);
 namespace App\Services;
 
 use App\Domain\Device;
-use App\Domain\Customer;
 use Doctrine\ORM\EntityManager;
-use Ramsey\Uuid\Rfc4122\UuidInterface;
+use App\Contracts\DeviceProviderInterface;
 
-class DeviceService
+class DeviceService implements DeviceProviderInterface
 {
     private readonly EntityManager $em;
 
@@ -45,24 +44,29 @@ class DeviceService
 
     }
 
-    public function getById(string $id): Device
+    public function getById(string $id): Device|null
     {
         return $this->em->find(Device::class, $id);
     }
 
-    public function getBySerial(string $serial): Device
+    public function getBySerial(string $serial): Device|null
     {
         return $this->em->getRepository(Device::class)->findOneBy(['serial' => $serial]);
     }
 
-    public function update(UuidInterface $id, array $data): void
+    public function getAll() : array
+    {
+        return $this->em->getRepository(Device::class)->findAll();
+    }
+
+    public function update(string $id, array $data): void
     {
         $customer = $this->em->find(Device::class, $id);
 
         $customer->setFirstName($data['model']);
     }
 
-    public function delete(UuidInterface $id): void
+    public function delete(string $id): void
     {
         
     }

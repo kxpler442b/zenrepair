@@ -51,7 +51,7 @@ class User
     private bool $is_admin;
 
     #[ManyToOne(targetEntity: Group::class, inversedBy: 'users')]
-    private Collection|null $group;
+    private Group|null $group;
 
     #[OneToMany(targetEntity: Ticket::class, mappedBy: 'user')]
     private Collection|null $tickets;
@@ -67,7 +67,7 @@ class User
 
     public function __construct() {}
 
-    public function getId() : UuidInterface | string
+    public function getId() : UuidInterface|string
     {
         return $this->id;
     }

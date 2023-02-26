@@ -38,6 +38,7 @@ class CustomerService implements CustomerProviderInterface
         $customer->setFirstName($data['first_name']);
         $customer->setLastName($data['last_name']);
         $customer->setMobile($data['mobile']);
+        $customer->setGroup($data['group']);
         $customer->setCreated();
         $customer->setUpdated();
         

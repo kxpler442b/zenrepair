@@ -1,4 +1,4 @@
-<div class="h-full px-8 py-6 z-0 flex flex-grow flex-col justify-start align-middle items-center overflow-y-auto">
+<div class="h-full px-8 py-6 z-0 row-span-full col-start-7 col-span-6 overflow-y-auto">
     <div class="w-full mb-2">
         <h2 class="text-sky-600 text-2xl font-bold">{{ record.display_name }}</h2>
     </div>
@@ -27,7 +27,7 @@
                 </li>
             </ul>
         </div>
-        <div hx-get="{{ controller.base_url }}/get/record/{{ record.id }}" hx-trigger="load" hx-swap="outerHTML">
+        <div id="record_view" hx-get="{{ controller.base_url }}/get/record/{{ record.id }}" hx-trigger="load" hx-swap="outerHTML">
             <!-- Load table fragment with HTMX -->
             <table class="w-full table-auto animate-pulse">
                 <thead>

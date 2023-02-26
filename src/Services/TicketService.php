@@ -11,10 +11,11 @@ declare(strict_types = 1);
 
 namespace App\Services;
 
+use App\Contracts\TicketProviderInterface;
 use App\Domain\Ticket;
 use Doctrine\ORM\EntityManager;
 
-class TicketService
+class TicketService implements TicketProviderInterface
 {
     private readonly EntityManager $em;
 
@@ -29,7 +30,7 @@ class TicketService
     {
         $ticket = new Ticket;
 
-        $ticket->setTitle($data['status']);
+        $ticket->setTitle($data['title']);
         $ticket->setStatus($data['status'] ?? 0);
         $ticket->setUser($data['user']);
         $ticket->setCustomer($data['customer']);

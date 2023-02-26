@@ -24,6 +24,7 @@ use Ramsey\Uuid\UuidInterface;
 
 use DateTime;
 use Doctrine\Common\Collections\Collection;
+use Doctrine\ORM\Mapping\ManyToOne;
 
 #[Entity, Table(name: 'customers')]
 class Customer
@@ -47,6 +48,9 @@ class Customer
 
     #[Column(name: 'last_name', type: 'string')]
     private string $last_name;
+
+    #[ManyToOne(targetEntity: Group::class, inversedBy: 'customers')]
+    private Group|null $group;
 
     #[OneToMany(targetEntity: Device::class, mappedBy: 'customer')]
     private Collection|null $devices;
@@ -115,6 +119,24 @@ class Customer
     public function setLastName(string $last_name)
     {
         $this->last_name = $last_name;
+    }
+
+    /**
+     * Get the value of group
+     *
+     * @return Group|null
+     */
+    public function getGroup() : Group|null
+    {
+        return $this->group;
+    }
+
+    /**
+     * Set the value of group
+     */ 
+    public function setGroup(Group $group) : void
+    {
+        $this->group = $group;
     }
 
     /**

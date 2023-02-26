@@ -8,7 +8,8 @@ module.exports = {
     extend: {
       fontFamily: {
         sans: ["'Space Grotesk'", ...defaultTheme.fontFamily.sans],
-        mono: ["'Space Mono'", ...defaultTheme.fontFamily.mono]
+        mono: ["'Space Mono'", ...defaultTheme.fontFamily.mono],
+        phosphor: ["'Phosphor'"]
       },
     }
   },

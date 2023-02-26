@@ -14,20 +14,7 @@
     <!-- Tailwind CSS -->
     <link rel="stylesheet" type="text/css" href="{{ css_url }}/output.css">
 
+    <script src="https://unpkg.com/phosphor-icons"></script>
+
     <title>{{ title }}</title>
 </head>
-<body class="h-screen bg-stone-100">
-    <div class="h-full grid grid-rows-3 grid-cols-12">
-        {% block navbar %} {% endblock %}
-
-        {% block content %} {% endblock %}
-    </div>
-</body>
-
-<!-- HTMX -->
-<script src="{{ htmx_url }}"></script>
-
-<!-- HyperScript -->
-<script src="https://unpkg.com/hyperscript.org@0.9.7"></script>
-
-</html>

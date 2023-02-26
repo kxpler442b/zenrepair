@@ -12,16 +12,26 @@ declare(strict_types = 1);
 
 namespace App\Controllers;
 
+use App\Contracts\CustomerProviderInterface;
+use App\Contracts\DeviceProviderInterface;
 use Slim\Views\Twig;
 use App\Services\TicketService;
 use App\Contracts\SessionInterface;
+use App\Contracts\TicketProviderInterface;
+use App\Contracts\UserProviderInterface;
+use App\Services\CustomerService;
+use App\Services\DeviceService;
+use App\Services\UserService;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 class TicketController
 {
-    private readonly TicketService $ticketService;
+    private readonly UserService $userProvider;
+    private readonly CustomerService $customerProvider;
+    private readonly DeviceService $deviceProvider;
+    private readonly TicketService $ticketProvider;
     private readonly SessionInterface $session;
     private readonly Twig $twig;
 
@@ -32,7 +42,10 @@ class TicketController
      */
     public function __construct(ContainerInterface $container)
     {
-        $this->ticketService = $container->get(TicketService::class);
+        $this->userProvider = $container->get(UserProviderInterface::class);
+        $this->customerProvider = $container->get(CustomerProviderInterface::class);
+        $this->deviceProvider = $container->get(DeviceProviderInterface::class);
+        $this->ticketProvider = $container->get(TicketProviderInterface::class);
         $this->session = $container->get(SessionInterface::class);
         $this->twig = $container->get(Twig::class);
     }
@@ -62,7 +75,7 @@ class TicketController
             ]
         ];
 
-        return $this->twig->render($response, '/table_view.twig', $twig_data);
+        return $this->twig->render($response, '/basic_view.twig', $twig_data);
     }
 
     public function createView(RequestInterface $request, ResponseInterface $response)
@@ -124,18 +137,27 @@ class TicketController
             ],
         ];
 
-        return $this->twig->render($response, '/frags/creators/ticket.twig', $twig_data);
+        return $this->twig->render($response, '/frags/creators/table.twig', $twig_data);
     }
 
-    public function getTable(RequestInterface $request, ResponseInterface $response) : ResponseInterface
+    public function getList(RequestInterface $request, ResponseInterface $response) : ResponseInterface
     {
-        $rows = [];
-        $tickets = $this->ticketService->getAll();
+        $tickets = [];
+        $ticketsArray = $this->ticketProvider->getAll();
 
-        foreach($tickets as &$ticket)
+        foreach($ticketsArray as &$ticket)
         {
-            $rows[$ticket->getId()->toString()] = array($ticket->getSubject(), [$ticket->getStatus(), 'null', 'null', 'null', $ticket->getCreated()->format('d-m-Y'), $ticket->getUpdated()->format('d-m-Y H:i:s')]);
-        }
+            $device = $ticket->getDevice();
+            $customer = $ticket->getCustomer();
+
+            $tickets[$ticket->getId()->toString()] = array(
+                'title' => $ticket->getTitle(),
+                'status' => $ticket->getStatus(),
+                'device' => $device->getManufacturer().' '.$device->getModel(),
+                'customer' => $customer->getFirstName().' '.$customer->getLastName(),
+                'last_updated' => $ticket->getUpdated()->format('d-m-Y H:i:s')
+            );
+        };
 
         $twig_data = [
             'controller' => [
@@ -143,13 +165,10 @@ class TicketController
                 'name' => 'ticket',
                 'Name' => 'Customer'
             ],
-            'table' => [
-                'headers' => ['Subject', 'Status', 'Created By', 'Device', 'Customer', 'Date Created', 'Last Updated'],
-                'rows' => $rows
-            ]
+            'tickets' => $tickets
         ];
 
-        return $this->twig->render($response, '/frags/tables/table.html', $twig_data);
+        return $this->twig->render($response, '/fragments/lists/tickets.html', $twig_data);
     }
 
     public function update(RequestInterface $request, ResponseInterface $response)

@@ -20,14 +20,21 @@ use Doctrine\ORM\ORMSetup;
 use Slim\Factory\AppFactory;
 use App\Services\UserService;
 use \Doctrine\DBAL\Types\Type;
+use App\Services\GroupService;
+use App\Services\DeviceService;
 use Doctrine\ORM\EntityManager;
 use App\Contracts\AuthInterface;
 use Doctrine\DBAL\DriverManager;
+use App\Services\CustomerService;
 use App\Services\LocalAuthService;
 use App\Contracts\SessionInterface;
 use Psr\Container\ContainerInterface;
-
 use App\Contracts\UserProviderInterface;
+use App\Contracts\DeviceProviderInterface;
+use App\Contracts\TicketProviderInterface;
+use App\Contracts\CustomerProviderInterface;
+use App\Contracts\UserGroupProviderInterface;
+use App\Services\TicketService;
 use Psr\Http\Message\ResponseFactoryInterface;
 
 return [
@@ -78,6 +85,22 @@ return [
     UserProviderInterface::class => function(ContainerInterface $container)
     {
         return new UserService($container->get(EntityManager::class));
+    },
+    UserGroupProviderInterface::class => function(ContainerInterface $container)
+    {
+        return new GroupService($container->get(EntityManager::class));
+    },
+    CustomerProviderInterface::class => function(ContainerInterface $container)
+    {
+        return new CustomerService($container->get(EntityManager::class));
+    },
+    DeviceProviderInterface::class => function(ContainerInterface $container)
+    {
+        return new DeviceService($container->get(EntityManager::class));
+    },
+    TicketProviderInterface::class => function(ContainerInterface $container)
+    {
+        return new TicketService($container->get(EntityManager::class));
     },
     SessionInterface::class => function(Config $config)
     {

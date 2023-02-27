@@ -1,6 +1,6 @@
-<div class="flex flex-col justify-start align-middle items-center border-b border-black bg-white overflow-y-auto">
+<div id="list_area" class="flex flex-col justify-start align-middle items-center border-b border-black bg-white overflow-y-auto">
     {% for key, data in customers %}
-        <button hx-get="{{ controller.base_url }}/get/record/{{ key }}" hx-trigger="click" hx-target="#record_view" class="w-full border-t border-black hover:bg-sky-50">
+        <button hx-get="{{ controller.base_url }}/get/record/{{ key }}" hx-trigger="click" hx-target="#content_area" class="w-full border-t border-black hover:bg-sky-50">
             <div class="w-full p-4 flex flex-row justify-between align-middle items-center text-left text-md">
                 <span class="w-3/4">
                     <h3>{{ data.name }}</h3>

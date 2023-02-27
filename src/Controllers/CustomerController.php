@@ -105,12 +105,20 @@ class CustomerController
 
         foreach($devices as &$device)
         {
-            $rows[$device->getId()->toString()] = array($device->getSerial(), [$device->getImei() ?? 'Empty', $device->getManufacturer(), $device->getModel(), $device->getCustomer()->getFirstName(), $device->getCreated()->format('d-m-Y'), $device->getUpdated()->format('d-m-Y H:i:s')]);
+            $rows[$device->getId()->toString()] = array(
+                $device->getSerial(), 
+                [
+                    $device->getManufacturer().' '.$device->getModel(),
+                    $device->getCreated()->format('d-m-Y'),
+                    $device->getUpdated()->format('d-m-Y H:i:s')
+                ]
+            );
         }
 
         $twig_data = [
             'controller' => [
-                'base_url' => BASE_URL . '/customers'
+                'base_url' => BASE_URL . '/customers',
+                'devices_url' => BASE_URL . '/devices'
             ],
             'record' => [
                 'id' => $customer->getId(),
@@ -120,7 +128,7 @@ class CustomerController
                 'mobile' => $customer->getMobile()
             ],
             'table' => [
-                'headers' => ['Serial', 'IMEI', 'Manufacturer', 'Model', 'Owner', 'Date Created', 'Last Updated'],
+                'headers' => ['Serial', 'Name', 'Date Created', 'Last Updated'],
                 'rows' => $rows
             ]
         ];

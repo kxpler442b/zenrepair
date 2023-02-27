@@ -25,9 +25,10 @@ use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\CustomIdGenerator;
+use Doctrine\ORM\Mapping\ManyToMany;
 
 #[Entity, Table(name: 'users')]
-final class User
+class User
 {
     #[Id, Column(type: "uuid", unique: true)]
     #[GeneratedValue(strategy: "CUSTOM")]
@@ -55,7 +56,7 @@ final class User
     #[OneToMany(targetEntity: Device::class, mappedBy: 'user')]
     private Collection|null $devices;
 
-    #[OneToMany(targetEntity: Ticket::class, mappedBy: 'user')]
+    #[ManyToMany(targetEntity: Ticket::class)]
     private Collection|null $tickets;
 
     #[OneToMany(targetEntity: Note::class, mappedBy: 'author')]

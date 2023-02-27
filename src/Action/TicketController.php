@@ -25,8 +25,8 @@ use App\Interface\LocalAccountProviderInterface;
 class TicketController
 {
     private readonly LocalAccountService $accountProvider;
-    private readonly DeviceService $deviceProvider;
-    private readonly TicketService $ticketProvider;
+    private readonly DeviceService $deviceService;
+    private readonly TicketService $ticketService;
     private readonly SessionInterface $session;
     private readonly Twig $twig;
 
@@ -38,8 +38,8 @@ class TicketController
     public function __construct(ContainerInterface $container)
     {
         $this->accountProvider = $container->get(LocalAccountProviderInterface::class);
-        $this->deviceProvider = $container->get(DeviceService::class);
-        $this->ticketProvider = $container->get(TicketService::class);
+        $this->deviceService = $container->get(DeviceService::class);
+        $this->ticketService = $container->get(TicketService::class);
         $this->session = $container->get(SessionInterface::class);
         $this->twig = $container->get(Twig::class);
     }
@@ -137,18 +137,16 @@ class TicketController
     public function getList(RequestInterface $request, ResponseInterface $response) : ResponseInterface
     {
         $tickets = [];
-        $ticketsArray = $this->ticketProvider->getAll();
+        $ticketsArray = $this->ticketService->getAll();
 
         foreach($ticketsArray as &$ticket)
         {
             $device = $ticket->getDevice();
-            $customer = $ticket->getCustomer();
 
             $tickets[$ticket->getId()->toString()] = array(
                 'title' => $ticket->getTitle(),
                 'status' => $ticket->getStatus(),
                 'device' => $device->getManufacturer().' '.$device->getModel(),
-                'customer' => $customer->getFirstName().' '.$customer->getLastName(),
                 'last_updated' => $ticket->getUpdated()->format('d-m-Y H:i:s')
             );
         };

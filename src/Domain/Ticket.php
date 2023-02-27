@@ -26,6 +26,7 @@ use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\CustomIdGenerator;
 use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\ORM\Mapping\ManyToMany;
 
 #[Entity, Table(name: 'tickets')]
 class Ticket
@@ -44,8 +45,8 @@ class Ticket
     #[OneToMany(targetEntity: Note::class, mappedBy: 'ticket')]
     private Collection|null $notes;
 
-    #[ManyToOne(targetEntity: User::class, inversedBy: 'tickets')]
-    private User|null $user;
+    #[ManyToMany(targetEntity: User::class)]
+    private Collection|null $users;
 
     #[OneToOne(targetEntity: Device::class, inversedBy: 'ticket')]
     private Device|null $device;
@@ -58,6 +59,7 @@ class Ticket
 
     public function __construct() 
     {
+        $this->users = new ArrayCollection();
         $this->notes = new ArrayCollection();
     }
 
@@ -122,9 +124,9 @@ class Ticket
     /**
      * Get the value of user
      */ 
-    public function getUser() : User
+    public function getUsers() : ?Collection
     {
-        return $this->user;
+        return $this->users;
     }
 
     /**
@@ -132,7 +134,7 @@ class Ticket
      */ 
     public function setUser(User $user) : void
     {
-        $this->user = $user;
+        $this->users = $user;
     }
 
     /**

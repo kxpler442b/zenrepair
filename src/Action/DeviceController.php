@@ -12,15 +12,18 @@ declare(strict_types = 1);
 
 namespace App\Action;
 
+use App\Interface\LocalAccountProviderInterface;
 use Slim\Views\Twig;
 use App\Service\DeviceService;
+use App\Service\LocalAccountService;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 class DeviceController
 {
-    private readonly DeviceService $deviceProvider;
+    private readonly LocalAccountService $accountProvider;
+    private readonly DeviceService $deviceService;
     private readonly Twig $twig;
 
     /**
@@ -30,7 +33,8 @@ class DeviceController
      */
     public function __construct(ContainerInterface $container)
     {
-        $this->deviceProvider = $container->get(DeviceService::class);
+        $this->accountProvider = $container->get(LocalAccountProviderInterface::class);
+        $this->deviceService = $container->get(DeviceService::class);
         $this->twig = $container->get(Twig::class);
     }
 
@@ -64,7 +68,7 @@ class DeviceController
     public function viewRecord(RequestInterface $request, ResponseInterface $response, array $args) : ResponseInterface
     {
         $id = $args['id'];
-        $device = $this->deviceProvider->getById($id);
+        $device = $this->deviceService->getById($id);
 
         $twig_data = [
             'css_url' => CSS_URL,
@@ -97,7 +101,7 @@ class DeviceController
 
     public function getRecord(RequestInterface $request, ResponseInterface $response, array $args) : ResponseInterface
     {
-        $device = $this->deviceProvider->getById($args['id']);
+        $device = $this->deviceService->getById($args['id']);
         $owner = $device->getUser();
 
         $twig_data = [
@@ -126,18 +130,18 @@ class DeviceController
     public function getList(RequestInterface $request, ResponseInterface $response) : ResponseInterface
     {
         $devices = [];
-        $deviceArray = $this->deviceProvider->getAll();
+        $deviceArray = $this->deviceService->getAll();
 
         foreach($deviceArray as &$device)
         {
             $ticketStatus = 'NULL';
-            $customer = $device->getCustomer();
+            $user = $device->getUser();
 
             $devices[$device->getId()->toString()] = array(
                 'name' => $device->getManufacturer().' '.$device->getModel(),
                 'status' => $ticketStatus,
                 'serial' => $device->getSerial(),
-                'owner' => $customer->getFirstName().' '.$customer->getLastName(),
+                'owner' => $user->getFirstName().' '.$user->getLastName(),
                 'last_updated' => $device->getUpdated()->format('d-m-Y H:i:s')
             );
         }

@@ -9,11 +9,11 @@
 
 declare(strict_types = 1);
 
-namespace App\Contracts;
+namespace App\Interface;
 
 use App\Domain\User;
 
-interface AuthInterface
+interface LocalAuthInterface
 {
     public function verify();
 
@@ -21,7 +21,7 @@ interface AuthInterface
 
     public function auth(User $user) : void;
 
-    public function getUser() : User|null;
+    public function getUser() : ?User;
 
     public function checkPassword(string $password, string $hash) : bool;
 

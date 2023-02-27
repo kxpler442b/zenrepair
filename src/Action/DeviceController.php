@@ -10,14 +10,13 @@
 
 declare(strict_types = 1);
 
-namespace App\Controllers;
+namespace App\Action;
 
 use Slim\Views\Twig;
-use App\Services\DeviceService;
+use App\Service\DeviceService;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
-use App\Contracts\DeviceProviderInterface;
 
 class DeviceController
 {
@@ -31,7 +30,7 @@ class DeviceController
      */
     public function __construct(ContainerInterface $container)
     {
-        $this->deviceProvider = $container->get(DeviceProviderInterface::class);
+        $this->deviceProvider = $container->get(DeviceService::class);
         $this->twig = $container->get(Twig::class);
     }
 
@@ -99,7 +98,7 @@ class DeviceController
     public function getRecord(RequestInterface $request, ResponseInterface $response, array $args) : ResponseInterface
     {
         $device = $this->deviceProvider->getById($args['id']);
-        $owner = $device->getCustomer();
+        $owner = $device->getUser();
 
         $twig_data = [
             'controller' => [

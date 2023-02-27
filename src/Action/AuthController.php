@@ -9,18 +9,25 @@
 
 declare(strict_types = 1);
 
-namespace App\Controllers;
+namespace App\Action;
 
+use App\Interface\LocalAccountProviderInterface;
+use App\Interface\LocalAuthInterface;
+use App\Service\LocalAccountService;
 use Slim\Views\Twig;
-use App\Contracts\AuthInterface;
+use App\Service\LocalAuthService;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface as Response;
 
+use function PHPSTORM_META\map;
+
 class AuthController
 {
-    private readonly AuthInterface $auth;
+    private readonly LocalAuthService $auth;
     private readonly Twig $twig;
+
+    private readonly LocalAccountService $accountProvider;
 
     /**
      * Constructor method.
@@ -29,7 +36,8 @@ class AuthController
      */
     public function __construct(ContainerInterface $container)
     {
-        $this->auth = $container->get(AuthInterface::class);
+        $this->auth = $container->get(LocalAuthInterface::class);
+        $this->accountProvider = $container->get(LocalAccountProviderInterface::class);
         $this->twig = $container->get(Twig::class);
     }
 

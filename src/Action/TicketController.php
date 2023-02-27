@@ -10,26 +10,21 @@
 
 declare(strict_types = 1);
 
-namespace App\Controllers;
+namespace App\Action;
 
-use App\Contracts\CustomerProviderInterface;
-use App\Contracts\DeviceProviderInterface;
 use Slim\Views\Twig;
-use App\Services\TicketService;
-use App\Contracts\SessionInterface;
-use App\Contracts\TicketProviderInterface;
-use App\Contracts\UserProviderInterface;
-use App\Services\CustomerService;
-use App\Services\DeviceService;
-use App\Services\UserService;
+use App\Service\DeviceService;
+use App\Service\TicketService;
+use App\Interface\SessionInterface;
+use App\Service\LocalAccountService;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use App\Interface\LocalAccountProviderInterface;
 
 class TicketController
 {
-    private readonly UserService $userProvider;
-    private readonly CustomerService $customerProvider;
+    private readonly LocalAccountService $accountProvider;
     private readonly DeviceService $deviceProvider;
     private readonly TicketService $ticketProvider;
     private readonly SessionInterface $session;
@@ -42,10 +37,9 @@ class TicketController
      */
     public function __construct(ContainerInterface $container)
     {
-        $this->userProvider = $container->get(UserProviderInterface::class);
-        $this->customerProvider = $container->get(CustomerProviderInterface::class);
-        $this->deviceProvider = $container->get(DeviceProviderInterface::class);
-        $this->ticketProvider = $container->get(TicketProviderInterface::class);
+        $this->accountProvider = $container->get(LocalAccountProviderInterface::class);
+        $this->deviceProvider = $container->get(DeviceService::class);
+        $this->ticketProvider = $container->get(TicketService::class);
         $this->session = $container->get(SessionInterface::class);
         $this->twig = $container->get(Twig::class);
     }

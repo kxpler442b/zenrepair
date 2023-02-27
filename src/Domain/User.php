@@ -1,10 +1,11 @@
 <?php
 
 /**
- * User entity for Doctrine.
+ * Local User Account Model.
  * 
- * @author B Moss <P2595849@mydmu.ac.uk>
- * Date: 02/01/23
+ * @author Benjamin Moss <p2595849@mydmu.ac.uk>
+ * 
+ * Date: 27/02/23
  */
 
 declare(strict_types = 1);
@@ -12,6 +13,7 @@ declare(strict_types = 1);
 namespace App\Domain;
 
 use DateTime;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping\Id;
 use Ramsey\Uuid\UuidInterface;
 use Doctrine\ORM\Mapping\Table;
@@ -25,7 +27,7 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\CustomIdGenerator;
 
 #[Entity, Table(name: 'users')]
-class User
+final class User
 {
     #[Id, Column(type: "uuid", unique: true)]
     #[GeneratedValue(strategy: "CUSTOM")]
@@ -38,20 +40,20 @@ class User
     #[Column(name:'password', type:'string')]
     private string $password;
 
-    #[Column(name: 'mobile', type: 'string', nullable: true)]
-    private string $mobile;
-
     #[Column(name: 'first_name', type: 'string', nullable: true)]
     private string $first_name;
 
     #[Column(name: 'last_name', type: 'string', nullable: true)]
     private string $last_name;
 
-    #[Column(name: 'is_admin', type: 'boolean')]
-    private bool $is_admin;
+    #[Column(name: 'mobile', type: 'string', nullable: true)]
+    private string $mobile;
 
     #[ManyToOne(targetEntity: Group::class, inversedBy: 'users')]
     private Group|null $group;
+
+    #[OneToMany(targetEntity: Device::class, mappedBy: 'user')]
+    private Collection|null $devices;
 
     #[OneToMany(targetEntity: Ticket::class, mappedBy: 'user')]
     private Collection|null $tickets;
@@ -65,17 +67,105 @@ class User
     #[Column(name:'updated', type:'datetime')]
     private DateTime $updated;
 
-    public function __construct() {}
+    public function __construct()
+    {
+        $this->devices = new ArrayCollection();
+        $this->tickets = new ArrayCollection();
+        $this->notes = new ArrayCollection();
+    }
 
-    public function getId() : UuidInterface|string
+    /**
+     * Get the value of id
+     */ 
+    public function getId(): UuidInterface|string
     {
         return $this->id;
     }
 
     /**
+     * Get the value of email
+     */ 
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    /**
+     * Set the value of email
+     */ 
+    public function setEmail(string $email): void
+    {
+        $this->email = $email;
+    }
+
+    /**
+     * Get the value of password
+     */ 
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    /**
+     * Set the value of password
+     */ 
+    public function setPassword($password): void
+    {
+        $this->password = $password;
+    }
+
+    /**
+     * Get the value of first_name
+     */ 
+    public function getFirstName(): string
+    {
+        return $this->first_name;
+    }
+
+    /**
+     * Set the value of first_name
+     */ 
+    public function setFirstName(string $first_name): void
+    {
+        $this->first_name = $first_name;
+    }
+
+    /**
+     * Get the value of last_name
+     */ 
+    public function getLastName(): string
+    {
+        return $this->last_name;
+    }
+
+    /**
+     * Set the value of last_name
+     */ 
+    public function setLastName(string $last_name): void
+    {
+        $this->last_name = $last_name;
+    }
+
+    /**
+     * Get the value of mobile
+     */ 
+    public function getMobile(): string
+    {
+        return $this->mobile;
+    }
+
+    /**
+     * Set the value of mobile
+     */ 
+    public function setMobile(string $mobile): void
+    {
+        $this->mobile = $mobile;
+    }
+
+    /**
      * Get the value of group
      */ 
-    public function getGroup() : Collection|null
+    public function getGroup(): Group|null
     {
         return $this->group;
     }
@@ -83,175 +173,63 @@ class User
     /**
      * Set the value of group
      */ 
-    public function setGroup(Group $group) : void
+    public function setGroup(Group $group): void
     {
         $this->group = $group;
     }
 
     /**
-     * Get the value of email
+     * Get the value of devices
      */ 
-    public function getEmail() : string
+    public function getDevices(): Collection|null
     {
-        return $this->email;
+        return $this->devices;
     }
 
     /**
-     * Set the value of email
-     *
-     * @return  self
+     * Set the value of devices
      */ 
-    public function setEmail($email)
+    public function setDevice(Device $device): void
     {
-        $this->email = $email;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of password
-     */ 
-    public function getPassword() : string
-    {
-        return $this->password;
-    }
-
-    /**
-     * Set the value of password
-     *
-     * @return  self
-     */ 
-    public function setPassword($password)
-    {
-        $this->password = $password;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of mobile
-     */ 
-    public function getMobile() : string
-    {
-        return $this->mobile;
-    }
-
-    /**
-     * Set the value of mobile
-     *
-     * @return  self
-     */ 
-    public function setMobile($mobile)
-    {
-        $this->mobile = $mobile;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of first_name
-     */ 
-    public function getFirstName() : string
-    {
-        return $this->first_name;
-    }
-
-    /**
-     * Set the value of first_name
-     *
-     * @return  self
-     */ 
-    public function setFirstName($first_name)
-    {
-        $this->first_name = $first_name;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of last_name
-     */ 
-    public function getLastName() : string
-    {
-        return $this->last_name;
-    }
-
-    /**
-     * Set the value of last_name
-     *
-     * @return  self
-     */ 
-    public function setLastName($last_name)
-    {
-        $this->last_name = $last_name;
-
-        return $this;
-    }
-
-    /**
-     * Get the value of is_admin
-     */ 
-    public function getIsAdmin() : bool
-    {
-        return $this->is_admin;
-    }
-
-    /**
-     * Set the value of is_admin
-     *
-     * @return  self
-     */ 
-    public function setIsAdmin($is_admin)
-    {
-        $this->is_admin = $is_admin;
-
-        return $this;
+        
     }
 
     /**
      * Get the value of tickets
      */ 
-    public function getTickets() : Collection
+    public function getTickets(): Collection|null
     {
         return $this->tickets;
     }
 
     /**
      * Set the value of tickets
-     *
-     * @return  self
      */ 
-    public function setTickets(Ticket $tickets)
+    public function setTickets(Ticket $ticket): void
     {
-        $this->tickets = $tickets;
-
-        return $this;
+        $this->tickets = $ticket;
     }
 
     /**
      * Get the value of notes
      */ 
-    public function getNotes()
+    public function getNotes(): Collection|null
     {
         return $this->notes;
     }
 
     /**
      * Set the value of notes
-     *
-     * @return  self
      */ 
-    public function setNotes($notes)
+    public function setNotes(Note $note): void
     {
-        $this->notes = $notes;
-
-        return $this;
+        $this->notes = $note;
     }
 
     /**
      * Get the value of created
      */ 
-    public function getCreated() : DateTime
+    public function getCreated(): DateTime
     {
         return $this->created;
     }
@@ -259,7 +237,7 @@ class User
     /**
      * Set the value of created
      */ 
-    public function setCreated() : void
+    public function setCreated(): void
     {
         $this->created = new DateTime('now');
     }
@@ -267,7 +245,7 @@ class User
     /**
      * Get the value of updated
      */ 
-    public function getUpdated() : DateTime
+    public function getUpdated(): DateTime
     {
         return $this->updated;
     }
@@ -275,7 +253,7 @@ class User
     /**
      * Set the value of updated
      */ 
-    public function setUpdated() : void
+    public function setUpdated(): void
     {
         $this->updated = new DateTime('now');
     }

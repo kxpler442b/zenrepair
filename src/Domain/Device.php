@@ -46,8 +46,8 @@ class Device
     #[Column(name: 'locator', type: 'string')]
     private string $locator;
 
-    #[ManyToOne(targetEntity: Customer::class, inversedBy: 'devices')]
-    private Customer|null $customer;
+    #[ManyToOne(targetEntity: User::class, inversedBy: 'devices')]
+    private User|null $user;
 
     #[OneToOne(targetEntity: Ticket::class, mappedBy: 'device')]
     private Ticket|null $ticket;
@@ -168,17 +168,17 @@ class Device
     /**
      * Get the value of customer
      */ 
-    public function getCustomer() : Customer
+    public function getUser(): ?User
     {
-        return $this->customer;
+        return $this->user;
     }
 
     /**
      * Set the value of customer
      */ 
-    public function setCustomer(Customer $customer) : void
+    public function setUser(User $user) : void
     {
-        $this->customer = $customer;
+        $this->user = $user;
     }
 
     /**

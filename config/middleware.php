@@ -10,10 +10,10 @@
 declare(strict_types = 1);
 
 use Slim\App;
-use App\Config;
+use App\Support\Config;
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
-use App\Contracts\SessionInterface;
+use App\Interface\SessionInterface;
 use App\Middleware\SessionMiddleware;
 use App\Middleware\LocalAuthMiddleware;
 

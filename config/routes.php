@@ -10,12 +10,12 @@
 declare(strict_types = 1);
 
 use Slim\App;
-use App\Controllers\AuthController;
-use App\Controllers\DeviceController;
-use App\Controllers\TicketController;
+use App\Action\AuthController;
+use App\Action\DeviceController;
+use App\Action\TicketController;
 use Slim\Routing\RouteCollectorProxy;
-use App\Controllers\CustomerController;
-use App\Controllers\DashboardController;
+use App\Action\CustomerController;
+use App\Action\DashboardController;
 use App\Middleware\LocalAuthMiddleware;
 
 return function (App $app)

@@ -13,6 +13,6 @@ use DI\ContainerBuilder;
 
 $containerBuilder = new ContainerBuilder();
 
-$containerBuilder->addDefinitions(__DIR__ . '/bindings.php');
+$containerBuilder->addDefinitions(__DIR__ . '/dependencies.php');
 
 return $containerBuilder->build();

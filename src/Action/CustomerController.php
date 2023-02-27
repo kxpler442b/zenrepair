@@ -10,18 +10,18 @@
 
 declare(strict_types = 1);
 
-namespace App\Controllers;
+namespace App\Action;
 
-use App\Contracts\CustomerProviderInterface;
 use Slim\Views\Twig;
-use App\Services\CustomerService;
+use App\Service\LocalAccountService;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
+use App\Interface\LocalAccountProviderInterface;
 
 class CustomerController
 {
-    private readonly CustomerService $customerProvider;
+    private readonly LocalAccountService $accountProvider;
     private readonly Twig $twig;
 
     /**
@@ -31,7 +31,7 @@ class CustomerController
      */
     public function __construct(ContainerInterface $container)
     {
-        $this->customerProvider = $container->get(CustomerProviderInterface::class);
+        $this->accountProvider = $container->get(LocalAccountProviderInterface::class);
         $this->twig = $container->get(Twig::class);
     }
 
@@ -65,7 +65,7 @@ class CustomerController
     public function viewCustomer(RequestInterface $request, ResponseInterface $response, array $args) : ResponseInterface
     {
         $id = $args['id'];
-        $customer = $this->customerProvider->getById($id);
+        $customer = $this->accountProvider->getAccountById($id);
 
         $twig_data = [
             'css_url' => CSS_URL,
@@ -98,7 +98,7 @@ class CustomerController
 
     public function getRecord(RequestInterface $request, ResponseInterface $response, array $args) : ResponseInterface
     {
-        $customer = $this->customerProvider->getById($args['id']);
+        $customer = $this->accountProvider->getAccountById($args['id']);
 
         $rows = [];
         $devices = $customer->getDevices();
@@ -139,7 +139,7 @@ class CustomerController
     public function getList(RequestInterface $request, ResponseInterface $response) : ResponseInterface
     {
         $customers = [];
-        $customerArray = $this->customerProvider->getAll();
+        $customerArray = $this->accountProvider->getAccountsInGroup('customers');
 
         foreach($customerArray as &$customer)
         {

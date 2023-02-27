@@ -43,9 +43,6 @@ class Group
     #[OneToMany(targetEntity: User::class, mappedBy: 'group')]
     private Collection|null $users;
 
-    #[OneToMany(targetEntity: Customer::class, mappedBy: 'group')]
-    private Collection|null $customers;
-
     #[Column(name: 'created', type: 'datetime')]
     private DateTime $created;
 
@@ -65,7 +62,7 @@ class Group
     /**
      * Get the value of id
      */ 
-    public function getId() : string
+    public function getId() : UuidInterface|string
     {
         return $this->id;
     }

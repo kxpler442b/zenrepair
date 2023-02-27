@@ -10,17 +10,18 @@
 
 declare(strict_types = 1);
 
-namespace App;
+namespace App\Service;
 
 use App\Domain\User;
-use App\Contracts\AuthInterface;
-use App\Contracts\SessionInterface;
-use App\Contracts\UserProviderInterface;
+use App\Interface\SessionInterface;
+use App\Service\LocalAccountService;
+use App\Interface\LocalAuthInterface;
+use App\Interface\LocalAccountProviderInterface;
 
-class LocalAuth implements AuthInterface
+class LocalAuthService implements LocalAuthInterface
 {
-    private User|null $user;
-    private readonly UserProviderInterface $userProvider;
+    private ?User $user;
+    private readonly LocalAccountService $accountProvider;
     private readonly SessionInterface $session;
 
     /**
@@ -29,10 +30,10 @@ class LocalAuth implements AuthInterface
      * @param UserProviderInterface $user
      * @param SessionInterface $session
      */
-    public function __construct(UserProviderInterface $userProvider, SessionInterface $session)
+    public function __construct(LocalAccountProviderInterface $accountProvider, SessionInterface $session)
     {
         $this->user = null;
-        $this->userProvider = $userProvider;
+        $this->accountProvider = $accountProvider;
         $this->session = $session;
     }
 
@@ -50,7 +51,7 @@ class LocalAuth implements AuthInterface
             return null;
         }
 
-        $user = $this->userProvider->getById($userId);
+        $user = $this->accountProvider->getAccountById($userId);
 
         if (!$user) {
             return null;
@@ -63,7 +64,7 @@ class LocalAuth implements AuthInterface
 
     public function attemptAuth(string $email, string $password)
     {
-        $user = $this->userProvider->getByEmail($email);
+        $user = $this->accountProvider->getAccountByEmail($email);
 
         if($user === null || !$this->checkPassword($password, $user->getPassword()))
         {

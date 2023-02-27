@@ -9,9 +9,9 @@
 
 declare(strict_types = 1);
 
-namespace App;
+namespace App\Support;
 
-use App\Contracts\SessionInterface;
+use App\Interface\SessionInterface;
 use App\Exception\SessionException;
 
 class Session implements SessionInterface

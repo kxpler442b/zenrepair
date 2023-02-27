@@ -14,8 +14,9 @@ namespace App\Middleware;
 
 use Slim\App;
 use Slim\Views\Twig;
-use App\Contracts\AuthInterface;
-use App\Contracts\SessionInterface;
+use App\Interface\LocalAuthInterface;
+use App\Interface\SessionInterface;
+use App\Service\LocalAuthService;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -26,11 +27,11 @@ use Psr\Http\Message\ResponseFactoryInterface;
 class LocalAuthMiddleware implements MiddlewareInterface
 {
     private readonly ResponseFactoryInterface $responseFactory;
-    private readonly AuthInterface $auth;
+    private readonly LocalAuthService $auth;
     private readonly SessionInterface $session;
     private readonly Twig $twig;
 
-    public function __construct(ResponseFactoryInterface $responseFactory, AuthInterface $auth, SessionInterface $session, Twig $twig)
+    public function __construct(ResponseFactoryInterface $responseFactory, LocalAuthInterface $auth, SessionInterface $session, Twig $twig)
     {
         $this->responseFactory = $responseFactory;
         $this->auth = $auth;

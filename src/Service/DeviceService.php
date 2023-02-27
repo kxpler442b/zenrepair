@@ -9,13 +9,12 @@
 
 declare(strict_types = 1);
 
-namespace App\Services;
+namespace App\Service;
 
 use App\Domain\Device;
 use Doctrine\ORM\EntityManager;
-use App\Contracts\DeviceProviderInterface;
 
-class DeviceService implements DeviceProviderInterface
+class DeviceService
 {
     private readonly EntityManager $em;
 
@@ -35,7 +34,7 @@ class DeviceService implements DeviceProviderInterface
         $device->setSerial($data['serial']);
         $device->setImei($data['imei']);
         $device->setLocator($data['locator']);
-        $device->setCustomer($data['customer']);
+        $device->setUser($data['user']);
         $device->setCreated();
         $device->setUpdated();
         

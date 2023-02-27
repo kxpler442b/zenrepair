@@ -47,9 +47,6 @@ class Ticket
     #[ManyToOne(targetEntity: User::class, inversedBy: 'tickets')]
     private User|null $user;
 
-    #[ManyToOne(targetEntity: Customer::class, inversedBy: 'tickets')]
-    private Customer|null $customer;
-
     #[OneToOne(targetEntity: Device::class, inversedBy: 'ticket')]
     private Device|null $device;
 
@@ -136,22 +133,6 @@ class Ticket
     public function setUser(User $user) : void
     {
         $this->user = $user;
-    }
-
-    /**
-     * Get the value of customer
-     */ 
-    public function getCustomer() : Customer
-    {
-        return $this->customer;
-    }
-
-    /**
-     * Set the value of customer
-     */ 
-    public function setCustomer($customer) : void
-    {
-        $this->customer = $customer;
     }
 
     /**

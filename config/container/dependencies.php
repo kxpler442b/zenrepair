@@ -10,32 +10,25 @@
 declare(strict_types = 1);
 
 use Slim\App;
-use App\Config;
-use App\Session;
-use App\LocalAuth;
 use function DI\get;
 use Slim\Views\Twig;
+use App\Support\Config;
 use function DI\create;
+use App\Support\Session;
+use App\Service\LocalAuthService;
 use Doctrine\ORM\ORMSetup;
 use Slim\Factory\AppFactory;
-use App\Services\UserService;
 use \Doctrine\DBAL\Types\Type;
-use App\Services\GroupService;
-use App\Services\DeviceService;
+use App\Service\DeviceService;
+use App\Service\TicketService;
 use Doctrine\ORM\EntityManager;
-use App\Contracts\AuthInterface;
 use Doctrine\DBAL\DriverManager;
-use App\Services\CustomerService;
-use App\Services\LocalAuthService;
-use App\Contracts\SessionInterface;
+use App\Interface\SessionInterface;
+use App\Service\LocalAccountService;
 use Psr\Container\ContainerInterface;
-use App\Contracts\UserProviderInterface;
-use App\Contracts\DeviceProviderInterface;
-use App\Contracts\TicketProviderInterface;
-use App\Contracts\CustomerProviderInterface;
-use App\Contracts\UserGroupProviderInterface;
-use App\Services\TicketService;
 use Psr\Http\Message\ResponseFactoryInterface;
+use App\Interface\LocalAccountProviderInterface;
+use App\Interface\LocalAuthInterface;
 
 return [
     App::class => function (ContainerInterface $container)
@@ -82,32 +75,24 @@ return [
         return $twig;
     },
     ResponseFactoryInterface::class => fn(App $app) => $app->getResponseFactory(),
-    UserProviderInterface::class => function(ContainerInterface $container)
+    LocalAccountProviderInterface::class => function(ContainerInterface $container)
     {
-        return new UserService($container->get(EntityManager::class));
+        return new LocalAccountService($container->get(EntityManager::class));
     },
-    UserGroupProviderInterface::class => function(ContainerInterface $container)
-    {
-        return new GroupService($container->get(EntityManager::class));
-    },
-    CustomerProviderInterface::class => function(ContainerInterface $container)
-    {
-        return new CustomerService($container->get(EntityManager::class));
-    },
-    DeviceProviderInterface::class => function(ContainerInterface $container)
-    {
-        return new DeviceService($container->get(EntityManager::class));
-    },
-    TicketProviderInterface::class => function(ContainerInterface $container)
+    TicketService::class => function(ContainerInterface $container)
     {
         return new TicketService($container->get(EntityManager::class));
+    },
+    DeviceService::class => function(ContainerInterface $container)
+    {
+        return new DeviceService($container->get(EntityManager::class));
     },
     SessionInterface::class => function(Config $config)
     {
         return new Session($config->get('session'));
     },
-    AuthInterface::class => function(ContainerInterface $container)
+    LocalAuthInterface::class => function(ContainerInterface $container)
     {
-        return new LocalAuth($container->get(UserProviderInterface::class), $container->get(SessionInterface::class));
+        return new LocalAuthService($container->get(LocalAccountService::class), $container->get(SessionInterface::class));
     },
 ];

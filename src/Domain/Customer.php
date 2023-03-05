@@ -1,11 +1,11 @@
 <?php
 
 /**
- * Local User Account Model.
+ * Customer object model.
  * 
- * @author Benjamin Moss <p2595849@mydmu.ac.uk>
+ * @author Benjamin Moss <p2595849@my365.dmu.ac.uk>
  * 
- * Date: 27/02/23
+ * Date: 10/02/23
  */
 
 declare(strict_types = 1);
@@ -18,7 +18,6 @@ use Ramsey\Uuid\UuidInterface;
 use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Doctrine\ORM\Mapping\GeneratedValue;
@@ -26,34 +25,37 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping\CustomIdGenerator;
 use Doctrine\Common\Collections\ArrayCollection;
 
-#[Entity, Table(name: 'users')]
-class User
+#[Entity, Table(name: 'customers')]
+class Customer
 {
-    #[Id, Column(type: "uuid", unique: true)]
-    #[GeneratedValue(strategy: "CUSTOM")]
+    #[Id, Column(type: 'uuid', unique: true)]
+    #[GeneratedValue(strategy: 'CUSTOM')]
     #[CustomIdGenerator(class: UuidGenerator::class)]
     private UuidInterface|string $id;
 
-    #[Column(name:'email', type:'string')]
+    #[Column(name: 'email', type: 'string')]
     private string $email;
 
-    #[Column(name:'password', type:'string')]
+    #[Column(name: 'password', type: 'string')]
     private string $password;
 
-    #[Column(name: 'first_name', type: 'string', nullable: true)]
+    #[Column(name: 'first_name', type: 'string')]
     private string $first_name;
 
     #[Column(name: 'last_name', type: 'string', nullable: true)]
     private string $last_name;
 
-    #[ManyToOne(targetEntity: Group::class, inversedBy: 'users')]
-    private ?Group $group;
+    #[Column(name: 'mobile', type: 'string')]
+    private string $mobile;
 
-    #[OneToMany(targetEntity: Ticket::class, mappedBy: 'user')]
+    #[OneToMany(targetEntity: Address::class, mappedBy: 'customer')]
+    private ?Collection $addresses;
+
+    #[OneToMany(targetEntity: Device::class, mappedBy: 'owner')]
+    private ?Collection $devices;
+
+    #[OneToMany(targetEntity: Ticket::class, mappedBy: 'customer')]
     private ?Collection $tickets;
-
-    #[OneToMany(targetEntity: Note::class, mappedBy: 'author')]
-    private ?Collection $notes;
 
     #[Column(name:'created', type:'datetime')]
     private DateTime $created;
@@ -63,14 +65,15 @@ class User
 
     public function __construct()
     {
+        $this->addresses = new ArrayCollection();
+        $this->devices = new ArrayCollection();
         $this->tickets = new ArrayCollection();
-        $this->notes = new ArrayCollection();
     }
 
     /**
      * Get the value of id
      */ 
-    public function getId(): UuidInterface|string
+    public function getId(): ?UuidInterface
     {
         return $this->id;
     }
@@ -102,7 +105,7 @@ class User
     /**
      * Set the value of password
      */ 
-    public function setPassword($password): void
+    public function setPassword(string $password): void
     {
         $this->password = $password;
     }
@@ -140,25 +143,57 @@ class User
     }
 
     /**
-     * Get the value of group
+     * Get the value of mobile
      */ 
-    public function getGroup(): Group|null
+    public function getMobile(): string
     {
-        return $this->group;
+        return $this->mobile;
     }
 
     /**
-     * Set the value of group
+     * Set the value of mobile
      */ 
-    public function setGroup(Group $group): void
+    public function setMobile(string $mobile = null): void
     {
-        $this->group = $group;
+        $this->mobile = $mobile;
+    }
+
+    /**
+     * Get the value of addresses
+     */ 
+    public function getAddresses(): ?Collection
+    {
+        return $this->addresses;
+    }
+
+    /**
+     * Set the value of addresses
+     */ 
+    public function setAddresses(Address $addresses = null): void
+    {
+        $this->addresses = $addresses;
+    }
+
+    /**
+     * Get the value of devices
+     */ 
+    public function getDevices(): ?Collection
+    {
+        return $this->devices;
+    }
+
+    /**
+     * Set the value of devices
+     */ 
+    public function setDevices(Device $device = null): void
+    {
+        $this->devices = $device;
     }
 
     /**
      * Get the value of tickets
      */ 
-    public function getTickets(): Collection|null
+    public function getTickets(): ?Collection
     {
         return $this->tickets;
     }
@@ -166,31 +201,15 @@ class User
     /**
      * Set the value of tickets
      */ 
-    public function setTickets(Ticket $ticket): void
+    public function setTickets(Ticket $ticket = null): void
     {
         $this->tickets = $ticket;
     }
 
     /**
-     * Get the value of notes
-     */ 
-    public function getNotes(): Collection|null
-    {
-        return $this->notes;
-    }
-
-    /**
-     * Set the value of notes
-     */ 
-    public function setNotes(Note $note): void
-    {
-        $this->notes = $note;
-    }
-
-    /**
      * Get the value of created
      */ 
-    public function getCreated(): DateTime
+    public function getCreated(): ?DateTime
     {
         return $this->created;
     }
@@ -201,12 +220,13 @@ class User
     public function setCreated(): void
     {
         $this->created = new DateTime('now');
+
     }
 
     /**
      * Get the value of updated
      */ 
-    public function getUpdated(): DateTime
+    public function getUpdated(): ?DateTime
     {
         return $this->updated;
     }

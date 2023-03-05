@@ -43,7 +43,6 @@ class LocalAccountService implements LocalAccountProviderInterface
         $user->setPassword(password_hash($data['password'], PASSWORD_BCRYPT, ['cost' => 12]));
         $user->setFirstName($data['first_name']);
         $user->setLastName($data['last_name'] ?? 'null');
-        $user->setMobile($data['mobile'] ?? 'null');
         $user->setGroup($group);
         $user->setCreated();
         $user->setUpdated();

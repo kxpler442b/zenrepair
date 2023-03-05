@@ -34,7 +34,7 @@ class DeviceService
         $device->setSerial($data['serial']);
         $device->setImei($data['imei']);
         $device->setLocator($data['locator']);
-        $device->setUser($data['user']);
+        $device->setCustomer($data['owner']);
         $device->setCreated();
         $device->setUpdated();
         
@@ -43,12 +43,12 @@ class DeviceService
 
     }
 
-    public function getById(string $id): Device|null
+    public function getById(string $id): ?Device
     {
         return $this->em->find(Device::class, $id);
     }
 
-    public function getBySerial(string $serial): Device|null
+    public function getBySerial(string $serial): ?Device
     {
         return $this->em->getRepository(Device::class)->findOneBy(['serial' => $serial]);
     }

@@ -43,13 +43,16 @@ class Ticket
     private int $status;
 
     #[OneToMany(targetEntity: Note::class, mappedBy: 'ticket')]
-    private Collection|null $notes;
+    private ?Collection $notes;
 
-    #[ManyToMany(targetEntity: User::class)]
-    private Collection|null $users;
+    #[ManyToOne(targetEntity: User::class, inversedBy: 'tickets')]
+    private ?User $user;
+
+    #[ManyToOne(targetEntity: Customer::class, inversedBy: 'tickets')]
+    private ?Customer $customer;
 
     #[OneToOne(targetEntity: Device::class, inversedBy: 'ticket')]
-    private Device|null $device;
+    private ?Device $device;
 
     #[Column(name:'created', type:'datetime')]
     private DateTime $created;
@@ -59,7 +62,6 @@ class Ticket
 
     public function __construct() 
     {
-        $this->users = new ArrayCollection();
         $this->notes = new ArrayCollection();
     }
 
@@ -68,7 +70,7 @@ class Ticket
     /**
      * Get the value of id
      */ 
-    public function getId()
+    public function getId(): UuidInterface|string
     {
         return $this->id;
     }
@@ -124,17 +126,33 @@ class Ticket
     /**
      * Get the value of user
      */ 
-    public function getUsers() : ?Collection
+    public function getUser() : ?User
     {
-        return $this->users;
+        return $this->user;
     }
 
     /**
      * Set the value of user
      */ 
-    public function setUser(User $user) : void
+    public function setUser(User $user = null): void
     {
-        $this->users = $user;
+        $this->user = $user;
+    }
+
+    /**
+     * Get the value of customer
+     */ 
+    public function getCustomer() : ?Customer
+    {
+        return $this->customer;
+    }
+
+    /**
+     * Set the value of user
+     */ 
+    public function setCustomer(Customer $customer = null): void
+    {
+        $this->customer = $customer;
     }
 
     /**

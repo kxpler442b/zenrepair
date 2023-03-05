@@ -46,11 +46,11 @@ class Device
     #[Column(name: 'locator', type: 'string')]
     private string $locator;
 
-    #[ManyToOne(targetEntity: User::class, inversedBy: 'devices')]
-    private User|null $user;
+    #[ManyToOne(targetEntity: Customer::class, inversedBy: 'devices')]
+    private ?Customer $owner;
 
     #[OneToOne(targetEntity: Ticket::class, mappedBy: 'device')]
-    private Ticket|null $ticket;
+    private ?Ticket $ticket;
 
     #[Column(name:'created', type:'datetime')]
     private DateTime $created;
@@ -60,7 +60,7 @@ class Device
 
     public function __construct() {}
 
-    public function getId() : UuidInterface | string
+    public function getId(): ?UuidInterface
     {
         return $this->id;
     }
@@ -68,143 +68,119 @@ class Device
     /**
      * Get the value of manufacturer
      */ 
-    public function getManufacturer()
+    public function getManufacturer(): string
     {
         return $this->manufacturer;
     }
 
     /**
      * Set the value of manufacturer
-     *
-     * @return  self
      */ 
-    public function setManufacturer(string $manufacturer)
+    public function setManufacturer(string $manufacturer): void
     {
         $this->manufacturer = $manufacturer;
-
-        return $this;
     }
 
     /**
      * Get the value of model
      */ 
-    public function getModel()
+    public function getModel(): string
     {
         return $this->model;
     }
 
     /**
      * Set the value of model
-     *
-     * @return  self
      */ 
-    public function setModel(string $model)
+    public function setModel(string $model): void
     {
         $this->model = $model;
-
-        return $this;
     }
 
     /**
      * Get the value of imei
      */ 
-    public function getImei()
+    public function getImei(): string
     {
         return $this->imei;
     }
 
     /**
      * Set the value of imei
-     *
-     * @return  self
      */ 
-    public function setImei(string $imei)
+    public function setImei(string $imei): void
     {
         $this->imei = $imei;
-
-        return $this;
     }
 
     /**
      * Get the value of serial
      */ 
-    public function getSerial()
+    public function getSerial(): string
     {
         return $this->serial;
     }
 
     /**
      * Set the value of serial
-     *
-     * @return  self
      */ 
-    public function setSerial(string $serial)
+    public function setSerial(string $serial): void
     {
         $this->serial = $serial;
-
-        return $this;
     }
 
     /**
      * Get the value of ticket
      */ 
-    public function getTicket()
+    public function getTicket(): ?Ticket
     {
         return $this->ticket;
     }
 
     /**
      * Set the value of ticket
-     *
-     * @return  self
      */ 
-    public function setTicket(Ticket $ticket)
+    public function setTicket(Ticket $ticket = null): void
     {
         $this->ticket = $ticket;
-
-        return $this;
     }
 
     /**
      * Get the value of customer
      */ 
-    public function getUser(): ?User
+    public function getCustomer(): ?Customer
     {
-        return $this->user;
+        return $this->owner;
     }
 
     /**
      * Set the value of customer
      */ 
-    public function setUser(User $user) : void
+    public function setCustomer(Customer $owner = null) : void
     {
-        $this->user = $user;
+        $this->owner = $owner;
     }
 
     /**
      * Get the value of locator
      */ 
-    public function getLocator()
+    public function getLocator(): string
     {
         return $this->locator;
     }
 
     /**
      * Set the value of locator
-     *
-     * @return  self
      */ 
-    public function setLocator(string $locator)
+    public function setLocator(string $locator): void
     {
         $this->locator = $locator;
-
-        return $this;
     }
 
     /**
      * Get the value of created
      */ 
-    public function getCreated() : DateTime
+    public function getCreated(): ?DateTime
     {
         return $this->created;
     }
@@ -212,7 +188,7 @@ class Device
     /**
      * Set the value of created
      */ 
-    public function setCreated() : void
+    public function setCreated(): void
     {
         $this->created = new DateTime('now');
     }
@@ -220,7 +196,7 @@ class Device
     /**
      * Get the value of updated
      */ 
-    public function getUpdated() : DateTime
+    public function getUpdated(): ?DateTime
     {
         return $this->updated;
     }
@@ -228,7 +204,7 @@ class Device
     /**
      * Set the value of updated
      */ 
-    public function setUpdated() : void
+    public function setUpdated(): void
     {
         $this->updated = new DateTime('now');
     }

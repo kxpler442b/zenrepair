@@ -31,8 +31,8 @@ class TicketService
 
         $ticket->setTitle($data['title']);
         $ticket->setStatus($data['status'] ?? 0);
-        $ticket->getUsers()->add(($data['technician']));
-        $ticket->getUsers()->add(($data['customer']));
+        $ticket->setUser($data['technician']);
+        $ticket->setCustomer($data['customer']);
         $ticket->setDevice($data['device']);
         $ticket->setCreated();
         $ticket->setUpdated();

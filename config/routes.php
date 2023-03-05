@@ -10,64 +10,64 @@
 declare(strict_types = 1);
 
 use Slim\App;
-use App\Action\AuthController;
-use App\Action\DeviceController;
-use App\Action\TicketController;
+use App\Controller\ViewController;
+use App\Controller\DeviceController;
+use App\Controller\TicketController;
 use Slim\Routing\RouteCollectorProxy;
-use App\Action\CustomerController;
-use App\Action\DashboardController;
+use App\Controller\CustomerController;
+use App\Controller\SecurityController;
 use App\Middleware\LocalAuthMiddleware;
 
 return function (App $app)
 {
     $app->group('/', function (RouteCollectorProxy $auth) {
-        $auth->get('', [AuthController::class, 'index']);
-        $auth->post('', [AuthController::class, 'authUser']);
-        $auth->get('logout', [AuthController::class, 'logout']);
+        $auth->get('', [SecurityController::class, 'index']);
+        $auth->get('logout', [SecurityController::class, 'logout']);
 
-        $auth->get('debug', [AuthController::class, 'debug0']);
+        $auth->post('', [SecurityController::class, 'authUser']);
     });
 
-    $app->group('/dashboard', function (RouteCollectorProxy $dashboard) {
-        $dashboard->get('', [DashboardController::class, 'index']);
+    $app->group('/view', function (RouteCollectorProxy $view) {
+        $view->get('/dashboard', [ViewController::class, 'viewDashboard']);
+        $view->get('/tickets', [ViewController::class, 'viewTickets']);
+        $view->get('/customers', [ViewController::class, 'viewCustomers']);
+        $view->get('/customer/{id}', [ViewController::class, 'viewCustomer']);
+        $view->get('/devices', [ViewController::class, 'viewDevices']);
     })->add(LocalAuthMiddleware::class);
 
-    $app->group('/tickets', function (RouteCollectorProxy $tickets) {
-        $tickets->get('', [TicketController::class, 'index']);
+    $app->group('/users', function (RouteCollectorProxy $users) {
+        $users->get('/get', [AccountController::class]);
+        $users->get('/get/{id}', [AccountController::class]);
 
-        $tickets->get('/get/creator', [TicketController::class, 'getCreator']);
-        $tickets->get('/get/creator/next', [TicketController::class, 'getCreatorNext']);
-        $tickets->post('/create/{id}', [TicketController::class, 'createTicket']);
-
-        $tickets->get('/view/{id}', [TicketController::class, 'ticketView']);
-        $tickets->get('/get/list', [TicketController::class, 'getList']);
-
-        $tickets->post('/delete/{id}', [TicketController::class, 'deleteTicket']);
+        $users->put('/create', [AccountController::class]);
+        $users->put('/update', [AccountController::class]);
+        $users->put('/delete', [AccountController::class]);
     })->add(LocalAuthMiddleware::class);
 
     $app->group('/customers', function (RouteCollectorProxy $customers) {
-        $customers->get('', [CustomerController::class, 'index']);
-        $customers->get('/get/list', [CustomerController::class, 'getList']);
+        $customers->get('/get', [CustomerController::class, 'getList']);
+        $customers->get('/get/{id}', [CustomerController::class, 'getRecord']);
 
-        $customers->get('/get/creator', [CustomerController::class, 'getCreator']);
-        $customers->post('/create', [CustomerController::class, 'create']);
+        $customers->put('/create', [CustomerController::class]);
+        $customers->put('/update', [CustomerController::class]);
+        $customers->put('/delete', [CustomerController::class]);
+    })->add(LocalAuthMiddleware::class);
 
-        $customers->get('/view/{id}', [CustomerController::class, 'viewCustomer']);
-        $customers->get('/get/record/{id}', [CustomerController::class, 'getRecord']);
+    $app->group('/tickets', function (RouteCollectorProxy $tickets) {
+        $tickets->get('/get', [TicketController::class, 'getList']);
+        $tickets->get('/get/{id}', [TicketController::class]);
 
-        $customers->post('/delete/{id}', [CustomerController::class, 'deleteTicket']);
+        $tickets->put('/create', [TicketController::class]);
+        $tickets->put('/update', [TicketController::class]);
+        $tickets->put('/delete', [TicketController::class]);
     })->add(LocalAuthMiddleware::class);
 
     $app->group('/devices', function (RouteCollectorProxy $devices) {
-        $devices->get('', [DeviceController::class, 'index']);
-        $devices->get('/get/list', [DeviceController::class, 'getList']);
+        $devices->get('/get', [DeviceController::class, 'getList']);
+        $devices->get('/get/{id}', [DeviceController::class]);
 
-        $devices->get('/create', [DeviceController::class, 'createView']);
-        $devices->post('/create', [DeviceController::class, 'createDevice']);
-        
-        $devices->get('/view/{id}', [DeviceController::class, 'viewRecord']);
-        $devices->get('/get/record/{id}', [DeviceController::class, 'getRecord']);
-        
-        $devices->post('/delete/{id}', [DeviceController::class, 'deleteDevice']);
+        $devices->put('/create', [DeviceController::class]);
+        $devices->put('/update', [DeviceController::class]);
+        $devices->put('/delete', [DeviceController::class]);
     })->add(LocalAuthMiddleware::class);
 };

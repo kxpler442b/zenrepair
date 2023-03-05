@@ -8,7 +8,10 @@
     .box-shadow-black {
         box-shadow: 0.125rem 0.125rem 0px 0px #000; 
     };
-    .poop {
-        box-shadow: 0.125rem 0.125rem 0px 0px #f00; 
+}
+
+@layer utilities {
+    .box-shadow-lime {
+        box-shadow: 0.125rem 0.125rem 0px 0px #fff; 
     };
 }

@@ -1,0 +1,36 @@
+{% extends "base.html.twig" %}
+
+{% block nav %}
+    {% include "/components/nav.html.twig" %}
+{% endblock %}
+
+{% block main %}
+
+<div class="row-span-full col-start-3 col-span-10 flex flex-col justify-start align-middle items-start">
+
+    <div class="w-full mb-6 px-6 py-8 flex flex-col justify-center align-middle items-center bg-violet-500">
+        <div class="w-full mb-8 flex flex-row justify-between align-middle items-center">
+            <h2 class="font-bold text-3xl text-white">{{ page.record.display_name }}</h2>
+            <div class="flex-grow"></div>
+            <a href="#" class="mr-4 px-4 py-2 text-sm text-black hover:text-lime-700 box-shadow-black border border-black bg-lime-300 hover:bg-lime-100">Edit {{ page.context.Name }}</a>
+            <a href="#" class="px-4 py-2 text-sm text-black hover:text-red-700 box-shadow-black border border-black bg-red-300 hover:bg-red-100">Delete {{ page.context.Name }}</a>
+        </div>
+
+        <div class="w-full mb-2 flex flex-row justify-start align-middle items-center">
+            <form method="POST">
+                <input type="text" name="search" id="search" placeholder="Search {{ page.context.name }}..." class="form-input mr-2 text-sm box-shadow-black focus:box-shadow-black border border-black bg-white focus:ring-transparent">
+                <select id="order_by" name="order_by" class="form-select pr-10 text-sm box-shadow-black focus:box-shadow-black border border-black focus:border-lime-500 bg-white focus:ring-transparent">
+                    <option value="name_asc">order by updated ascending</option>
+                    <option value="name_desc">order by updated descending</option>
+                </select>
+            </form>
+        </div>
+    </div>
+
+    <div hx-get="{{ globals.base_url }}/{{ page.context.name }}s/get/{{ page.record.id }}" hx-trigger="load" hx-swap="outerHTML" class="w-full px-6 py-2 hidden">
+        <!-- Load result using HTMX -->
+        
+    </div>
+</div>
+
+{% endblock %}

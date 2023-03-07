@@ -13,31 +13,26 @@ declare(strict_types = 1);
 namespace App\Domain;
 
 use DateTime;
-use Doctrine\ORM\Mapping\Id;
-use Ramsey\Uuid\UuidInterface;
+use App\Trait\EntityId;
 use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\OneToOne;
 use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
-use Ramsey\Uuid\Doctrine\UuidGenerator;
-use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping\CustomIdGenerator;
 use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\ORM\Mapping\ManyToMany;
 
 #[Entity, Table(name: 'tickets')]
 class Ticket
 {
-    #[Id, Column(type: 'uuid', unique: true)]
-    #[GeneratedValue(strategy: 'CUSTOM')]
-    #[CustomIdGenerator(class: UuidGenerator::class)]
-    private UuidInterface|string $id;
+    use EntityId;
 
-    #[Column(name:'title', type:'string')]
-    private string $title;
+    #[Column(name:'subject', type:'string')]
+    private string $subject;
+
+    #[Column(name:'issue_type', type:'string', nullable: true)]
+    private string $issue_type;
 
     #[Column(name:'status', type:'integer')]
     private int $status;
@@ -54,47 +49,56 @@ class Ticket
     #[OneToOne(targetEntity: Device::class, inversedBy: 'ticket')]
     private ?Device $device;
 
-    #[Column(name:'created', type:'datetime')]
+    #[Column(name:'created', type:'datetime', updatable: false)]
     private DateTime $created;
 
     #[Column(name:'updated', type:'datetime')]
     private DateTime $updated;
+
+    #[Column(name:'closed', type:'datetime')]
+    private DateTime $closed;
 
     public function __construct() 
     {
         $this->notes = new ArrayCollection();
     }
 
-    public function __destruct() {}
-
     /**
-     * Get the value of id
+     * Get the value of subject
      */ 
-    public function getId(): UuidInterface|string
+    public function getSubject(): string
     {
-        return $this->id;
+        return $this->subject;
     }
 
     /**
-     * Get the value of title
+     * Set the value of subject
      */ 
-    public function getTitle() : string
+    public function setSubject(string $subject = 'subject'): void
     {
-        return $this->title;
+        $this->subject = $subject;
     }
 
     /**
-     * Set the value of title
+     * Get the value of issue_type
      */ 
-    public function setTitle(string $title) : void
+    public function getIssueType(): string
     {
-        $this->title = $title;
+        return $this->issue_type;
+    }
+
+    /**
+     * Set the value of issue_type
+     */ 
+    public function setIssue_type(string $issue_type = 'not set'): void
+    {
+        $this->issue_type = $issue_type;
     }
 
     /**
      * Get the value of status
      */ 
-    public function getStatus() : int
+    public function getStatus(): int
     {
         return $this->status;
     }
@@ -102,7 +106,7 @@ class Ticket
     /**
      * Set the value of status
      */ 
-    public function setStatus(int $status = 0)
+    public function setStatus(int $status = 0): void
     {
         $this->status = $status;
     }
@@ -110,7 +114,7 @@ class Ticket
     /**
      * Get the value of notes
      */ 
-    public function getNotes() : Collection
+    public function getNotes(): ?Collection
     {
         return $this->notes;
     }
@@ -118,7 +122,7 @@ class Ticket
     /**
      * Set the value of notes
      */ 
-    public function setNotes($notes)
+    public function setNotes(Collection $notes): void
     {
         $this->notes = $notes;
     }
@@ -126,7 +130,7 @@ class Ticket
     /**
      * Get the value of user
      */ 
-    public function getUser() : ?User
+    public function getUser(): ?User
     {
         return $this->user;
     }
@@ -134,7 +138,7 @@ class Ticket
     /**
      * Set the value of user
      */ 
-    public function setUser(User $user = null): void
+    public function setUser(User $user): void
     {
         $this->user = $user;
     }
@@ -142,15 +146,15 @@ class Ticket
     /**
      * Get the value of customer
      */ 
-    public function getCustomer() : ?Customer
+    public function getCustomer(): ?Customer
     {
         return $this->customer;
     }
 
     /**
-     * Set the value of user
+     * Set the value of customer
      */ 
-    public function setCustomer(Customer $customer = null): void
+    public function setCustomer(Customer $customer): void
     {
         $this->customer = $customer;
     }
@@ -158,7 +162,7 @@ class Ticket
     /**
      * Get the value of device
      */ 
-    public function getDevice() : Device
+    public function getDevice(): ?Device
     {
         return $this->device;
     }
@@ -174,7 +178,7 @@ class Ticket
     /**
      * Get the value of created
      */ 
-    public function getCreated() : DateTime
+    public function getCreated(): DateTime
     {
         return $this->created;
     }
@@ -182,7 +186,7 @@ class Ticket
     /**
      * Set the value of created
      */ 
-    public function setCreated() : void
+    public function setCreated(): void
     {
         $this->created = new DateTime('now');
     }
@@ -190,7 +194,7 @@ class Ticket
     /**
      * Get the value of updated
      */ 
-    public function getUpdated() : DateTime
+    public function getUpdated(): DateTime
     {
         return $this->updated;
     }
@@ -198,8 +202,24 @@ class Ticket
     /**
      * Set the value of updated
      */ 
-    public function setUpdated() : void
+    public function setUpdated()
     {
         $this->updated = new DateTime('now');
+    }
+
+    /**
+     * Get the value of closed
+     */ 
+    public function getClosed()
+    {
+        return $this->closed;
+    }
+
+    /**
+     * Set the value of closed
+     */ 
+    public function setClosed()
+    {
+        $this->closed = new DateTime('now');
     }
 }

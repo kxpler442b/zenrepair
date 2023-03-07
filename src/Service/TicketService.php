@@ -13,14 +13,19 @@ namespace App\Service;
 
 use App\Domain\Ticket;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\Persistence\ObjectRepository;
 
 class TicketService
 {
     private readonly EntityManager $em;
+    private ObjectRepository|EntityRepository $repo;
 
     public function __construct(EntityManager $em)
     {
         $this->em = $em;
+
+        $this->getRepository();
     }
 
     public function __destruct() {}
@@ -29,7 +34,7 @@ class TicketService
     {
         $ticket = new Ticket;
 
-        $ticket->setTitle($data['title']);
+        $ticket->setSubject($data['subject']);
         $ticket->setStatus($data['status'] ?? 0);
         $ticket->setUser($data['technician']);
         $ticket->setCustomer($data['customer']);
@@ -42,19 +47,24 @@ class TicketService
 
     }
 
-    public function getById(string $id): Ticket
+    public function getById(string $id): ?Ticket
     {
-        return $this->em->find(Ticket::class, $id);
+        return $this->repo->findOneBy(['id' => $id]);
     }
 
-    public function getAll() : array
+    public function getByJobNumber(int $jobNumber): ?int
     {
-        return $this->em->getRepository(Ticket::class)->findAll();
+        return $this->repo->findOneBy(['job_number' => $jobNumber]);
+    }
+
+    public function getAll(): array
+    {
+        return $this->repo->findAll();
     }
 
     public function update(string $id, array $data): void
     {
-        $ticket = $this->em->find(Ticket::class, $id);
+        $ticket = $this->getById($id);
 
         $ticket->setSubject($data['subject']);
     }
@@ -62,5 +72,15 @@ class TicketService
     public function delete(string $id): void
     {
         
+    }
+
+    /**
+     * Set the private repository object.
+     *
+     * @return void
+     */
+    private function getRepository(): void
+    {
+        $this->repo = $this->em->getRepository(Ticket::class);
     }
 }

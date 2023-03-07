@@ -13,24 +13,17 @@ declare(strict_types = 1);
 namespace App\Domain;
 
 use DateTime;
-use Ramsey\Uuid\Uuid;
-use Doctrine\ORM\Mapping\Id;
-use Ramsey\Uuid\UuidInterface;
+use App\Trait\EntityId;
 use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\ManyToOne;
-use Ramsey\Uuid\Doctrine\UuidGenerator;
-use Doctrine\ORM\Mapping\GeneratedValue;
-use Doctrine\ORM\Mapping\CustomIdGenerator;
+use Doctrine\ORM\Query\AST\UpdateItem;
 
 #[Entity, Table(name: 'addresses')]
 class Address
 {
-    #[Id, Column(type: "uuid", unique: true)]
-    #[GeneratedValue(strategy: "CUSTOM")]
-    #[CustomIdGenerator(class: UuidGenerator::class)]
-    private UuidInterface|string $id;
+    use EntityId;
 
     #[Column(name: 'line_one', type: 'string')]
     private string $line_one;
@@ -50,19 +43,11 @@ class Address
     #[ManyToOne(targetEntity: Customer::class, inversedBy: 'addresses')]
     private ?Customer $customer;
 
-    #[Column(name:'created', type:'datetime')]
+    #[Column(name:'created', type:'datetime', updatable: false)]
     private DateTime $created;
 
     #[Column(name:'updated', type:'datetime')]
     private DateTime $updated;
-
-    /**
-     * Get the value of id
-     */ 
-    public function getId(): ?Uuid
-    {
-        return $this->id;
-    }
 
     /**
      * Get the value of line_one

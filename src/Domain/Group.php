@@ -13,26 +13,18 @@ declare(strict_types = 1);
 namespace App\Domain;
 
 use DateTime;
-use Doctrine\ORM\Mapping\Id;
-use Ramsey\Uuid\UuidInterface;
+use App\Trait\EntityId;
 use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
-use Doctrine\ORM\Mapping\JoinTable;
 use Doctrine\ORM\Mapping\OneToMany;
-use Ramsey\Uuid\Doctrine\UuidGenerator;
-use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping\CustomIdGenerator;
 use Doctrine\Common\Collections\ArrayCollection;
 
 #[Entity, Table(name: 'groups')]
 class Group
 {
-    #[Id, Column(type: "uuid", unique: true)]
-    #[GeneratedValue(strategy: "CUSTOM")]
-    #[CustomIdGenerator(class: UuidGenerator::class)]
-    private UuidInterface|string $id;
+    use EntityId;
 
     #[Column(name: 'name', type: 'string')]
     private string $name;
@@ -43,7 +35,7 @@ class Group
     #[OneToMany(targetEntity: User::class, mappedBy: 'group')]
     private Collection|null $users;
 
-    #[Column(name: 'created', type: 'datetime')]
+    #[Column(name: 'created', type: 'datetime', updatable: false)]
     private DateTime $created;
 
     #[Column(name: 'updated', type: 'datetime')]
@@ -55,16 +47,6 @@ class Group
     public function __construct()
     {
         $this->users = new ArrayCollection();
-    }
-
-    public function __destruct() {}
-
-    /**
-     * Get the value of id
-     */ 
-    public function getId() : UuidInterface|string
-    {
-        return $this->id;
     }
 
     /**

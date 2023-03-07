@@ -13,25 +13,18 @@ declare(strict_types = 1);
 namespace App\Domain;
 
 use DateTime;
-use Doctrine\ORM\Mapping\Id;
-use Ramsey\Uuid\UuidInterface;
+use App\Trait\EntityId;
 use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\OneToMany;
-use Ramsey\Uuid\Doctrine\UuidGenerator;
-use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\ORM\Mapping\CustomIdGenerator;
 use Doctrine\Common\Collections\ArrayCollection;
 
 #[Entity, Table(name: 'customers')]
 class Customer
 {
-    #[Id, Column(type: 'uuid', unique: true)]
-    #[GeneratedValue(strategy: 'CUSTOM')]
-    #[CustomIdGenerator(class: UuidGenerator::class)]
-    private UuidInterface|string $id;
+    use EntityId;
 
     #[Column(name: 'email', type: 'string')]
     private string $email;
@@ -57,7 +50,7 @@ class Customer
     #[OneToMany(targetEntity: Ticket::class, mappedBy: 'customer')]
     private ?Collection $tickets;
 
-    #[Column(name:'created', type:'datetime')]
+    #[Column(name:'created', type:'datetime', updatable: false)]
     private DateTime $created;
 
     #[Column(name:'updated', type:'datetime')]
@@ -68,14 +61,6 @@ class Customer
         $this->addresses = new ArrayCollection();
         $this->devices = new ArrayCollection();
         $this->tickets = new ArrayCollection();
-    }
-
-    /**
-     * Get the value of id
-     */ 
-    public function getId(): ?UuidInterface
-    {
-        return $this->id;
     }
 
     /**

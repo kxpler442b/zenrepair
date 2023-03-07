@@ -12,24 +12,17 @@ declare(strict_types = 1);
 namespace App\Domain;
 
 use DateTime;
-use Doctrine\ORM\Mapping\Id;
-use Ramsey\Uuid\UuidInterface;
+use App\Trait\EntityId;
 use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use Doctrine\ORM\Mapping\OneToOne;
 use Doctrine\ORM\Mapping\ManyToOne;
-use Ramsey\Uuid\Doctrine\UuidGenerator;
-use Doctrine\ORM\Mapping\GeneratedValue;
-use Doctrine\ORM\Mapping\CustomIdGenerator;
 
 #[Entity, Table(name: 'devices')]
 class Device
 {
-    #[Id, Column(type: 'uuid', unique: true)]
-    #[GeneratedValue(strategy: 'CUSTOM')]
-    #[CustomIdGenerator(class: UuidGenerator::class)]
-    private UuidInterface|string $id;
+    use EntityId;
 
     #[Column(name:'manufacturer', type:'string')]
     private string $manufacturer;
@@ -52,18 +45,13 @@ class Device
     #[OneToOne(targetEntity: Ticket::class, mappedBy: 'device')]
     private ?Ticket $ticket;
 
-    #[Column(name:'created', type:'datetime')]
+    #[Column(name:'created', type:'datetime', updatable: false)]
     private DateTime $created;
 
     #[Column(name:'updated', type:'datetime')]
     private DateTime $updated;
 
     public function __construct() {}
-
-    public function getId(): ?UuidInterface
-    {
-        return $this->id;
-    }
 
     /**
      * Get the value of manufacturer

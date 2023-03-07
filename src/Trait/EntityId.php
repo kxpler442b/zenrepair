@@ -15,6 +15,7 @@ namespace App\Trait;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\Id;
+use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
 trait EntityId
@@ -23,8 +24,8 @@ trait EntityId
     #[GeneratedValue(strategy: 'AUTO')]
     private int $id;
 
-    #[Column(name: 'uuid', unique: true)]
-    private ?UuidInterface  $uuid;
+    #[Column(name: 'uuid', type: 'uuid', unique: true, updatable: false)]
+    private ?UuidInterface $uuid;
 
     /**
      * Get the primary database identity key.
@@ -44,5 +45,17 @@ trait EntityId
     public function getUuid(): ?UuidInterface
     {
         return $this->uuid;
+    }
+
+    /**
+     * Set the UUID.
+     * 
+     * ! Only to be used during initial entity creation.
+     *
+     * @return void
+     */
+    public function setUuid(): void
+    {
+        $this->uuid = Uuid::uuid4();
     }
 }

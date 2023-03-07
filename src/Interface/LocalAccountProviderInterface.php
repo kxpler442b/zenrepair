@@ -21,7 +21,7 @@ interface LocalAccountProviderInterface
 
     public function createGroup(array $data): void;
 
-    public function getAccountById(string $id): ?User;
+    public function getAccountByUuid(string $uuid): ?User;
 
     public function getAccountByEmail(string $email): ?User;
 

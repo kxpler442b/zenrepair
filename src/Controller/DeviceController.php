@@ -68,7 +68,7 @@ class DeviceController
     public function viewRecord(RequestInterface $request, ResponseInterface $response, array $args) : ResponseInterface
     {
         $id = $args['id'];
-        $device = $this->deviceService->getById($id);
+        $device = $this->deviceService->getByUuid($id);
 
         $twig_data = [
             'css_url' => CSS_URL,
@@ -101,7 +101,7 @@ class DeviceController
 
     public function getRecord(RequestInterface $request, ResponseInterface $response, array $args) : ResponseInterface
     {
-        $device = $this->deviceService->getById($args['id']);
+        $device = $this->deviceService->getByUuid($args['id']);
         $owner = $device->getCustomer();
 
         $twig_data = [
@@ -109,7 +109,7 @@ class DeviceController
                 'base_url' => BASE_URL . '/devices'
             ],
             'record' => [
-                'id' => $device->getId(),
+                'id' => $device->getUuid(),
                 'manufacturer' => $device->getManufacturer(),
                 'model' => $device->getModel(),
                 'serial' => $device->getSerial(),
@@ -136,7 +136,7 @@ class DeviceController
         {
             $owner = $device->getCustomer();
 
-            $data[$device->getId()->toString()] = array(
+            $data[$device->getUuid()->toString()] = array(
                 'name' => $device->getManufacturer().' '.$device->getModel(),
                 'serial' => $device->getSerial(),
                 'owner' => $owner->getFirstName().' '.$owner->getLastName(),

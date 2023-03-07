@@ -25,33 +25,12 @@
         </div>
     </div>
 
-    <div hx-get="{{ globals.base_url }}/{{ page.context.name }}s/get" hx-trigger="load" hx-swap="" class="w-full px-6">
-        <div class="hidden">
-            <div class="w-full px-4 py-2 border-b border-black">
-                <h4 class="font-bold text-xs text-stone-600">Table</h4>
-            </div>
-            <table class="w-full table-auto">
-                <thead class="text-sm text-left text-stone-600 border-b border-black bg-stone-200">
-                    <th class="pl-4 py-1.5">Title</th>
-                    <th class="pl-4">Subject</th>
-                    <th class="pl-4">Technician</th>
-                    <th class="pl-4">Customer</th>
-                    <th class="pl-4">Device</th>
-                    <th class="pl-4">Created</th>
-                    <th class="pl-4">Updated</th>
-                </thead>
-                <tbody class="divide-y divide-black">
-                    <tr class="hover:bg-stone-100">
-                        <td class="pl-4 py-2.5"><a href="#" class="hover:underline hover:text-violet-600">Battery Replacement</a></td>
-                        <td class="pl-4">Battery</td>
-                        <td class="pl-4 py-2.5"><a href="#" class="hover:underline hover:text-violet-600">Benjamin Moss</a></td>
-                        <td class="pl-4 py-2.5"><a href="#" class="hover:underline hover:text-violet-600">Harry Cat</a></td>
-                        <td class="pl-4 py-2.5"><a href="#" class="hover:underline hover:text-violet-600">Banana bPhone 6</a></td>
-                        <td class="pl-4">02-01-23</td>
-                        <td class="pl-4">02-01-23 12:00</td>
-                    </tr>
-                </tbody>
-            </table>
+    <div hx-get="{{ globals.base_url }}/{{ page.context.name }}s/get" hx-trigger="load" hx-swap="" class="w-full">
+        <!-- Result is fetched using AJAX request -->
+
+        <div class="w-full pl-10 pt-4">
+            <h3 class="font-bold text-lg text-stone-600">No records found.</h3>
+            <p class="text-md text-stone-500">Is your database connection configured properly?</p>
         </div>
     </div>
 </div>

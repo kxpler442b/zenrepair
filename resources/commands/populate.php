@@ -127,15 +127,3 @@ if($deviceService->getBySerial('4EV9G9EHEQTWEH6L') == null)
         'owner' => $owner
     ]);
 }
-
-$t = $accountProvider->getAccountByEmail('admin@email.com');
-$cs = $customerService->getByEmail('harry@cat.com');
-$d = $deviceService->getBySerial('2ZQLNN8TJ4PNL8PV');
-
-$ticketService->create([
-    'subject' => 'Battery Replacement',
-    'status' => 0,
-    'technician' => $t,
-    'customer' => $cs,
-    'device' => $d
-]);

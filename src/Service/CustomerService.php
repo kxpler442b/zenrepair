@@ -26,6 +26,7 @@ class CustomerService
     public function __construct(EntityManager $em)
     {
         $this->em = $em;
+        
         $this->repo = $em->getRepository(Customer::class);
     }
 
@@ -38,6 +39,7 @@ class CustomerService
         $customer->setFirstName($data['first_name']);
         $customer->setLastName($data['last_name']);
         $customer->setMobile($data['mobile']);
+        $customer->setUuid();
         $customer->setCreated();
         $customer->setUpdated();
 
@@ -45,14 +47,14 @@ class CustomerService
         $this->em->flush($customer);
     }
 
-    public function getById(string $id): ?Customer
+    public function getByUuid(string $uuid): ?Customer
     {
-        return $this->em->getRepository(Customer::class)->findOneBy(['id' => $id]);
+        return $this->repo->findOneBy(['uuid' => $uuid]);
     }
 
     public function getByEmail(string $email): ?Customer
     {
-        return $this->em->getRepository(Customer::class)->findOneBy(['email' => $email]);
+        return $this->repo->findOneBy(['email' => $email]);
     }
 
     public function getAll(): ?array
@@ -60,18 +62,18 @@ class CustomerService
         return $this->repo->findAll();
     }
 
-    public function update(string $id, array $data): bool
+    public function update(string $uuid, array $data): bool
     {
-        $customer = $this->getById($id);
+        $customer = $this->getByUuid($uuid);
 
         // TODO: Update data function.
 
         return false;
     }
 
-    public function delete(string $id): bool
+    public function delete(string $uuid): bool
     {
-        $customer = $this->getById($id);
+        $customer = $this->getByUuid($uuid);
 
         // TODO: Delete customer function.
 

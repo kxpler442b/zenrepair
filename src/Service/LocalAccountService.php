@@ -15,12 +15,15 @@ namespace App\Service;
 use App\Domain\User;
 use App\Domain\Group;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\Persistence\ObjectRepository;
 use App\Interface\LocalAccountProviderInterface;
-use Doctrine\Common\Collections\Collection;
 
 class LocalAccountService implements LocalAccountProviderInterface
 {
     private readonly EntityManager $em;
+    private ObjectRepository|EntityRepository $userRepo;
+    private ObjectRepository|EntityRepository $groupRepo;
 
     /**
      * Constructor method
@@ -30,6 +33,9 @@ class LocalAccountService implements LocalAccountProviderInterface
     public function __construct(EntityManager $em)
     {
         $this->em = $em;
+
+        $this->setUserRepository();
+        $this->setGroupRepository();
     }
 
     public function __destruct() {}
@@ -44,6 +50,7 @@ class LocalAccountService implements LocalAccountProviderInterface
         $user->setFirstName($data['first_name']);
         $user->setLastName($data['last_name'] ?? 'null');
         $user->setGroup($group);
+        $user->setUuid();
         $user->setCreated();
         $user->setUpdated();
 
@@ -57,6 +64,7 @@ class LocalAccountService implements LocalAccountProviderInterface
 
         $group->setName($data['name']);
         $group->setPrivLevel($data['priv_level'] ?? 3);
+        $group->setUuid();
         $group->setCreated();
         $group->setUpdated();
 
@@ -64,36 +72,36 @@ class LocalAccountService implements LocalAccountProviderInterface
         $this->em->flush();
     }
 
-    public function getAccountById(string $id): ?User
+    public function getAccountByUuid(string $uuid): ?User
     {
-        return $this->em->getRepository(User::class)->findOneBy(['id' => $id]);
+        return $this->userRepo->findOneBy(['uuid' => $uuid]);
     }
 
     public function getAccountByEmail(string $email): ?User
     {
-        return $this->em->getRepository(User::class)->findOneBy(['email' => $email]);
+        return $this->userRepo->findOneBy(['email' => $email]);
     }
 
     public function getAccountByGroup(string $group_id): ?User
     {
-        return $this->em->getRepository(User::class)->findOneBy(['id' => $group_id]);
+        return $this->userRepo->findOneBy(['id' => $group_id]);
     }
 
     public function getAccountsInGroup(string $group_name): ?array
     {
         $group = $this->getGroupByName($group_name);
 
-        return $this->em->getRepository(User::class)->findBy(['group' => $group->getId()->toString()]);
+        return $this->userRepo->findBy(['group' => $group->getUuid()->toString()]);
     }
 
-    public function getGroupById(string $id): ?Group
+    public function getGroupById(string $uuid): ?Group
     {
-        return $this->em->getRepository(Group::class)->findOneBy(['id' => $id]);
+        return $this->groupRepo->findOneBy(['uuid' => $uuid]);
     }
 
     public function getGroupByName(string $name): ?Group
     {
-        return $this->em->getRepository(Group::class)->findOneBy(['name' => $name]);
+        return $this->groupRepo->findOneBy(['name' => $name]);
     }
 
     public function updateAccount(string $id, array $data): void
@@ -104,5 +112,15 @@ class LocalAccountService implements LocalAccountProviderInterface
     public function deleteAccount(string $id): void
     {
         // TODO: Implement account deletion function.
+    }
+
+    private function setUserRepository(): void
+    {
+        $this->userRepo = $this->em->getRepository(User::class);
+    }
+
+    private function setGroupRepository(): void
+    {
+        $this->groupRepo = $this->em->getRepository(Group::class);
     }
 }

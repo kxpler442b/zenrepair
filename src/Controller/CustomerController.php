@@ -52,7 +52,7 @@ class CustomerController
     public function getRecord(RequestInterface $request, ResponseInterface $response, array $args) : ResponseInterface
     {
         $customerId = $args['id'];
-        $customer = $this->customerService->getById($customerId);
+        $customer = $this->customerService->getByUuid($customerId);
         $customerDisplayName = $customer->getFirstName() . ' ' . $customer->getLastName();
 
         $devices = [];
@@ -60,7 +60,7 @@ class CustomerController
 
         foreach($deviceArray as &$device)
         {
-            $devices[$device->getId()->toString()] = array(
+            $devices[$device->getUuid()->toString()] = array(
                 'serial' => $device->getSerial(),
                 'imei' => $device->getImei(),
                 'manufacturer' => $device->getManufacturer(),
@@ -77,7 +77,7 @@ class CustomerController
                 ],
             ],
             'customer' => [
-                'Database ID' => $customer->getId(),
+                'Database ID' => $customer->getUuid(),
                 'First Name' => $customer->getFirstName(),
                 'Last Name' => $customer->getLastName(),
                 'Email Address' => $customer->getEmail(),
@@ -102,9 +102,9 @@ class CustomerController
 
         foreach($customerArray as &$customer)
         {
-            $data[$customer->getId()->toString()] = array(
+            $data[$customer->getUuid()->toString()] = array(
                 [
-                    'link' => BASE_URL . '/view/customer/' . $customer->getId()->toString(),
+                    'link' => BASE_URL . '/view/customer/' . $customer->getUuid()->toString(),
                     'data' => $customer->getFirstName().' '.$customer->getLastName()
                 ],
                 'email' => $customer->getEmail(),

@@ -13,14 +13,19 @@ namespace App\Service;
 
 use App\Domain\Device;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\Persistence\ObjectRepository;
 
 class DeviceService
 {
     private readonly EntityManager $em;
+    private ObjectRepository|EntityRepository $repo;
 
     public function __construct(EntityManager $em)
     {
         $this->em = $em;
+
+        $this->setRepository();
     }
 
     public function __destruct() {}
@@ -35,6 +40,7 @@ class DeviceService
         $device->setImei($data['imei']);
         $device->setLocator($data['locator']);
         $device->setCustomer($data['owner']);
+        $device->setUuid();
         $device->setCreated();
         $device->setUpdated();
         
@@ -43,9 +49,9 @@ class DeviceService
 
     }
 
-    public function getById(string $id): ?Device
+    public function getByUuid(string $uuid): ?Device
     {
-        return $this->em->find(Device::class, $id);
+        return $this->repo->findOneBy(['uuid' => $uuid]);
     }
 
     public function getBySerial(string $serial): ?Device
@@ -68,5 +74,10 @@ class DeviceService
     public function delete(string $id): void
     {
         
+    }
+
+    private function setRepository(): void
+    {
+        $this->repo = $this->em->getRepository(Device::class);
     }
 }

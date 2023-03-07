@@ -39,6 +39,7 @@ class TicketService
         $ticket->setUser($data['technician']);
         $ticket->setCustomer($data['customer']);
         $ticket->setDevice($data['device']);
+        $ticket->setUuid();
         $ticket->setCreated();
         $ticket->setUpdated();
         

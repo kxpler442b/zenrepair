@@ -80,7 +80,7 @@ class ViewController
     public function viewCustomer(Request $request, Response $response, array $args): Response
     {
         $customerId = $args['id'];
-        $customer = $this->customerService->getById($customerId);
+        $customer = $this->customerService->getByUuid($customerId);
 
         $display_name = $customer->getFirstName() . ' ' . $customer->getLastName();
 

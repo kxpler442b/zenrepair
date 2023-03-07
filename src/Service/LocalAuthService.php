@@ -45,13 +45,13 @@ class LocalAuthService implements LocalAuthInterface
             return $this->user;
         }
 
-        $userId = $this->session->get('user_id');
+        $userUuid = $this->session->get('user_uuid');
 
-        if (! $userId) {
+        if (! $userUuid) {
             return null;
         }
 
-        $user = $this->accountProvider->getAccountById($userId);
+        $user = $this->accountProvider->getAccountByUuid($userUuid);
 
         if (!$user) {
             return null;
@@ -79,7 +79,7 @@ class LocalAuthService implements LocalAuthInterface
     public function auth(User $user) : void
     {
         $this->session->regenerate();
-        $this->session->store('user_id', $user->getId()->toString());
+        $this->session->store('user_uuid', $user->getUuid()->toString());
         $this->session->store('user_info', [
             'first_name' => $user->getFirstName(),
             'last_name' => $user->getLastName(),

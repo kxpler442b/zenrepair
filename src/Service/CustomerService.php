@@ -32,10 +32,12 @@ class CustomerService
 
     public function create(array $data): void
     {
+        $password = 'hello';
+
         $customer = new Customer;
 
         $customer->setEmail($data['email']);
-        $customer->setPassword(password_hash($data['password'], PASSWORD_BCRYPT, ['cost' => 12]));
+        $customer->setPassword(password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]));
         $customer->setFirstName($data['first_name']);
         $customer->setLastName($data['last_name']);
         $customer->setMobile($data['mobile']);
@@ -71,12 +73,11 @@ class CustomerService
         return false;
     }
 
-    public function delete(string $uuid): bool
+    public function delete(string $uuid): void
     {
         $customer = $this->getByUuid($uuid);
 
-        // TODO: Delete customer function.
-
-        return false;
+        $this->em->remove($customer);
+        $this->em->flush();
     }
 }

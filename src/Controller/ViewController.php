@@ -13,6 +13,7 @@ declare(strict_types = 1);
 namespace App\Controller;
 
 use App\Service\CustomerService;
+use App\Service\DeviceService;
 use App\Service\TicketService;
 use Slim\Views\Twig;
 use Slim\Psr7\Request;
@@ -22,14 +23,36 @@ use Psr\Container\ContainerInterface;
 class ViewController
 {
     private readonly CustomerService $customerService;
+    private readonly DeviceService $deviceService;
     private readonly Twig $twig;
 
     public function __construct(ContainerInterface $c)
     {
         $this->customerService = $c->get(CustomerService::class);
+        $this->deviceService = $c->get(DeviceService::class);
         $this->twig = $c->get(Twig::class);
 
         $this->addTwigGlobals();
+    }
+
+    public function viewCreator(Request $request, Response $response, array $args): Response
+    {
+        if($args['context'] == 'customer')
+        {
+            $context = [
+                'name' => 'customer',
+                'Name' => 'Customer'
+            ];
+        }
+
+        $data = [
+            'page' => [
+                'title' => 'Create '. $context['Name'],
+                'context' => $context
+            ]
+        ];
+
+        return $this->twig->render($response, '/create/layout.html.twig', $data);
     }
 
     public function viewDashboard(Request $request, Response $response): Response
@@ -114,6 +137,30 @@ class ViewController
         ];
 
         return $this->twig->render($response, '/read/records.html.twig', $data);
+    }
+
+    public function viewDevice(Request $request, Response $response, array $args): Response
+    {
+        $deviceId = $args['id'];
+        $device = $this->deviceService->getByUuid($deviceId);
+
+        $display_name = $device->getManufacturer().' '.$device->getModel();
+
+        $data = [
+            'page' => [
+                'title' => $display_name . ' - RSMS',
+                'context' => [
+                    'name' => 'device',
+                    'Name' => 'Device'
+                ],
+                'record' => [
+                    'id' => $deviceId,
+                    'display_name' => $display_name
+                ]
+            ]
+        ];
+
+        return $this->twig->render($response, '/read/record.html.twig', $data);
     }
 
     private function addTwigGlobals()

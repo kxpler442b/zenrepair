@@ -38,55 +38,6 @@ class DeviceController
         $this->twig = $container->get(Twig::class);
     }
 
-    public function __destruct() {}
-
-    /**
-     * Full table view.
-     *
-     * @param RequestInterface $request
-     * @param ResponseInterface $response
-     * 
-     * @return ResponseInterface
-     */
-    public function index(RequestInterface $request, ResponseInterface $response) : ResponseInterface
-    {
-        $twig_data = [
-            'css_url' => CSS_URL,
-            'assets_url' => ASSETS_URL,
-            'htmx_url' => HTMX_URL,
-            'title' => 'Customers - RSMS',
-            'controller' => [
-                'base_url' => BASE_URL . '/devices',
-                'name' => 'device',
-                'Name' => 'Device'
-            ]
-        ];
-
-        return $this->twig->render($response, '/basic_view.twig', $twig_data);
-    }
-
-    public function viewRecord(RequestInterface $request, ResponseInterface $response, array $args) : ResponseInterface
-    {
-        $id = $args['id'];
-        $device = $this->deviceService->getByUuid($id);
-
-        $twig_data = [
-            'css_url' => CSS_URL,
-            'assets_url' => ASSETS_URL,
-            'htmx_url' => HTMX_URL,
-            'title' => 'Customers - RSMS',
-            'record' => [
-                'id' => $id,
-                'display_name' => $device->getManufacturer().' '.$device->getModel()
-            ],
-            'controller' => [
-                'base_url' => BASE_URL . '/devices',
-            ]
-        ];
-
-        return $this->twig->render($response, 'record_view.twig', $twig_data);
-    }
-
     public function getCreator(RequestInterface $request, ResponseInterface $response) : ResponseInterface
     {
         $twig_data = [
@@ -101,30 +52,30 @@ class DeviceController
 
     public function getRecord(RequestInterface $request, ResponseInterface $response, array $args) : ResponseInterface
     {
-        $device = $this->deviceService->getByUuid($args['id']);
+        $deviceId = $args['id'];
+        $device = $this->deviceService->getByUuid($deviceId);
+        $deviceDisplayName = $device->getManufacturer().' '.$device->getModel();
+
         $owner = $device->getCustomer();
+        $ownerDisplayName = $owner->getFirstName().' '.$owner->getLastName();
 
         $twig_data = [
-            'controller' => [
-                'base_url' => BASE_URL . '/devices'
-            ],
-            'record' => [
-                'id' => $device->getUuid(),
-                'manufacturer' => $device->getManufacturer(),
-                'model' => $device->getModel(),
-                'serial' => $device->getSerial(),
-                'imei' => $device->getImei(),
-                'owner' => [
-                    'name' => $owner->getFirstName().' '.$owner->getLastName()
+            'page' => [
+                'record' => [
+                    'display_name' => $deviceDisplayName
                 ],
-                'ticket' => [
-                    'id' => '7b249ecb-58a5-4571-bb70-ed2281b38ac3',
-                    'subject' => 'Screen Replacement'
-                ]
+            ],
+            'device' => [
+                'Database ID' => $device->getUuid(),
+                'Manufacturer' => $device->getManufacturer(),
+                'Model' => $device->getModel(),
+                'Serial' => $device->getSerial(),
+                'IMEI' => $device->getImei(),
+                'Locator' => $device->getLocator()
             ]
         ];
 
-        return $this->twig->render($response, '/fragments/tables/device.html', $twig_data);
+        return $this->twig->render($response, '/read/device.html', $twig_data);
     }
 
     public function getList(RequestInterface $request, ResponseInterface $response) : ResponseInterface
@@ -137,7 +88,10 @@ class DeviceController
             $owner = $device->getCustomer();
 
             $data[$device->getUuid()->toString()] = array(
-                'name' => $device->getManufacturer().' '.$device->getModel(),
+                [
+                    'link' => BASE_URL . '/view/device/' . $device->getUuid()->toString(),
+                    'data' => $device->getManufacturer().' '.$device->getModel()
+                ],
                 'serial' => $device->getSerial(),
                 'owner' => $owner->getFirstName().' '.$owner->getLastName(),
                 'created' => $device->getCreated()->format('d-m-Y H:i:s'),

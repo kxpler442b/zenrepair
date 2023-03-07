@@ -13,7 +13,7 @@
             <h2 class="font-bold text-3xl text-white">{{ page.record.display_name }}</h2>
             <div class="flex-grow"></div>
             <a href="#" class="mr-4 px-4 py-2 text-sm text-black hover:text-lime-700 box-shadow-black border border-black bg-lime-300 hover:bg-lime-100">Edit {{ page.context.Name }}</a>
-            <a href="#" class="px-4 py-2 text-sm text-black hover:text-red-700 box-shadow-black border border-black bg-red-300 hover:bg-red-100">Delete {{ page.context.Name }}</a>
+            <a href="{{ globals.base_url }}/{{ page.context.name }}s/delete/{{ page.record.id }}" class="px-4 py-2 text-sm text-black hover:text-red-700 box-shadow-black border border-black bg-red-300 hover:bg-red-100">Delete {{ page.context.Name }}</a>
         </div>
 
         <div class="w-full mb-2 flex flex-row justify-start align-middle items-center">

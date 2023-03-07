@@ -33,6 +33,9 @@ return function (App $app)
         $view->get('/customers', [ViewController::class, 'viewCustomers']);
         $view->get('/customer/{id}', [ViewController::class, 'viewCustomer']);
         $view->get('/devices', [ViewController::class, 'viewDevices']);
+        $view->get('/device/{id}', [ViewController::class, 'viewDevice']);
+
+        $view->get('/creator/{context}', [ViewController::class, 'viewCreator']);
     })->add(LocalAuthMiddleware::class);
 
     $app->group('/users', function (RouteCollectorProxy $users) {
@@ -45,12 +48,13 @@ return function (App $app)
     })->add(LocalAuthMiddleware::class);
 
     $app->group('/customers', function (RouteCollectorProxy $customers) {
+        $customers->get('/get/creator', [CustomerController::class, 'getCreator']);
         $customers->get('/get', [CustomerController::class, 'getList']);
         $customers->get('/get/{id}', [CustomerController::class, 'getRecord']);
 
-        $customers->put('/create', [CustomerController::class]);
+        $customers->post('/create', [CustomerController::class, 'create']);
         $customers->put('/update', [CustomerController::class]);
-        $customers->put('/delete', [CustomerController::class]);
+        $customers->get('/delete/{id}', [CustomerController::class, 'delete']);
     })->add(LocalAuthMiddleware::class);
 
     $app->group('/tickets', function (RouteCollectorProxy $tickets) {
@@ -64,7 +68,7 @@ return function (App $app)
 
     $app->group('/devices', function (RouteCollectorProxy $devices) {
         $devices->get('/get', [DeviceController::class, 'getList']);
-        $devices->get('/get/{id}', [DeviceController::class]);
+        $devices->get('/get/{id}', [DeviceController::class, 'getRecord']);
 
         $devices->put('/create', [DeviceController::class]);
         $devices->put('/update', [DeviceController::class]);

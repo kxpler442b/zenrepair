@@ -97,21 +97,31 @@ class TicketController
 
         foreach($ticketsArray as &$ticket)
         {
+            $technician = $ticket->getUser();
             $device = $ticket->getDevice();
 
-            $data[$ticket->getId()->toString()] = array(
-                'title' => $ticket->getTitle(),
+            $data[$ticket->getUuid()->toString()] = array(
+                [
+                    'link' => BASE_URL . '/view/ticket/' . $ticket->getUuid()->toString(),
+                    'data' => $ticket->getSubject()
+                ],
+                'issue_type' => $ticket->getIssueType(),
                 'status' => $ticket->getStatus(),
-                'device' => $device->getManufacturer().' '.$device->getModel(),
-                'last_updated' => $ticket->getUpdated()->format('d-m-Y H:i:s')
+                [
+                    'link' => BASE_URL . '/view/device/' . $device->getUuid()->toString(),
+                    'data' => $device->getSerial(),
+                ],
+                'technician' => $technician->getFirstName().' '.$technician->getLastName(),
+                'created' => $ticket->getCreated()->format('d-m-Y H:i:s'),
+                'updated' => $ticket->getUpdated()->format('d-m-Y H:i:s')
             );
-        };
+        }
 
         $twig_data = [
             'table' => [
                 'cols' => [
-                    'primary' => 'Title',
-                    'headers' => ['Subject', 'Technician', 'Customer', 'Device', 'Created', 'Last Updated']
+                    'primary' => 'Subject',
+                    'headers' => ['Issue Type', 'Status', 'Device', 'Assigned Technician', 'Created', 'Last Updated']
                 ],
                 'rows' => $data
             ]

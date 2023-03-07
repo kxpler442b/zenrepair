@@ -55,7 +55,7 @@ class Ticket
     #[Column(name:'updated', type:'datetime')]
     private DateTime $updated;
 
-    #[Column(name:'closed', type:'datetime')]
+    #[Column(name:'closed', type:'datetime', nullable: true)]
     private DateTime $closed;
 
     public function __construct() 
@@ -90,7 +90,7 @@ class Ticket
     /**
      * Set the value of issue_type
      */ 
-    public function setIssue_type(string $issue_type = 'not set'): void
+    public function setIssueType(string $issue_type = 'not set'): void
     {
         $this->issue_type = $issue_type;
     }

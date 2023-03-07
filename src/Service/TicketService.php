@@ -35,6 +35,7 @@ class TicketService
         $ticket = new Ticket;
 
         $ticket->setSubject($data['subject']);
+        $ticket->setIssueType($data['issue_type' ?? 'not set']);
         $ticket->setStatus($data['status'] ?? 0);
         $ticket->setUser($data['technician']);
         $ticket->setCustomer($data['customer']);
@@ -48,14 +49,14 @@ class TicketService
 
     }
 
-    public function getById(string $id): ?Ticket
+    public function getById(int $id): ?Ticket
     {
         return $this->repo->findOneBy(['id' => $id]);
     }
 
-    public function getByJobNumber(int $jobNumber): ?int
+    public function getByUuid(string $uuid): ?Ticket
     {
-        return $this->repo->findOneBy(['job_number' => $jobNumber]);
+        return $this->repo->findOneBy(['uuid' => $uuid]);
     }
 
     public function getAll(): array
@@ -63,7 +64,7 @@ class TicketService
         return $this->repo->findAll();
     }
 
-    public function update(string $id, array $data): void
+    public function update(int $id, array $data): void
     {
         $ticket = $this->getById($id);
 

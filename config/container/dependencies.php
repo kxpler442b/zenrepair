@@ -29,6 +29,7 @@ use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use App\Interface\LocalAccountProviderInterface;
 use App\Interface\LocalAuthInterface;
+use App\Service\AddressService;
 use App\Service\CustomerService;
 
 return [
@@ -83,6 +84,10 @@ return [
     CustomerService::class => function(ContainerInterface $container)
     {
         return new CustomerService($container->get(EntityManager::class));
+    },
+    AddressService::class => function(ContainerInterface $container)
+    {
+        return new AddressService($container->get(EntityManager::class));
     },
     TicketService::class => function(ContainerInterface $container)
     {

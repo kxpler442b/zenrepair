@@ -7,6 +7,7 @@
 declare(strict_types = 1);
 
 use App\Interface\LocalAccountProviderInterface;
+use App\Service\AddressService;
 use App\Service\CustomerService;
 use App\Service\DeviceService;
 use App\Service\TicketService;
@@ -17,6 +18,7 @@ $accountProvider = $c->get(LocalAccountProviderInterface::class);
 $customerService = $c->get(CustomerService::class);
 $deviceService = $c->get(DeviceService::class);
 $ticketService = $c->get(TicketService::class);
+$addresses = $c->get(AddressService::class);
 
 if($accountProvider->getGroupByName('admins') == null)
 {
@@ -86,6 +88,25 @@ if($customerService->getByEmail('joy@cat.com') == null)
     ]);
 }
 
+if($customerService->getByEmail('gemini@fish.com') == null)
+{
+    $customer = $customerService->create([
+        'email' => 'gemini@fish.com',
+        'password' => 'hello',
+        'first_name' => 'Gemini',
+        'last_name' => 'Fish',
+        'mobile' => '07123934012'
+    ]);
+
+    $addresses->create([
+        'line_one' => '1 Blue Street',
+        'town' => 'Seatown',
+        'county' => 'Shellshire',
+        'postcode' => 'SH1 C04',
+        'customer' => $customer
+    ]);
+}
+
 if($deviceService->getBySerial('2ZQLNN8TJ4PNL8PV') == null)
 {
     $owner = $customerService->getByEmail('harry@cat.com');
@@ -124,6 +145,20 @@ if($deviceService->getBySerial('4EV9G9EHEQTWEH6L') == null)
         'serial' => '4EV9G9EHEQTWEH6L',
         'imei' => '5325936452477',
         'locator' => 'AA3',
+        'owner' => $owner
+    ]);
+}
+
+if($deviceService->getBySerial('DDWMDVULZPUMD2SC') == null)
+{
+    $owner = $customerService->getByEmail('gemini@fish.com');
+
+    $deviceService->create([
+        'manufacturer' => 'Conch',
+        'model' => 'Shell 11 Max',
+        'serial' => 'DDWMDVULZPUMD2SC',
+        'imei' => '4886472472772',
+        'locator' => 'AA4',
         'owner' => $owner
     ]);
 }

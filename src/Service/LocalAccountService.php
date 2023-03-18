@@ -18,6 +18,7 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ObjectRepository;
 use App\Interface\LocalAccountProviderInterface;
+use Doctrine\Common\Collections\Collection;
 
 class LocalAccountService implements LocalAccountProviderInterface
 {
@@ -85,6 +86,11 @@ class LocalAccountService implements LocalAccountProviderInterface
     public function getAccountByGroup(string $group_id): ?User
     {
         return $this->userRepo->findOneBy(['id' => $group_id]);
+    }
+
+    public function getAccounts(): ?array
+    {
+        return $this->userRepo->findAll();
     }
 
     public function getAccountsInGroup(string $group_name): ?array

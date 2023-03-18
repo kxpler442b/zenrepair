@@ -1,0 +1,23 @@
+<div class="w-full shadow-sm border border-stone-300 bg-white">
+<table class="w-full table-auto">
+    <thead class="text-left border-b border-stone-300 bg-stone-200">
+        {% for key, col in table.cols.headers %}
+            <th class="px-4 py-2 font-medium text-xs text-stone-700">{{ col }}</th>
+        {% endfor %}
+    </thead>
+    <tbody class="divide-y divide-stone-300">
+    {% for item in table.rows %}
+        <tr class="hover:bg-stone-100 transition ease-in-out duration-100">
+        {% for key, row in item %}
+            {% if row is iterable %}
+                <td class="px-4 py-4 font-medium text-sm hover:underline "><a href="{{ row.link }}">{{ row.text }}</a></td>
+            {% else %}
+                <td class="px-4 py-2 font-medium text-sm">{{ row }}</td>
+            
+            {% endif %}
+        {% endfor %}
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+</div>

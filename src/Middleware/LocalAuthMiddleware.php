@@ -39,13 +39,15 @@ class LocalAuthMiddleware implements MiddlewareInterface
         $this->session = $session;
     }
 
-    public static function create(App $app, ContainerInterface $container)
+    public static function create(App $app)
     {
+        $c = $app->getContainer();
+
         return new self(
             $app->getResponseFactory(ResponseFactoryInterface::class),
-            $container->get(AuthInterface::class),
-            $container->get(SessionInterface::class),
-            $container->get(Twig::class)
+            $c->get(LocalAuthInterface::class),
+            $c->get(SessionInterface::class),
+            $c->get(Twig::class)
         );
     }
 
@@ -55,10 +57,14 @@ class LocalAuthMiddleware implements MiddlewareInterface
 
         if($user !== null)
         {
-            $this->twig->getEnvironment()->addGlobal('user_info', [
-                'first_name' => $user->getFirstName(),
-                'last_name' => $user->getLastName(),
-                'email' => $user->getEmail()
+            $this->twig->getEnvironment()->addGlobal(
+                'user', [
+                    'level' => $user->getGroup()->getPrivLevel(),
+                    'info' => [
+                        'first_name' => $user->getFirstName(),
+                        'last_name' => $user->getLastName(),
+                        'email' => $user->getEmail()
+                    ]
             ]);
 
             return $handler->handle($request);

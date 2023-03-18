@@ -13,13 +13,13 @@ declare(strict_types = 1);
 namespace App\Controller;
 
 use Slim\Views\Twig;
+use Slim\Psr7\Request;
+use Slim\Psr7\Response;
 use App\Service\DeviceService;
 use App\Service\TicketService;
 use App\Interface\SessionInterface;
 use App\Service\LocalAccountService;
 use Psr\Container\ContainerInterface;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
 use App\Interface\LocalAccountProviderInterface;
 
 class TicketController
@@ -46,7 +46,7 @@ class TicketController
 
     public function __destruct() {}
 
-    public function getCreator(RequestInterface $request, ResponseInterface $response) : ResponseInterface
+    public function getCreator(Request $request, Response $response) : Response
     {
         if(!$this->session->exists('creator_state'))
         {
@@ -68,29 +68,46 @@ class TicketController
         return $this->twig->render($response, '/frags/creators/ticket.twig', $twig_data);
     }
 
-    public function getCreatorNext(RequestInterface $request, ResponseInterface $response) : ResponseInterface
+    public function getRecord(Request $request, Response $response, array $args) : Response
     {
-        if(!$this->session->exists('creator_state'))
-        {
-            $this->session->store('creator_state', 0);
-        }
+        $ticketId = $args['id'];
+        $ticket = $this->ticketService->getByUuid($ticketId);
 
-        var_dump($this->session->get('creator_state'));
+        $device = $ticket->getDevice();
+        $customer = $ticket->getCustomer();
 
         $twig_data = [
-            'creator' => [
-                'state' => $this->session->get('creator_state')
+            'ticket' => [
+                'Job Number' => $ticket->getId(),
+                'Subject' => $ticket->getSubject(),
+                'Issue Type' => $ticket->getIssueType(),
+                'Status' => $ticket->getStatus(),
             ],
-            'controller' => [
-                'base_url' => BASE_URL . '/tickets',
-                'Name' => 'Ticket'
+            'device' => [
+                'link' => BASE_URL . '/workshop/device/' . $device->getUuid()->toString(),
+                'details' => [
+                    'Manufacturer' => $device->getManufacturer(),
+                    'Model' => $device->getModel(),
+                    'Serial' => $device->getSerial(),
+                    'IMEI' => $device->getImei(),
+                    'Locator' => $device->getLocator()
+                ] 
+            ],
+            'customer' => [
+                'link' => BASE_URL . '/workshop/customer/' . $customer->getUuid()->toString(),
+                'details' => [
+                    'First Name' => $customer->getFirstName(),
+                    'Last Name' => $customer->getLastName(),
+                    'Email Address' => $customer->getEmail(),
+                    'Mobile Number' => $customer->getMobile()
+                ]
             ],
         ];
 
-        return $this->twig->render($response, '/frags/creators/table.twig', $twig_data);
+        return $this->twig->render($response, '/read/ticket.html', $twig_data);
     }
 
-    public function getList(RequestInterface $request, ResponseInterface $response) : ResponseInterface
+    public function getRecords(Request $request, Response $response) : Response
     {
         $data = [];
         $ticketsArray = $this->ticketService->getAll();
@@ -98,44 +115,56 @@ class TicketController
         foreach($ticketsArray as &$ticket)
         {
             $technician = $ticket->getUser();
+            $customer = $ticket->getCustomer();
             $device = $ticket->getDevice();
 
             $data[$ticket->getUuid()->toString()] = array(
+                'id' => $ticket->getId(),
                 [
-                    'link' => BASE_URL . '/view/ticket/' . $ticket->getUuid()->toString(),
-                    'data' => $ticket->getSubject()
+                    'link' => BASE_URL . '/workshop/ticket/' . $ticket->getUuid()->toString(),
+                    'text' => $ticket->getSubject()
                 ],
-                'issue_type' => $ticket->getIssueType(),
+                [
+                    'link' => BASE_URL . '/workshop/customer/' . $customer->getUuid()->toString(),
+                    'text' => $customer->getFirstName().' '.$customer->getLastName()
+                ],
+                'created' => $ticket->getCreated()->format('d-m-Y'),
                 'status' => $ticket->getStatus(),
-                [
-                    'link' => BASE_URL . '/view/device/' . $device->getUuid()->toString(),
-                    'data' => $device->getSerial(),
-                ],
+                'issue_type' => $ticket->getIssueType(),
                 'technician' => $technician->getFirstName().' '.$technician->getLastName(),
-                'created' => $ticket->getCreated()->format('d-m-Y H:i:s'),
                 'updated' => $ticket->getUpdated()->format('d-m-Y H:i:s')
             );
         }
 
         $twig_data = [
+            'page' => [
+                'context' => [
+                    'name' => 'ticket',
+                    'Name' => 'Ticket'
+                ]
+            ],
             'table' => [
                 'cols' => [
-                    'primary' => 'Subject',
-                    'headers' => ['Issue Type', 'Status', 'Device', 'Assigned Technician', 'Created', 'Last Updated']
+                    'headers' => ['#', 'Subject', 'Customer', 'Created', 'Status', 'Issue Type', 'Technician', 'Last Updated']
                 ],
                 'rows' => $data
+            ],
+            'errors' => [
+                0 => [
+                    'error'
+                ]
             ]
         ];
 
-        return $this->twig->render($response, '/read/table.html.twig', $twig_data);
+        return $this->twig->render($response, '/workshop/fragments/table.html.twig', $twig_data);
     }
 
-    public function update(RequestInterface $request, ResponseInterface $response)
+    public function update(Request $request, Response $response)
     {
         
     }
 
-    public function delete(RequestInterface $request, ResponseInterface $response)
+    public function delete(Request $request, Response $response)
     {
         
     }

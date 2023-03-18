@@ -14,6 +14,7 @@ namespace App\Interface;
 
 use App\Domain\User;
 use App\Domain\Group;
+use Doctrine\Common\Collections\Collection;
 
 interface LocalAccountProviderInterface
 {
@@ -26,6 +27,8 @@ interface LocalAccountProviderInterface
     public function getAccountByEmail(string $email): ?User;
 
     public function getAccountByGroup(string $group_id): ?User;
+
+    public function getAccounts(): ?array;
 
     public function getAccountsInGroup(string $group_name): ?array;
 

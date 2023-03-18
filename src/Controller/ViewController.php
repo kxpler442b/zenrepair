@@ -12,6 +12,8 @@ declare(strict_types = 1);
 
 namespace App\Controller;
 
+use App\Interface\LocalAccountProviderInterface;
+use App\Interface\SessionInterface;
 use App\Service\CustomerService;
 use App\Service\DeviceService;
 use App\Service\TicketService;
@@ -22,14 +24,22 @@ use Psr\Container\ContainerInterface;
 
 class ViewController
 {
+    private readonly LocalAccountProviderInterface $users;
     private readonly CustomerService $customerService;
     private readonly DeviceService $deviceService;
+    private readonly TicketService $ticketService;
+
+    private readonly SessionInterface $session;
     private readonly Twig $twig;
 
     public function __construct(ContainerInterface $c)
     {
+        $this->users = $c->get(LocalAccountProviderInterface::class);
         $this->customerService = $c->get(CustomerService::class);
         $this->deviceService = $c->get(DeviceService::class);
+        $this->ticketService = $c->get(TicketService::class);
+
+        $this->session = $c->get(SessionInterface::class);
         $this->twig = $c->get(Twig::class);
 
         $this->addTwigGlobals();
@@ -39,6 +49,16 @@ class ViewController
     {
         if($args['context'] == 'customer')
         {
+            if($this->session->exists('creator'))
+            {
+                $this->session->delete('creator');
+            }
+
+            $this->session->store('creator', [
+                'context' => 'customer',
+                'step' => 0
+            ]);
+
             $context = [
                 'name' => 'customer',
                 'Name' => 'Customer'
@@ -49,7 +69,8 @@ class ViewController
             'page' => [
                 'title' => 'Create '. $context['Name'],
                 'context' => $context
-            ]
+            ],
+            'session' => $this->session->get('creator')
         ];
 
         return $this->twig->render($response, '/create/layout.html.twig', $data);
@@ -57,6 +78,8 @@ class ViewController
 
     public function viewDashboard(Request $request, Response $response): Response
     {
+        $errors = $this->session->get('errors');
+
         $data = [
             'page' => [
                 'title' => 'Dashboard - RSMS',
@@ -64,15 +87,17 @@ class ViewController
                     'name' => 'dashboard',
                     'Name' => 'Dashboard'
                 ]
-            ]
+            ],
+            'errors' => $errors
         ];
 
-        return $this->twig->render($response, '/dashboard/layout.html.twig', $data);
+        return $this->twig->render($response, '/dashboard/dashboard.html.twig', $data);
     }
 
     public function viewTickets(Request $request, Response $response): Response
     {
         $data = [
+            'sidebar_required' => true,
             'page' => [
                 'title' => 'Tickets - RSMS',
                 'context' => [
@@ -82,22 +107,98 @@ class ViewController
             ]
         ];
 
-        return $this->twig->render($response, '/read/records.html.twig', $data);
+        return $this->twig->render($response, '/workshop/list_view.html.twig', $data);
+    }
+
+    public function viewTicket(Request $request, Response $response, array $args): Response
+    {
+        $ticketId = $args['id'];
+        $ticket = $this->ticketService->getByUuid($ticketId);
+
+        $device = $ticket->getDevice();
+        $deviceName = $device->getManufacturer().' '.$device->getModel();
+
+        $displayName = $ticket->getSubject().' For '.$deviceName;
+
+        $data = [
+            'sidebar_required' => true,
+            'page' => [
+                'title' => $displayName . ' - RSMS',
+                'context' => [
+                    'name' => 'ticket',
+                    'Name' => 'Ticket'
+                ],
+                'record' => [
+                    'id' => $ticketId,
+                    'display_name' => $displayName
+                ]
+            ]
+        ];
+
+        return $this->twig->render($response, '/workshop/single_view.html.twig', $data);
+    }
+
+    public function viewUsers(Request $request, Response $response): Response
+    {
+        $errors = $this->session->get('errors');
+
+        $data = [
+            'sidebar_required' => true,
+            'page' => [
+                'title' => 'Users - RSMS',
+                'context' => [
+                    'name' => 'user',
+                    'Name' => 'User'
+                ]
+            ],
+            'errors' => $errors,
+        ];
+
+        return $this->twig->render($response, '/workshop/list_view.html.twig', $data);
+    }
+
+    public function viewUser(Request $request, Response $response, array $args): Response
+    {
+        $userId = $args['id'];
+        $user = $this->users->getAccountByUuid($userId);
+
+        $display_name = $user->getFirstName() . ' ' . $user->getLastName();
+
+        $data = [
+            'sidebar_required' => true,
+            'page' => [
+                'title' => $display_name . ' - RSMS',
+                'context' => [
+                    'name' => 'user',
+                    'Name' => 'User'
+                ],
+                'record' => [
+                    'id' => $userId,
+                    'display_name' => $display_name
+                ]
+            ]
+        ];
+
+        return $this->twig->render($response, '/workshop/single_view.html.twig', $data);
     }
 
     public function viewCustomers(Request $request, Response $response): Response
     {
+        $errors = $this->session->get('errors');
+
         $data = [
+            'sidebar_required' => true,
             'page' => [
                 'title' => 'Customers - RSMS',
                 'context' => [
                     'name' => 'customer',
                     'Name' => 'Customer'
                 ]
-            ]
+            ],
+            'errors' => $errors,
         ];
 
-        return $this->twig->render($response, '/read/records.html.twig', $data);
+        return $this->twig->render($response, '/workshop/list_view.html.twig', $data);
     }
 
     public function viewCustomer(Request $request, Response $response, array $args): Response
@@ -108,6 +209,7 @@ class ViewController
         $display_name = $customer->getFirstName() . ' ' . $customer->getLastName();
 
         $data = [
+            'sidebar_required' => true,
             'page' => [
                 'title' => $display_name . ' - RSMS',
                 'context' => [
@@ -121,12 +223,13 @@ class ViewController
             ]
         ];
 
-        return $this->twig->render($response, '/read/record.html.twig', $data);
+        return $this->twig->render($response, '/workshop/single_view.html.twig', $data);
     }
 
     public function viewDevices(Request $request, Response $response): Response
     {
         $data = [
+            'sidebar_required' => true,
             'page' => [
                 'title' => 'Devices - RSMS',
                 'context' => [
@@ -136,7 +239,7 @@ class ViewController
             ]
         ];
 
-        return $this->twig->render($response, '/read/records.html.twig', $data);
+        return $this->twig->render($response, '/workshop/list_view.html.twig', $data);
     }
 
     public function viewDevice(Request $request, Response $response, array $args): Response
@@ -147,6 +250,7 @@ class ViewController
         $display_name = $device->getManufacturer().' '.$device->getModel();
 
         $data = [
+            'sidebar_required' => true,
             'page' => [
                 'title' => $display_name . ' - RSMS',
                 'context' => [
@@ -160,7 +264,7 @@ class ViewController
             ]
         ];
 
-        return $this->twig->render($response, '/read/record.html.twig', $data);
+        return $this->twig->render($response, '/workshop/single_view.html.twig', $data);
     }
 
     private function addTwigGlobals()

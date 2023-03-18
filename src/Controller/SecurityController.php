@@ -14,29 +14,31 @@ namespace App\Controller;
 use Slim\Views\Twig;
 use Slim\Psr7\Request;
 use Slim\Psr7\Response;
+use Valitron\Validator;
 use App\Service\LocalAuthService;
-use App\Service\LocalAccountService;
 use App\Interface\LocalAuthInterface;
+use App\Interface\SessionInterface;
 use Psr\Container\ContainerInterface;
-use App\Interface\LocalAccountProviderInterface;
+use DateTime;
 
 class SecurityController
 {
     private readonly LocalAuthService $auth;
-    private readonly Twig $twig;
 
-    private readonly LocalAccountService $accountProvider;
+    private readonly SessionInterface $session;
+    private readonly Twig $twig;
 
     /**
      * Constructor method.
      *
      * @param ContainerInterface $container
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $c)
     {
-        $this->auth = $container->get(LocalAuthInterface::class);
-        $this->accountProvider = $container->get(LocalAccountProviderInterface::class);
-        $this->twig = $container->get(Twig::class);
+        $this->auth = $c->get(LocalAuthInterface::class);
+
+        $this->session = $c->get(SessionInterface::class);
+        $this->twig = $c->get(Twig::class);
 
         $this->addTwigGlobals();
     }
@@ -53,11 +55,15 @@ class SecurityController
      */
     public function index(Request $request, Response $response) : Response
     {
+        $errors = $this->session->get('errors');
+
         $twig_data = [
             'page' => [
                 'title' => 'Sign in - RSMS',
                 'context' => 'Security'
-            ]
+            ],
+            'errors' => $errors,
+            'error_timestamp' => $this->session->get('error_timestamp')
         ];
 
         return $this->twig->render($response, '/security/layout.html.twig', $twig_data);
@@ -68,13 +74,42 @@ class SecurityController
         $email = $_POST['email'];
         $password = $_POST['password'];
 
-        if ($this->auth->attemptAuth($email, $password))
-        {
-            return $response->withHeader('Location', '/view/dashboard')
-                            ->withStatus(302);
+        $rules = [
+            'required' => ['email', 'password'],
+            'email' => 'email'
+        ];
+
+        $v = new Validator([
+            'email' => $email,
+            'password' => $password
+        ]);
+
+        $v->rules($rules);
+
+        $datetime = new DateTime('now');
+
+        if($this->session->exists('errors')) {
+            $this->session->delete('errors');
+            $this->session->delete('error_timestamp');
         }
-        else
-        {
+
+        if($v->validate()) {
+            if ($this->auth->attemptAuth($email, $password)) {
+                return $response->withHeader('Location', '/view/dashboard')
+                                ->withStatus(302);
+            }
+            else {
+                $this->session->store('errors', $v->errors());
+                $this->session->store('error_timestamp', $datetime->format('H:i:s'));
+
+                return $response->withHeader('Location', '/')
+                                ->withStatus(302);
+            }
+        }
+        else {
+            $this->session->store('errors', $v->errors());
+            $this->session->store('error_timestamp', $datetime->format('H:i:s'));
+
             return $response->withHeader('Location', '/')
                             ->withStatus(302);
         }

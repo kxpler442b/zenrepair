@@ -13,7 +13,6 @@ declare(strict_types = 1);
 namespace App\Service;
 
 use App\Domain\Customer;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ObjectRepository;
@@ -30,7 +29,7 @@ class CustomerService
         $this->repo = $em->getRepository(Customer::class);
     }
 
-    public function create(array $data): void
+    public function create(array $data): ?Customer
     {
         $password = 'hello';
 
@@ -46,7 +45,9 @@ class CustomerService
         $customer->setUpdated();
 
         $this->em->persist($customer);
-        $this->em->flush($customer);
+        $this->em->flush();
+
+        return $customer;
     }
 
     public function getByUuid(string $uuid): ?Customer

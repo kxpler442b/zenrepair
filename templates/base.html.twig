@@ -7,13 +7,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Space Grotesk Font -->
+    <!-- IBM Plex Sans & Mono -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-
-    <!-- Space Mono Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;700&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600;1,700&display=swap" rel="stylesheet">
 
     <!-- Tailwind Stylesheet -->
     <link type="text/css" href="{{ globals.css_url }}/output.css" rel="stylesheet">
@@ -23,14 +20,15 @@
 
     <title>{{ page.title }}</title>
 </head>
-<body class="h-screen bg-stone-100 overflow-y-hidden">
+<body class="h-screen overflow-y-hidden bg-stone-100">
 
-<div class="h-full grid grid-rows-2 grid-cols-12">
-    {% block nav %} {% endblock %}
+{% include "errors.html.twig" %}
 
-    {% block main %} {% endblock %}
+<div class="h-full grid grid-rows-3 grid-cols-12">
+    {% block navigation %}{% endblock %}
+
+    {% block content %}{% endblock %}
 </div>
-    
 </body>
 
 <!-- HTMX -->

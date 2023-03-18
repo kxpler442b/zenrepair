@@ -1,0 +1,16 @@
+<div class="row-span-full col-start-3 col-end-13 p-8 flex flex-col justify-start align-middle items-start">
+
+    <div class="w-full flex flex-row justify-center align-middle items-start mb-4">
+
+        <h2 class="font-bold text-4xl text-stone-900">{{ page.record.display_name }}</h2>
+
+        <div class="flex-grow"></div>
+
+    </div>
+
+    <div  hx-swap="outerHTML" hx-trigger="load">
+        <!-- Load table fragment with HTMX -->
+        
+    </div>
+
+</div>

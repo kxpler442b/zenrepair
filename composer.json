@@ -32,6 +32,7 @@
         "vlucas/valitron": "^1.4",
         "slim/twig-view": "^3.3",
         "symfony/cache": "^6.2",
-        "ramsey/uuid-doctrine": "^2.0"
+        "ramsey/uuid-doctrine": "^2.0",
+        "tightenco/collect": "^9.52"
     }
 }

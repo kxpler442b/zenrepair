@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Example controller layout.
+ * Customer actions controller.
  * 
  * @author Benjamin Moss <p2595849@my365.dmu.ac.uk>
  * 
@@ -12,15 +12,20 @@ declare(strict_types = 1);
 
 namespace App\Controller;
 
+use App\Interface\SessionInterface;
+use App\Service\AddressService;
 use Slim\Views\Twig;
 use Psr\Container\ContainerInterface;
 use Slim\Psr7\Request;
 use Slim\Psr7\Response;
 use App\Service\CustomerService;
+use Valitron\Validator;
 
 class CustomerController
 {
     private readonly CustomerService $customerService;
+    private readonly AddressService $addressService;
+    private readonly SessionInterface $session;
     private readonly Twig $twig;
 
     /**
@@ -31,34 +36,87 @@ class CustomerController
     public function __construct(ContainerInterface $container)
     {
         $this->customerService = $container->get(CustomerService::class);
+        $this->addressService = $container->get(AddressService::class);
+        $this->session = $container->get(SessionInterface::class);
+
         $this->twig = $container->get(Twig::class);
     }
 
-    public function create(Request $request, Response $response)
+    /**
+     * Create a new customer record.
+     *
+     * @param Request $request
+     * @param Response $response
+     * 
+     * @return Response
+     */
+    public function create(Request $request, Response $response): Response
     {
-        $this->customerService->create([
-            'first_name' => $_POST['first_name'],
-            'last_name' => $_POST['last_name'],
-            'email' => $_POST['email'],
-            'mobile' => $_POST['mobile']
+        $rules = [
+            'required' => [
+                'customer.first_name',
+                'customer.last_name',
+                'customer.email'
+            ],
+            'alphaNum' => [
+                'customer.first_name',
+                'customer.last_name'
+            ]
+        ];
+
+        $this->session->store('post', $_POST);
+
+        $v = new Validator([
+            'customer' => [
+                'first_name' => $_POST['first_name'],
+                'last_name' => $_POST['last_name'],
+                'email' => $_POST['email'],
+                'mobile' => $_POST['mobile']
+            ],
+            'address' => [
+                'line_one' => $_POST['address_line1'],
+                'line_two' => $_POST['address_line2'],
+                'county' => $_POST['address_county'],
+                'town' => $_POST['address_town'],
+                'postcode' => $_POST['address_postcode']
+            ]
         ]);
 
-        return $response->withHeader('Location', BASE_URL . '/view/customers')
-                        ->withStatus(302);
+        $v->rules($rules);
+
+        if($v->validate()) {
+            if($this->session->exists('errors')) {
+                $this->session->delete('errors');
+            }
+
+            return $response->withHeader('Location', BASE_URL . '/view/customers')
+                            ->withStatus(302);
+        }
+        else {
+            if($this->session->exists('errors')) {
+                $this->session->delete('errors');
+            }
+
+            $this->session->store('errors', $v->errors());
+
+            return $response->withHeader('Location', BASE_URL . '/view/customers')
+                            ->withStatus(302);
+        }
     }
 
     public function getCreator(Request $request, Response $response) : Response
     {
+
         $twig_data = [
             'page' => [
                 'context' => [
                     'name' => 'customer',
                     'Name' => 'Customer'
-                ]
+                ], 
             ]
         ];
 
-        return $this->twig->render($response, '/create/customer.html', $twig_data);
+        return $this->twig->render($response, '/create/customer.html.twig', $twig_data);
     }
 
     public function getRecord(Request $request, Response $response, array $args) : Response
@@ -67,6 +125,20 @@ class CustomerController
         $customer = $this->customerService->getByUuid($customerId);
         $customerDisplayName = $customer->getFirstName() . ' ' . $customer->getLastName();
 
+        $addresses = [];
+        $addressArray = $customer->getAddresses();
+
+        foreach($addressArray as &$address)
+        {
+            $addresses[$address->getUuid()->toString()] = array(
+                'Line One' => $address->getLineOne(),
+                'Line Two' => $address->getLineTwo(),
+                'Town / City' => $address->getTown(),
+                'County' => $address->getCounty(),
+                'Postcode' => $address->getPostcode()
+            );
+        }
+
         $devices = [];
         $deviceArray = $customer->getDevices();
 
@@ -74,7 +146,7 @@ class CustomerController
         {
             $devices[$device->getUuid()->toString()] = array(
                 [
-                    'link' => BASE_URL . '/view/device/' . $device->getUuid()->toString(),
+                    'link' => BASE_URL . '/workshop/device/' . $device->getUuid()->toString(),
                     'data' => $device->getManufacturer().' '.$device->getModel()
                 ],
                 'serial' => $device->getSerial(),
@@ -97,6 +169,7 @@ class CustomerController
                 'Email Address' => $customer->getEmail(),
                 'Mobile Number' => $customer->getMobile()
             ],
+            'addresses' => $addresses,
             'devices' => [
                 'cols' => [
                     'primary' => 'Device Name',
@@ -109,7 +182,7 @@ class CustomerController
         return $this->twig->render($response, '/read/customer.html.twig', $twig_data);
     }
 
-    public function getList(Request $request, Response $response) : Response
+    public function getRecords(Request $request, Response $response) : Response
     {
         $data = [];
         $customerArray = $this->customerService->getAll();
@@ -118,8 +191,8 @@ class CustomerController
         {
             $data[$customer->getUuid()->toString()] = array(
                 [
-                    'link' => BASE_URL . '/view/customer/' . $customer->getUuid()->toString(),
-                    'data' => $customer->getFirstName().' '.$customer->getLastName()
+                    'link' => BASE_URL . '/workshop/customer/' . $customer->getUuid()->toString(),
+                    'text' => $customer->getFirstName().' '.$customer->getLastName()
                 ],
                 'email' => $customer->getEmail(),
                 'mobile' => $customer->getMobile(),
@@ -129,16 +202,21 @@ class CustomerController
         };
 
         $twig_data = [
+            'page' => [
+                'context' => [
+                    'name' => 'customer',
+                    'Name' => 'Customer'
+                ]
+            ],
             'table' => [
                 'cols' => [
-                    'primary' => 'Name',
-                    'headers' => ['Email Address', 'Mobile Number', 'Created', 'Last Updated']
+                    'headers' => ['Name', 'Email Address', 'Mobile Number', 'Created', 'Last Updated']
                 ],
                 'rows' => $data
             ]
         ];
 
-        return $this->twig->render($response, '/read/table.html.twig', $twig_data);
+        return $this->twig->render($response, '/workshop/fragments/table.html.twig', $twig_data);
     }
 
     public function update(Request $request, Response $response)

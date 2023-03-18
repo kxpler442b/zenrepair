@@ -78,7 +78,7 @@ class DeviceController
         return $this->twig->render($response, '/read/device.html', $twig_data);
     }
 
-    public function getList(RequestInterface $request, ResponseInterface $response) : ResponseInterface
+    public function getRecords(RequestInterface $request, ResponseInterface $response) : ResponseInterface
     {
         $data = [];
         $deviceArray = $this->deviceService->getAll();
@@ -89,8 +89,8 @@ class DeviceController
 
             $data[$device->getUuid()->toString()] = array(
                 [
-                    'link' => BASE_URL . '/view/device/' . $device->getUuid()->toString(),
-                    'data' => $device->getManufacturer().' '.$device->getModel()
+                    'link' => BASE_URL . '/workshop/device/' . $device->getUuid()->toString(),
+                    'text' => $device->getManufacturer().' '.$device->getModel()
                 ],
                 'serial' => $device->getSerial(),
                 'owner' => $owner->getFirstName().' '.$owner->getLastName(),
@@ -100,16 +100,21 @@ class DeviceController
         }
 
         $twig_data = [
+            'page' => [
+                'context' => [
+                    'name' => 'device',
+                    'Name' => 'Device'
+                ]
+            ],
             'table' => [
                 'cols' => [
-                    'primary' => 'Name',
-                    'headers' => ['Serial Number', 'Owner', 'Created', 'Last Updated']
+                    'headers' => ['Name', 'Serial Number', 'Owner', 'Created', 'Last Updated']
                 ],
                 'rows' => $data
             ]
         ];
 
-        return $this->twig->render($response, '/read/table.html.twig', $twig_data);
+        return $this->twig->render($response, '/workshop/fragments/table.html.twig', $twig_data);
     }
 
     public function update(RequestInterface $request, ResponseInterface $response)

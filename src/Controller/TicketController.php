@@ -78,10 +78,12 @@ class TicketController
 
         $twig_data = [
             'ticket' => [
-                'Job Number' => $ticket->getId(),
-                'Subject' => $ticket->getSubject(),
-                'Issue Type' => $ticket->getIssueType(),
-                'Status' => $ticket->getStatus(),
+                'status' => $ticket->getStatus(),
+                'details' => [
+                    'Job ID' => $ticket->getId(),
+                    'Subject' => $ticket->getSubject(),
+                    'Issue Type' => $ticket->getIssueType(),
+                ]
             ],
             'device' => [
                 'link' => BASE_URL . '/workshop/device/' . $device->getUuid()->toString(),
@@ -104,7 +106,7 @@ class TicketController
             ],
         ];
 
-        return $this->twig->render($response, '/read/ticket.html', $twig_data);
+        return $this->twig->render($response, '/workshop/fragments/ticket.html.twig', $twig_data);
     }
 
     public function getRecords(Request $request, Response $response) : Response

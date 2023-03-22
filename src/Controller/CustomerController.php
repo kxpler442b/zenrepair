@@ -147,7 +147,7 @@ class CustomerController
             $devices[$device->getUuid()->toString()] = array(
                 [
                     'link' => BASE_URL . '/workshop/device/' . $device->getUuid()->toString(),
-                    'data' => $device->getManufacturer().' '.$device->getModel()
+                    'text' => $device->getManufacturer().' '.$device->getModel()
                 ],
                 'serial' => $device->getSerial(),
                 'imei' => $device->getImei(),
@@ -163,23 +163,24 @@ class CustomerController
                 ],
             ],
             'customer' => [
-                'Database ID' => $customer->getUuid()->toString(),
-                'First Name' => $customer->getFirstName(),
-                'Last Name' => $customer->getLastName(),
-                'Email Address' => $customer->getEmail(),
-                'Mobile Number' => $customer->getMobile()
+                'id' => $customer->getUuid()->toString(),
+                'details' => [
+                    'First Name' => $customer->getFirstName(),
+                    'Last Name' => $customer->getLastName(),
+                    'Email Address' => $customer->getEmail(),
+                    'Mobile Number' => $customer->getMobile()
+                ]
             ],
             'addresses' => $addresses,
             'devices' => [
                 'cols' => [
-                    'primary' => 'Device Name',
-                    'headers' => ['Serial Number', 'IMEI', 'Created', 'Last Updated']
+                    'headers' => ['Device Name', 'Serial Number', 'IMEI', 'Created', 'Last Updated']
                 ],
                 'rows' => $devices
             ]
         ];
 
-        return $this->twig->render($response, '/read/customer.html.twig', $twig_data);
+        return $this->twig->render($response, '/workshop/fragments/customer.html', $twig_data);
     }
 
     public function getRecords(Request $request, Response $response) : Response

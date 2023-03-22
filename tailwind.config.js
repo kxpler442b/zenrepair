@@ -7,15 +7,14 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["'IBM Plex Sans'", ...defaultTheme.fontFamily.sans],
-        mono: ["'IBM Plex Mono'", ...defaultTheme.fontFamily.mono],
+        sans: ["'Inter'", ...defaultTheme.fontFamily.sans],
+      },
+      gridTemplateRows: {
+        'layout': '64px repeat(4, minmax(0, 1fr))'
       },
       gridTemplateColumns: {
         '16': 'repeat(16, minmax(0, 1fr))'
       },
-      backgroundImage: {
-        'security': 'url("/assets/security-bg.jpg")'
-      }
     }
   },
   plugins: [

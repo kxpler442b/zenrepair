@@ -66,7 +66,7 @@ class SecurityController
             'error_timestamp' => $this->session->get('error_timestamp')
         ];
 
-        return $this->twig->render($response, '/security/layout.html.twig', $twig_data);
+        return $this->twig->render($response, '/security/login.html.twig', $twig_data);
     }
 
     public function authUser(Request $request, Response $response) : Response

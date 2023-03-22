@@ -270,6 +270,10 @@ class ViewController
     private function addTwigGlobals()
     {
         $this->twig->getEnvironment()->addGlobal('globals', [
+            'debug' => [
+                'enabled' => true,
+                'phpversion' => phpversion()
+            ],
             'base_url' => BASE_URL,
             'favicon_url' => FAVICON_URL,
             'css_url' => CSS_URL,

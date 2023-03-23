@@ -21,10 +21,10 @@ use Slim\Views\Twig;
 use Slim\Psr7\Request;
 use Slim\Psr7\Response;
 use Psr\Container\ContainerInterface;
+use Valitron\Validator;
 
-class ViewController
+class WorkshopController
 {
-    private readonly LocalAccountProviderInterface $users;
     private readonly CustomerService $customerService;
     private readonly DeviceService $deviceService;
     private readonly TicketService $ticketService;
@@ -34,31 +34,17 @@ class ViewController
 
     public function __construct(ContainerInterface $c)
     {
-        $this->users = $c->get(LocalAccountProviderInterface::class);
         $this->customerService = $c->get(CustomerService::class);
         $this->deviceService = $c->get(DeviceService::class);
         $this->ticketService = $c->get(TicketService::class);
 
         $this->session = $c->get(SessionInterface::class);
         $this->twig = $c->get(Twig::class);
-
-        $this->addTwigGlobals();
     }
 
-    public function viewCreator(Request $request, Response $response, array $args): Response
+    public function viewCreate(Request $request, Response $response, array $args): Response
     {
-        if($args['context'] == 'customer')
-        {
-            if($this->session->exists('creator'))
-            {
-                $this->session->delete('creator');
-            }
-
-            $this->session->store('creator', [
-                'context' => 'customer',
-                'step' => 0
-            ]);
-
+        if($args['context'] == 'customer') {
             $context = [
                 'name' => 'customer',
                 'Name' => 'Customer'
@@ -67,13 +53,60 @@ class ViewController
 
         $data = [
             'page' => [
-                'title' => 'Create '. $context['Name'],
+                'title' => 'Create - RSMS',
                 'context' => $context
             ],
-            'session' => $this->session->get('creator')
         ];
 
-        return $this->twig->render($response, '/create/layout.html.twig', $data);
+        return $this->twig->render($response, '/workshop/create_view.html.twig', $data);
+    }
+
+    /**
+     * Returns a predefined notice block if it is found in the whitelist.
+     *
+     * @param Request $request
+     * @param Response $response
+     * @param array $args
+     * @return Response
+     */
+    public function getNotice(Request $request, Response $response, array $args): Response
+    {
+        $page_name = $args['notice'];
+
+        $whitelist = array('gdpr_accuracy');
+
+        $rules = [
+            'required' => ['page_name'],
+            'in' => $whitelist
+        ];
+
+        $v = new Validator([
+            'page_name' => $page_name
+        ]);
+
+        $v->rules($rules);
+
+        if($v->validate()) {
+            return $this->twig->render($response, '/workshop/notices/'.$page_name.'.html.twig');
+        }
+        else {
+            return $response->withStatus(500);
+        }
+    }
+
+    public function viewSettings(Request $request, Response $response): Response
+    {
+        $data = [
+            'page' => [
+                'title' => 'Settings - RSMS',
+                'context' => [
+                    'name' => 'settings',
+                    'Name' => 'Settings'
+                ]
+            ]
+        ];
+
+        return $this->twig->render($response, '/dashboard/dashboard.html.twig', $data);
     }
 
     public function viewDashboard(Request $request, Response $response): Response
@@ -97,7 +130,6 @@ class ViewController
     public function viewTickets(Request $request, Response $response): Response
     {
         $data = [
-            'sidebar_required' => true,
             'page' => [
                 'title' => 'Tickets - RSMS',
                 'context' => [
@@ -131,50 +163,6 @@ class ViewController
                 'record' => [
                     'id' => $ticketId,
                     'display_name' => $displayName
-                ]
-            ]
-        ];
-
-        return $this->twig->render($response, '/workshop/single_view.html.twig', $data);
-    }
-
-    public function viewUsers(Request $request, Response $response): Response
-    {
-        $errors = $this->session->get('errors');
-
-        $data = [
-            'sidebar_required' => true,
-            'page' => [
-                'title' => 'Users - RSMS',
-                'context' => [
-                    'name' => 'user',
-                    'Name' => 'User'
-                ]
-            ],
-            'errors' => $errors,
-        ];
-
-        return $this->twig->render($response, '/workshop/list_view.html.twig', $data);
-    }
-
-    public function viewUser(Request $request, Response $response, array $args): Response
-    {
-        $userId = $args['id'];
-        $user = $this->users->getAccountByUuid($userId);
-
-        $display_name = $user->getFirstName() . ' ' . $user->getLastName();
-
-        $data = [
-            'sidebar_required' => true,
-            'page' => [
-                'title' => $display_name . ' - RSMS',
-                'context' => [
-                    'name' => 'user',
-                    'Name' => 'User'
-                ],
-                'record' => [
-                    'id' => $userId,
-                    'display_name' => $display_name
                 ]
             ]
         ];
@@ -265,20 +253,5 @@ class ViewController
         ];
 
         return $this->twig->render($response, '/workshop/single_view.html.twig', $data);
-    }
-
-    private function addTwigGlobals()
-    {
-        $this->twig->getEnvironment()->addGlobal('globals', [
-            'debug' => [
-                'enabled' => true,
-                'phpversion' => phpversion()
-            ],
-            'base_url' => BASE_URL,
-            'favicon_url' => FAVICON_URL,
-            'css_url' => CSS_URL,
-            'assets_url' => ASSETS_URL,
-            'htmx_url' => HTMX_URL
-        ]);
     }
 }

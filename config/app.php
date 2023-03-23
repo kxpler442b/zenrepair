@@ -10,6 +10,7 @@
 declare(strict_types = 1);
 
 return [
+    'debugEnabled' => true,
     'displayErrorDetails' => true,
     'logErrors' => false,
     'logErrorDetails' => false,

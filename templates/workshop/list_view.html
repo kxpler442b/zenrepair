@@ -1,4 +1,6 @@
 <div class="row-start-0 row-span-1 col-start-3 col-end-13 px-6 flex flex-row justify-center align-middle items-center">
+    <h2 class="font-semibold text-2xl text-stone-700">{{ page.context.Name }}s</h2>
+
     <div class="flex-grow"></div>
 
     <div class="w-1/3 mr-4">
@@ -7,14 +9,12 @@
         </form>
     </div>
     
-    <a href="#" class="block px-4 py-2 font-medium text-sm text-white rounded-md hover:shadow-sm bg-sky-500 hover:bg-sky-700">New {{ page.context.Name }}</a>
+    <a href="{{ globals.base_url }}/workshop/create/{{ page.context.name }}" class="block px-4 py-2 font-medium text-sm text-white rounded-md hover:shadow-sm bg-sky-500 hover:bg-sky-700">New {{ page.context.Name }}</a>
 </div>
 
-<div class="row-start-2 row-span-4 col-start-3 col-end-13 px-6 py-2 flex flex-col justify-start align-middle items-start">
+<div class="row-start-2 row-span-4 col-start-3 col-end-13 px-6 py-4 flex flex-col justify-start align-middle items-start">
 
-    <div class="w-full flex flex-row justify-center align-middle items-start mb-4">
-
-        <h2 class="font-semibold text-3xl text-stone-700">{{ page.context.Name }}s</h2>
+    <div class="w-full flex flex-row justify-center align-middle items-start">
 
         <div class="flex-grow"></div>
 
@@ -27,10 +27,6 @@
             {% endfor %}
         {% endif %}
 
-    </div>
-
-    <div class="w-full mb-6 flex flex-row justify-center align-middle items-center">
-        
     </div>
 
     <div hx-get="{{ globals.base_url }}/{{ page.context.name }}s/get" hx-swap="outerHTML" hx-trigger="load">

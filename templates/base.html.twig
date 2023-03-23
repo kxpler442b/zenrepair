@@ -30,9 +30,9 @@
     {% block content %}{% endblock %}
 </div>
 
-{% if globals.debug.enabled == true %}
+{% if debug.enabled == true %}
     <div class="absolute bottom-0 left-0 w-full px-4 py-2 flex flex-row justify-center align-middle items-center">
-        <p class="font-mono text-xs text-red-500">RSMS CANARY, PHP {{ globals.debug.phpversion }}</p>
+        <p class="font-mono text-xs text-red-500">APP DEBUG MODE ENABLED, PHP {{ debug.phpversion }}</p>
     </div>
 {% endif %}
 

@@ -64,7 +64,7 @@ return [
 
         return new EntityManager($connection, $orm_config);
     },
-    Twig::class => function ()
+    Twig::class => function (Config $config)
     {
         $twig = Twig::create(VIEWS_PATH, [
             'debug' => true,
@@ -74,6 +74,25 @@ return [
 
         $twig->addExtension(new \Twig\Extension\DebugExtension());
 
+        $twig->getEnvironment()->addGlobal(
+            'globals', [
+                'base_url' => BASE_URL,
+                'favicon_url' => FAVICON_URL,
+                'css_url' => CSS_URL,
+                'assets_url' => ASSETS_URL,
+                'htmx_url' => HTMX_URL
+            ]
+        );
+
+        if($config->get('debugEnabled')){
+            $twig->getEnvironment()->addGlobal(
+                'debug', [
+                    'enabled' => true,
+                    'phpversion' => phpversion()
+                ]
+            );
+        }
+        
         return $twig;
     },
     ResponseFactoryInterface::class => fn(App $app) => $app->getResponseFactory(),

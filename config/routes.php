@@ -10,14 +10,15 @@
 declare(strict_types = 1);
 
 use Slim\App;
-use App\Controller\ViewController;
+use App\Controller\UserController;
+use App\Controller\WorkshopController;
+use App\Controller\AdminController;
 use App\Controller\DeviceController;
 use App\Controller\TicketController;
 use Slim\Routing\RouteCollectorProxy;
 use App\Controller\CustomerController;
-use App\Controller\DashboardController;
 use App\Controller\SecurityController;
-use App\Controller\UserController;
+use App\Controller\DashboardController;
 use App\Middleware\LocalAuthMiddleware;
 
 return function (App $app)
@@ -29,26 +30,28 @@ return function (App $app)
         $auth->post('', [SecurityController::class, 'authUser']);
     });
 
-    $app->group('/view', function (RouteCollectorProxy $view) {
-        $view->get('/dashboard', [ViewController::class, 'viewDashboard']);
+    $app->group('/workshop', function(RouteCollectorProxy $workshop) {
+        $workshop->get('/dashboard', [WorkshopController::class, 'viewDashboard']);
+        $workshop->get('/settings', [WorkshopController::class, 'viewSettings']);
 
-        $view->get('/users', [ViewController::class, 'viewUsers']);
-        $view->get('/user/{id}', [ViewController::class, 'viewUser']);
+        $workshop->get('/tickets', [WorkshopController::class, 'viewTickets']);
+        $workshop->get('/ticket/{id}', [WorkshopController::class, 'viewTicket']);
 
-        $view->get('/creator/{context}', [ViewController::class, 'viewCreator']);
+        $workshop->get('/customers', [WorkshopController::class, 'viewCustomers']);
+        $workshop->get('/customer/{id}', [WorkshopController::class, 'viewCustomer']);
+
+        $workshop->get('/devices', [WorkshopController::class, 'viewDevices']);
+        $workshop->get('/device/{id}', [WorkshopController::class, 'viewDevice']);
+
+        $workshop->get('/create/{context}', [WorkshopController::class, 'viewCreate']);
+        $workshop->get('/notice/{notice}', [WorkshopController::class, 'getNotice']);
     })->add(LocalAuthMiddleware::class);
 
-    $app->group('/workshop', function(RouteCollectorProxy $workshop) {
-        $workshop->get('', [ViewController::class, 'viewWorkshop']);
+    $app->group('/admin', function(RouteCollectorProxy $admin) {
+        $admin->get('/users', [AdminController::class, 'viewUsers']);
+        $admin->get('/user/{id}', [AdminController::class, 'viewUser']);
 
-        $workshop->get('/tickets', [ViewController::class, 'viewTickets']);
-        $workshop->get('/ticket/{id}', [ViewController::class, 'viewTicket']);
-
-        $workshop->get('/customers', [ViewController::class, 'viewCustomers']);
-        $workshop->get('/customer/{id}', [ViewController::class, 'viewCustomer']);
-
-        $workshop->get('/devices', [ViewController::class, 'viewDevices']);
-        $workshop->get('/device/{id}', [ViewController::class, 'viewDevice']);
+        $admin->get('/settings', [AdminController::class, 'viewSettings']);
     })->add(LocalAuthMiddleware::class);
 
     $app->group('/dashboard', function(RouteCollectorProxy $dashboard) {
@@ -66,7 +69,6 @@ return function (App $app)
 
     $app->group('/customers', function (RouteCollectorProxy $customers) {
         $customers->get('/get/creator', [CustomerController::class, 'getCreator']);
-        $customers->get('/get/creator/{step}', [CustomerController::class, 'getCreator']);
 
         $customers->get('/get', [CustomerController::class, 'getRecords']);
         $customers->get('/get/{id}', [CustomerController::class, 'getRecord']);
@@ -77,6 +79,8 @@ return function (App $app)
     })->add(LocalAuthMiddleware::class);
 
     $app->group('/tickets', function (RouteCollectorProxy $tickets) {
+        $tickets->get('/get/creator', [TicketController::class, 'getCreator']);
+
         $tickets->get('/get', [TicketController::class, 'getRecords']);
         $tickets->get('/get/{id}', [TicketController::class, 'getRecord']);
 

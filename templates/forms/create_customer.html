@@ -1,0 +1,78 @@
+<div class="w-full flex flex-row justify-start align-middle items-start overflow-y-auto">
+    <div class="w-2/3 pb-8 flex flex-col justify-start align-middle items-center overflow-y-auto scroll-py-8">
+
+        <div class="w-full mb-8 px-4 py-2 flex flex-row justify-between items-center border border-stone-300 bg-white">
+            <div class="px-2 py-2 inline-flex flex-row items-center text-stone-700 animate-pulse">
+                <svg class="mr-4 h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z"></path>
+                </svg>
+                <p>Checking information...</p>
+            </div>
+
+            <div class="hidden px-2 py-2 inline-flex flex-row items-center text-green-700">
+                <svg class="mr-4 h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path>
+                </svg>
+                <p>Valid</p>
+            </div>
+        
+            <button hx-post="{{ globals.base_url }}/{{ page.context.name }}s/create" hx-include="#basic-info, #address" hx-swap="none" class="px-4 py-2 inline-flex flex-row items-center font-medium text-sm text-stone-700 hover:text-sky-700 rounded-md hover:bg-sky-200">
+                <svg class="mr-4 h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path>
+                </svg>
+                Finish
+            </button>
+        </div>
+
+        <div class="w-full mb-8 flex flex-col justify-start border border-stone-300 bg-white">
+            <div class="px-4 py-1.5 border-b border-stone-300 bg-stone-200">
+                <h3 class="font-medium text-xs text-stone-700">Basic Information</h3>
+            </div>
+            <div class="px-6 py-4">
+                <form id="basic-info" method="POST" class="w-1/2">
+
+                    <label for="first_name" class="font-medium text-sm text-stone-700">First Name</label><br>
+                    <input required type="text" name="first_name" id="first_name" class="form-input w-full mt-2 mb-4 text-sm shadow-sm rounded-md border-stone-300 bg-white focus:ring-transparent"><br>
+                    <label for="last_name" class="font-medium text-sm text-stone-700">Last Name</label><br>
+                    <input type="text" name="last_name" id="last_name" class="form-input w-full mt-2 mb-4 text-sm shadow-sm rounded-md border-stone-300 bg-white focus:ring-transparent"><br>
+                    <label for="email" class="font-medium text-sm text-stone-700">Email Address</label><br>
+                    <input type="text" name="email" id="email" class="form-input w-full mt-2 mb-4 text-sm shadow-sm rounded-md border-stone-300 bg-white focus:ring-transparent"><br>
+                    <label for="mobile" class="font-medium text-sm text-stone-700">Phone Number</label><br>
+                    <input type="text" name="mobile" id="mobile" class="form-input w-full mt-2 mb-4 text-sm shadow-sm rounded-md border-stone-300 bg-white focus:ring-transparent"><br>
+
+                </form>
+            </div>
+        </div>
+
+        <div class="w-full flex flex-col justify-start border border-stone-300 bg-white">
+            <div class="px-4 py-1.5 border-b border-stone-300 bg-stone-200">
+                <h3 class="font-medium text-xs text-stone-700">Home Address</h3>
+            </div>
+            <div class="px-6 py-4">
+                <form id="address" method="POST" class="w-1/2">
+
+                    <label for="address_line1" class="font-medium text-sm text-stone-700">Line One</label><br>
+                    <input type="text" name="address_line1" id="address_line1" class="form-input w-full mt-2 mb-4 text-sm shadow-sm rounded-md border-stone-300 bg-white focus:ring-transparent"><br>
+                    <label for="address_line2" class="font-medium text-sm text-stone-700">Line Two (Optional)</label><br>
+                    <input type="text" name="address_line2" id="address_line2" class="form-input w-full mt-2 mb-4 text-sm shadow-sm rounded-md border-stone-300 bg-white focus:ring-transparent"><br>
+                    <label for="town_city" class="font-medium text-sm text-stone-700">Town / City</label><br>
+                    <input type="text" name="town_city" id="town_city" class="form-input w-full mt-2 mb-4 text-sm shadow-sm rounded-md border-stone-300 bg-white focus:ring-transparent"><br>
+                    <label for="county" class="font-medium text-sm text-stone-700">County</label><br>
+                    <input type="text" name="county" id="county" class="form-input w-full mt-2 mb-4 text-sm shadow-sm rounded-md border-stone-300 bg-white focus:ring-transparent"><br>
+                    <label for="postcode" class="font-medium text-sm text-stone-700">Postcode</label><br>
+                    <input type="text" name="postcode" id="postcode" class="form-input w-full mt-2 mb-4 text-sm shadow-sm rounded-md border-stone-300 bg-white focus:ring-transparent"><br>
+
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="w-6"></div>
+
+    <div class="w-1/3 px-4 flex flex-col justify-start align-middle items-center">
+        <div hx-get="{{ globals.base_url }}/workshop/notice/gdpr_accuracy" hx-swap="outerHTML" hx-trigger="load">
+            <!-- Load notice block with AJAX call -->
+        </div>
+    </div>  
+</div>

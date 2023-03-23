@@ -95,7 +95,7 @@ class SecurityController
 
         if($v->validate()) {
             if ($this->auth->attemptAuth($email, $password)) {
-                return $response->withHeader('Location', '/view/dashboard')
+                return $response->withHeader('Location', '/workshop/dashboard')
                                 ->withStatus(302);
             }
             else {

@@ -64,9 +64,7 @@ class CustomerController
             ]
         ];
 
-        $this->session->store('post', $_POST);
-
-        $v = new Validator([
+        $data = [
             'customer' => [
                 'first_name' => $_POST['first_name'],
                 'last_name' => $_POST['last_name'],
@@ -80,7 +78,11 @@ class CustomerController
                 'town' => $_POST['address_town'],
                 'postcode' => $_POST['address_postcode']
             ]
-        ]);
+        ];
+
+        $this->session->store('post', $data);
+
+        $v = new Validator($data);
 
         $v->rules($rules);
 
@@ -89,7 +91,14 @@ class CustomerController
                 $this->session->delete('errors');
             }
 
-            return $response->withHeader('Location', BASE_URL . '/view/customers')
+            $this->customerService->create([
+                'first_name' => $data['customer']['first_name'],
+                'last_name' => $data['customer']['last_name'],
+                'email' => $data['customer']['email'],
+                'mobile' => $data['customer']['mobile']
+            ]);
+
+            return $response->withHeader('Location', BASE_URL . '/workshop/customers')
                             ->withStatus(302);
         }
         else {
@@ -99,7 +108,7 @@ class CustomerController
 
             $this->session->store('errors', $v->errors());
 
-            return $response->withHeader('Location', BASE_URL . '/view/customers')
+            return $response->withHeader('Location', BASE_URL . '/workshop/customers')
                             ->withStatus(302);
         }
     }
@@ -116,7 +125,7 @@ class CustomerController
             ]
         ];
 
-        return $this->twig->render($response, '/create/customer.html.twig', $twig_data);
+        return $this->twig->render($response, '/forms/create_customer.html', $twig_data);
     }
 
     public function getRecord(Request $request, Response $response, array $args) : Response

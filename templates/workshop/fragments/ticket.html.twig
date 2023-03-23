@@ -1,17 +1,27 @@
 <div class="w-full mt-4 mb-10 flex flex-row justify-start align-middle items-center">
-    {% if ticket.status >= 0 %}
+    {% if ticket.status == 0 %}
+        <div class="w-1/5 mr-4 px-4 py-2 rounded-md font-medium text-xs text-sky-500 border border-sky-300 bg-sky-100">Added</div>
+        {% else %}
         <div class="w-1/5 mr-4 px-4 py-2 rounded-md text-xs text-stone-500 border border-stone-300 bg-stone-100">Added</div>
     {% endif %}
-    {% if ticket.status >= 1 %}
-        <div class="w-1/5 mr-4 px-4 py-2 rounded-md font-medium text-xs text-amber-700 border border-amber-700 bg-amber-100">Pre Testing</div>
+    {% if ticket.status == 1 %}
+        <div class="w-1/5 mr-4 px-4 py-2 rounded-md font-medium text-xs text-sky-500 border border-sky-300 bg-sky-100 animate-pulse">Pre Testing</div>
+        {% else %}
+        <div class="w-1/5 mr-4 px-4 py-2 rounded-md text-xs text-stone-500 border border-stone-300 bg-stone-100">Pre Testing</div>
     {% endif %}
     {% if ticket.status >= 2 %}
+        <div class="w-1/5 mr-4 px-4 py-2 rounded-md font-medium text-xs text-sky-500 border border-sky-300 bg-sky-100">In Progress</div>
+        {% else %}
         <div class="w-1/5 mr-4 px-4 py-2 rounded-md text-xs text-stone-500 border border-stone-300 bg-stone-100">In Progress</div>
     {% endif %}
     {% if ticket.status >= 3 %}
+        <div class="w-1/5 mr-4 px-4 py-2 rounded-md font-medium text-xs text-sky-500 border border-sky-300 bg-sky-100 animate-pulse">Post Testing</div>
+        {% else %}
         <div class="w-1/5 mr-4 px-4 py-2 rounded-md text-xs text-stone-500 border border-stone-300 bg-stone-100">Post Testing</div>
     {% endif %}
     {% if ticket.status >= 4 %}
+        <div class="w-1/5 mr-4 px-4 py-2 rounded-md font-medium text-xs text-sky-500 border border-sky-300 bg-sky-100">Completed</div>
+        {% else %}
         <div class="w-1/5 mr-4 px-4 py-2 rounded-md text-xs text-stone-500 border border-stone-300 bg-stone-100">Completed</div>
     {% endif %}
 </div>
@@ -43,7 +53,7 @@
 
     </div>
 
-    <div class="w-32"></div>
+    <div class="w-6"></div>
 
     <div class="w-1/3 px-4 flex flex-col items-center">
         <div class="w-full mb-8 shadow-sm border border-stone-300 bg-white">

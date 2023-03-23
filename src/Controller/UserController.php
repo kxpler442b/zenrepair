@@ -38,55 +38,62 @@ class UserController
     {
         $userId = $args['id'];
         $user = $this->users->getAccountByUuid($userId);
+        $userDisplayName = $user->getFirstName() . ' ' . $user->getLastName();
 
-        $data = [
-            'record' => [
-                'display_name' => $user->getFirstName().' '.$user->getLastName(),
-                'table' => [
+        $twig_data = [
+            'page' => [
+                'record' => [
+                    'display_name' => $userDisplayName
+                ],
+            ],
+            'user' => [
+                'id' => $user->getUuid()->toString(),
+                'details' => [
                     'First Name' => $user->getFirstName(),
                     'Last Name' => $user->getLastName(),
-                    'Email' => $user->getEmail(),
-                    'Group' => $user->getGroup()->getName(),
-                    'Created' => $user->getCreated()->format('d-m-Y'),
-                    'Last Updated' => $user->getUpdated()->format('H:i:s, d-m-Y')
+                    'Email Address' => $user->getEmail(),
+                    'Group' => $user->getGroup()->getName()
                 ]
             ]
         ];
 
-        return $this->twig->render($response, '/read/user.html', $data);
+        return $this->twig->render($response, '/workshop/fragments/user.html', $twig_data);
     }
 
     public function getUserRecords(Request $request, Response $response): Response
     {
-        $table = [];
-        $users = $this->users->getAccounts();
+        $data = [];
+        $usersArray = $this->users->getAccounts();
 
-        foreach($users as &$user)
+        foreach($usersArray as &$user)
         {
-            $displayName = $user->getFirstName().' '.$user->getLastName();
-
-            $table[$user->getUuid()->toString()] = array(
+            $data[$user->getUuid()->toString()] = array(
                 [
-                    'link' => BASE_URL . '/view/user/' . $user->getUuid()->toString(),
-                    'data' => $displayName
+                    'link' => BASE_URL . '/admin/user/' . $user->getUuid()->toString(),
+                    'text' => $user->getFirstName().' '.$user->getLastName()
                 ],
                 'email' => $user->getEmail(),
                 'group' => $user->getGroup()->getName(),
                 'created' => $user->getCreated()->format('d-m-Y'),
-                'updated' => $user->getUpdated()->format('d-m-Y')
+                'last_updated' => $user->getUpdated()->format('d-m-Y H:i:s')
             );
+        };
 
-            $data = [
-                'table' => [
-                    'cols' => [
-                        'primary' => 'Name',
-                        'headers' => ['Email Address', 'Group', 'Created', 'Last Updated']
-                    ],
-                    'rows' => $table
+        $twig_data = [
+            'page' => [
+                'context' => [
+                    'name' => 'user',
+                    'Name' => 'User'
                 ]
-            ];
+            ],
+            'table' => [
+                'cols' => [
+                    'headers' => ['Name', 'Email Address', 'Group', 'Created', 'Last Updated']
+                ],
+                'rows' => $data
+            ]
+        ];
 
-            return $this->twig->render($response, '/read/table.html.twig', $data);
-        }
+        return $this->twig->render($response, '/workshop/fragments/table.html.twig', $twig_data);
     }
 }

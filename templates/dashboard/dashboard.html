@@ -1,3 +1,24 @@
-<div class="row-span-full col-span-14">
-    Dashboard
+<div class="row-start-0 row-span-1 col-start-3 col-end-13 px-6 flex flex-row justify-center align-middle items-center">
+    <h2 class="font-semibold text-2xl text-stone-700">{{ user.info.first_name }}'s {{ page.context.Name }}</h2>
+
+    <div class="flex-grow"></div>
+</div>
+
+<div class="row-start-2 row-span-4 col-start-3 col-end-13 px-6 py-4 flex flex-col justify-start align-middle items-start">
+
+    <div class="w-full flex flex-row justify-center align-middle items-start">
+
+        <div class="flex-grow"></div>
+
+        {% if page.stats|length > 0 %}
+            {% for name, value in page.stats %}
+            <div class="mr-4 px-4 py-2 flex flex-col bg-black">
+                <h3 class="mb-2 font-bold text-3xl text-white">00</h3>
+                <h3 class="text-sm text-white">In progress</h3>
+            </div>
+            {% endfor %}
+        {% endif %}
+
+    </div>
+
 </div>

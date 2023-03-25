@@ -28,7 +28,7 @@ return [
         ]
     ],
     'session' => [
-        'secure' => true,
+        'secure' => false,
         'httponly' => true,
         'samesite' => 'lax'
     ],

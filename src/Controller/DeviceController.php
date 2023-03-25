@@ -23,7 +23,7 @@ use Psr\Http\Message\ResponseInterface;
 class DeviceController
 {
     private readonly LocalAccountService $accountProvider;
-    private readonly DeviceService $deviceService;
+    private readonly DeviceService $devices;
     private readonly Twig $twig;
 
     /**
@@ -34,7 +34,8 @@ class DeviceController
     public function __construct(ContainerInterface $container)
     {
         $this->accountProvider = $container->get(LocalAccountProviderInterface::class);
-        $this->deviceService = $container->get(DeviceService::class);
+        $this->devices = $container->get(DeviceService::class);
+
         $this->twig = $container->get(Twig::class);
     }
 
@@ -53,11 +54,10 @@ class DeviceController
     public function getRecord(RequestInterface $request, ResponseInterface $response, array $args) : ResponseInterface
     {
         $deviceId = $args['id'];
-        $device = $this->deviceService->getByUuid($deviceId);
-        $deviceDisplayName = $device->getManufacturer().' '.$device->getModel();
+        $device = $this->devices->getByUuid($deviceId);
+        $deviceDisplayName = $device->getManufacturer() . ' ' . $device->getModel();
 
         $owner = $device->getCustomer();
-        $ownerDisplayName = $owner->getFirstName().' '.$owner->getLastName();
 
         $twig_data = [
             'page' => [
@@ -66,22 +66,30 @@ class DeviceController
                 ],
             ],
             'device' => [
-                'Database ID' => $device->getUuid(),
-                'Manufacturer' => $device->getManufacturer(),
-                'Model' => $device->getModel(),
-                'Serial' => $device->getSerial(),
-                'IMEI' => $device->getImei(),
-                'Locator' => $device->getLocator()
+                'id' => $device->getUuid()->toString(),
+                'details' => [
+                    'Manufacturer' => $device->getManufacturer(),
+                    'Model' => $device->getModel(),
+                    'Serial Number' => $device->getSerial(),
+                    'IMEI' => $device->getImei(),
+                    'Locator' => $device->getLocator()
+                ]
+            ],
+            'owner' => [
+                'link' => BASE_URL . '/workshop/customer/' . $owner->getUuid()->toString(),
+                'details' => [
+                    'Name' => $owner->getFirstName().' '.$owner->getLastName()
+                ] 
             ]
         ];
 
-        return $this->twig->render($response, '/read/device.html', $twig_data);
+        return $this->twig->render($response, '/workshop/fragments/device.html', $twig_data);
     }
 
     public function getRecords(RequestInterface $request, ResponseInterface $response) : ResponseInterface
     {
         $data = [];
-        $deviceArray = $this->deviceService->getAll();
+        $deviceArray = $this->devices->getAll();
 
         foreach($deviceArray as &$device)
         {

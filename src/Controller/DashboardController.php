@@ -16,21 +16,15 @@ use Slim\Views\Twig;
 use Slim\Psr7\Request;
 use Slim\Psr7\Response;
 use App\Interface\SessionInterface;
-use App\Service\LocalAccountService;
 use Psr\Container\ContainerInterface;
 
 class DashboardController
 {
-    private readonly ContainerInterface $c;
-    private readonly LocalAccountService $users;
-
     private readonly SessionInterface $session;
     private readonly Twig $twig;
 
     public function __construct(ContainerInterface $c)
     {
-        $this->users = $c->get(LocalAccountService::class);
-
         $this->session = $c->get(SessionInterface::class);
         $this->twig = $c->get(Twig::class);
     }

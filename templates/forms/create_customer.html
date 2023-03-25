@@ -16,12 +16,12 @@
                 <p>Valid</p>
             </div>
         
-            <button hx-post="{{ globals.base_url }}/{{ page.context.name }}s/create" hx-include="#basic-info, #address" hx-swap="none" class="px-4 py-2 inline-flex flex-row items-center font-medium text-sm text-stone-700 hover:text-sky-700 rounded-md hover:bg-sky-200">
+            <a hx-post="{{ globals.base_url }}/{{ page.context.name }}s/create" hx-include="#basic-info, #address" hx-swap="none" class="px-4 py-2 inline-flex flex-row items-center font-medium text-sm text-stone-700 hover:text-sky-700 rounded-md hover:bg-sky-200">
                 <svg class="mr-4 h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
                     <path stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"></path>
                 </svg>
                 Finish
-            </button>
+            </a>
         </div>
 
         <div class="w-full mb-8 flex flex-col justify-start border border-stone-300 bg-white">
@@ -45,10 +45,13 @@
         </div>
 
         <div class="w-full flex flex-col justify-start border border-stone-300 bg-white">
-            <div class="px-4 py-1.5 border-b border-stone-300 bg-stone-200">
-                <h3 class="font-medium text-xs text-stone-700">Home Address</h3>
+            <div class="px-4 py-1.5 flex flex-row items-center border-b border-stone-300 bg-stone-200">
+                <h3 class="font-medium text-xs text-stone-700">Customer Address</h3>
+                <div class="flex-grow"></div>
+                <button id="address-add" _="on click toggle .hidden on #address_container then toggle .hidden on #address-cancel then toggle .hidden on me" class="px-4 py-1 rounded-md font-medium text-xs text-stone-700 hover:text-stone-900 border border-stone-500 hover:border-stone-700 bg-transparent hover:bg-stone-300">Add</button>
+                <button id="address-cancel" _="on click toggle .hidden on #address_container then toggle .hidden on #address-add then toggle .hidden on me" class="hidden px-4 py-1 rounded-md font-medium text-xs text-stone-700 hover:text-red-900 border border-stone-500 hover:border-red-700 bg-transparent hover:bg-red-300">Cancel</button>
             </div>
-            <div class="px-6 py-4">
+            <div id="address_container" class="hidden px-6 py-4">
                 <form id="address" method="POST" class="w-1/2">
 
                     <label for="address_line1" class="font-medium text-sm text-stone-700">Line One</label><br>

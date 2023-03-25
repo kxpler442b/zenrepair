@@ -6,18 +6,27 @@
 
 <div class="row-start-2 row-span-4 col-start-3 col-end-13 px-6 py-4 flex flex-col justify-start align-middle items-start">
 
-    <div class="w-full flex flex-row justify-center align-middle items-start">
+    <div class="w-full flex flex-row justify-start align-middle items-start overflow-x-scroll">
 
-        <div class="flex-grow"></div>
-
-        {% if page.stats|length > 0 %}
-            {% for name, value in page.stats %}
-            <div class="mr-4 px-4 py-2 flex flex-col bg-black">
-                <h3 class="mb-2 font-bold text-3xl text-white">00</h3>
-                <h3 class="text-sm text-white">In progress</h3>
-            </div>
-            {% endfor %}
+        {% if stats|length == 0 %}
+        <div class="px-4 py-2 flex flex-row justify-start items-center text-stone-500">
+            <svg class="mr-4 h-8 w-8" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 11-18 0 9 9 0 0118 0zm-9 5.25h.008v.008H12v-.008z"></path>
+            </svg>
+            <h2 class="text-xl">You aren't tracking any statistics.</h2>
+        </div>
         {% endif %}
+
+        {% for title, value in stats %}
+        <div class="mr-4 px-6 py-4 flex flex-col justify-center align-middle items-start shadow-sm border border-stone-300 bg-white">
+            <div class="mb-4">
+                <h2 class="text-6xl text-stone-700">{{ value }}</h2>
+            </div>
+            <div>
+                <h3 class="font-medium text-md text-stone-700">{{ title }}</h3>
+            </div>
+        </div>
+        {% endfor %}
 
     </div>
 

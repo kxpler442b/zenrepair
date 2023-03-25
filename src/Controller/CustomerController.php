@@ -64,25 +64,38 @@ class CustomerController
             ]
         ];
 
-        $data = [
-            'customer' => [
-                'first_name' => $_POST['first_name'],
-                'last_name' => $_POST['last_name'],
-                'email' => $_POST['email'],
-                'mobile' => $_POST['mobile']
-            ],
-            'address' => [
-                'line_one' => $_POST['address_line1'],
-                'line_two' => $_POST['address_line2'],
-                'county' => $_POST['address_county'],
-                'town' => $_POST['address_town'],
-                'postcode' => $_POST['address_postcode']
-            ]
+        $body = $request->getParsedBody();
+
+        $customer = [
+            'first_name' => $body['first_name'],
+            'last_name' => $body['last_name'],
+            'email' => $body['email'],
+            'mobile' => $body['mobile']
         ];
 
-        $this->session->store('post', $data);
+        $address = null;
 
-        $v = new Validator($data);
+        if($body['address_line1'] != null) {
+            $address = [
+                'line_one' => $body['address_line1'],
+                'line_two' => $body['address_line2'],
+                'town' => $body['town_city'],
+                'county' => $body['county'],
+                'postcode' => $body['postcode']
+            ];
+        }
+
+        if($address == null) {
+            $v = new Validator([
+                'customer' => $customer
+            ]);
+        }
+        else {
+            $v = new Validator([
+                'customer' => $customer,
+                'address' => $address
+            ]);
+        }
 
         $v->rules($rules);
 
@@ -91,14 +104,25 @@ class CustomerController
                 $this->session->delete('errors');
             }
 
-            $this->customerService->create([
-                'first_name' => $data['customer']['first_name'],
-                'last_name' => $data['customer']['last_name'],
-                'email' => $data['customer']['email'],
-                'mobile' => $data['customer']['mobile']
+            $customer = $this->customerService->create([
+                'first_name' => $customer['first_name'],
+                'last_name' => $customer['last_name'],
+                'email' => $customer['email'],
+                'mobile' => $customer['mobile']
             ]);
 
-            return $response->withHeader('Location', BASE_URL . '/workshop/customers')
+            if($address != null) {
+                $this->addressService->create([
+                    'line_one' => $address['line_one'],
+                    'line_two' => $address['line_one'],
+                    'town' => $address['town'],
+                    'county' => $address['county'],
+                    'postcode' => $address['postcode'],
+                    'customer' => $customer
+                ]);
+            }
+
+            return $response->withHeader('HX-Location', BASE_URL . '/workshop/customers')
                             ->withStatus(302);
         }
         else {
@@ -108,14 +132,13 @@ class CustomerController
 
             $this->session->store('errors', $v->errors());
 
-            return $response->withHeader('Location', BASE_URL . '/workshop/customers')
+            return $response->withHeader('HX-Location', BASE_URL . '/workshop/customers')
                             ->withStatus(302);
         }
     }
 
     public function getCreator(Request $request, Response $response) : Response
     {
-
         $twig_data = [
             'page' => [
                 'context' => [
@@ -234,13 +257,13 @@ class CustomerController
         
     }
 
-    public function delete(Request $request, Response $response, array $args)
+    public function delete(Request $request, Response $response, array $args): Response
     {
         $customerId = $args['id'];
 
         $this->customerService->delete($customerId);
 
-        return $response->withHeader('Location', BASE_URL . '/view/customers')
+        return $response->withHeader('HX-Location', BASE_URL . '/workshop/customers')
                         ->withStatus(302);
     }
 }

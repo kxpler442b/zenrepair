@@ -35,7 +35,7 @@ class AddressService
         $address = new Address;
 
         $address->setLineOne($data['line_one']);
-        $address->setLineTwo($data['line_two'] ?? ' ');
+        $address->setLineTwo($data['line_two'] ?? null);
         $address->setTown($data['town']);
         $address->setCounty($data['county']);
         $address->setPostcode($data['postcode']);

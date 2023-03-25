@@ -75,7 +75,7 @@ return function (App $app)
 
         $customers->post('/create', [CustomerController::class, 'create']);
         $customers->put('/update', [CustomerController::class]);
-        $customers->get('/delete/{id}', [CustomerController::class, 'delete']);
+        $customers->delete('/delete/{id}', [CustomerController::class, 'delete']);
     })->add(LocalAuthMiddleware::class);
 
     $app->group('/tickets', function (RouteCollectorProxy $tickets) {

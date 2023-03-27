@@ -41,7 +41,7 @@ class Customer
     #[Column(name: 'mobile', type: 'string')]
     private string $mobile;
 
-    #[OneToMany(targetEntity: Address::class, mappedBy: 'customer')]
+    #[OneToMany(targetEntity: Address::class, mappedBy: 'customer', cascade: ['remove'])]
     private ?Collection $addresses;
 
     #[OneToMany(targetEntity: Device::class, mappedBy: 'owner')]

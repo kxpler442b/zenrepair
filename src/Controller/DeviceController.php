@@ -12,18 +12,22 @@ declare(strict_types = 1);
 
 namespace App\Controller;
 
-use App\Interface\LocalAccountProviderInterface;
 use Slim\Views\Twig;
+use Slim\Psr7\Request;
+use Slim\Psr7\Response;
 use App\Service\DeviceService;
 use App\Service\LocalAccountService;
 use Psr\Container\ContainerInterface;
-use Psr\Http\Message\RequestInterface;
-use Psr\Http\Message\ResponseInterface;
+use App\Interface\LocalAccountProviderInterface;
+use App\Interface\SessionInterface;
+use Valitron\Validator;
 
 class DeviceController
 {
-    private readonly LocalAccountService $accountProvider;
+    private readonly LocalAccountService $users;
     private readonly DeviceService $devices;
+
+    private readonly SessionInterface $session;
     private readonly Twig $twig;
 
     /**
@@ -31,27 +35,98 @@ class DeviceController
      *
      * @param ContainerInterface $container
      */
-    public function __construct(ContainerInterface $container)
+    public function __construct(ContainerInterface $c)
     {
-        $this->accountProvider = $container->get(LocalAccountProviderInterface::class);
-        $this->devices = $container->get(DeviceService::class);
+        $this->users = $c->get(LocalAccountProviderInterface::class);
+        $this->devices = $c->get(DeviceService::class);
 
-        $this->twig = $container->get(Twig::class);
+        $this->session = $c->get(SessionInterface::class);
+        $this->twig = $c->get(Twig::class);
     }
 
-    public function getCreator(RequestInterface $request, ResponseInterface $response) : ResponseInterface
+    public function create(Request $request, Response $response): Response
     {
-        $twig_data = [
-            'controller' => [
-                'base_url' => BASE_URL . '/devices',
-                'Name' => 'Device'
+        $rules = array(
+            'required' => [
+                'device.manufacturer',
+                'device.model',
+                'device.serial',
+                'device.imei'
             ],
+            'requiredWith' => [
+                ['device.manufacturer', 'device.model']
+            ],
+            'alphaNum' => [
+                'device.manufacturer',
+                'device.serial',
+                'device.imei'
+            ],
+            'lengthMin' => [
+                ['device.imei', 13]
+            ],
+            'lengthMax' => [
+                ['device.manufacturer', 64],
+                ['device.model', 64],
+                ['device.serial', 32],
+                ['device.imei', 16]
+            ],
+        );
+
+        $formData = $request->getParsedBody();
+
+        $device = array(
+            'manufacturer' => $formData['device_manufacturer'],
+            'model' => $formData['device_model'],
+            'serial' => $formData['device_serial'],
+            'imei' => $formData['device_imei'],
+            'locator' => $formData['device_locator']
+        );
+
+        $v = new Validator([
+            'device' => $device
+        ]);
+
+        $v->rules($rules);
+
+        if($v->validate()) {
+
+            if($this->session->exists('errors')) {
+                $this->session->delete('errors');
+            }
+
+            $this->devices->create($device);
+
+            return $response->withHeader('HX-Location', BASE_URL . '/workshop/devices')
+                            ->withStatus(302);
+        }
+        else {
+
+            if($this->session->exists('errors')) {
+                $this->session->delete('errors');
+            }
+
+            $this->session->store('errors', $v->errors());
+
+            return $response->withHeader('HX-Location', BASE_URL . '/workshop/devices')
+                            ->withStatus(302);
+        }
+    }
+
+    public function getCreateForm(Request $request, Response $response): Response
+    {
+        $data = [
+            'page' => [
+                'context' => [
+                    'name' => 'device',
+                    'Name' => 'Device'
+                ]
+            ]
         ];
 
-        return $this->twig->render($response, '/fragments/creators/device.twig', $twig_data);
+        return $this->twig->render($response, '/forms/create_device.html', $data);
     }
 
-    public function getRecord(RequestInterface $request, ResponseInterface $response, array $args) : ResponseInterface
+    public function getRecord(Request $request, Response $response, array $args) : Response
     {
         $deviceId = $args['id'];
         $device = $this->devices->getByUuid($deviceId);
@@ -83,10 +158,10 @@ class DeviceController
             ]
         ];
 
-        return $this->twig->render($response, '/workshop/fragments/device.html', $twig_data);
+        return $this->twig->render($response, '/workshop/fragments/device.html.twig', $twig_data);
     }
 
-    public function getRecords(RequestInterface $request, ResponseInterface $response) : ResponseInterface
+    public function getRecords(Request $request, Response $response) : Response
     {
         $data = [];
         $deviceArray = $this->devices->getAll();
@@ -125,12 +200,12 @@ class DeviceController
         return $this->twig->render($response, '/workshop/fragments/table.html.twig', $twig_data);
     }
 
-    public function update(RequestInterface $request, ResponseInterface $response)
+    public function update(Request $request, Response $response)
     {
         
     }
 
-    public function delete(RequestInterface $request, ResponseInterface $response)
+    public function delete(Request $request, Response $response)
     {
         
     }

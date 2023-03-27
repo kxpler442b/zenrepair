@@ -5,12 +5,12 @@
         <div class="w-1/5 mr-4 px-4 py-2 rounded-md text-xs text-stone-500 border border-stone-300 bg-stone-100">Added</div>
     {% endif %}
     {% if ticket.status == 1 %}
-        <div class="w-1/5 mr-4 px-4 py-2 rounded-md font-medium text-xs text-sky-500 border border-sky-300 bg-sky-100 animate-pulse">Pre Testing</div>
+        <div class="w-1/5 mr-4 px-4 py-2 rounded-md font-medium text-xs text-sky-700 border border-sky-700 bg-sky-100 animate-pulse">Pre Testing</div>
         {% else %}
         <div class="w-1/5 mr-4 px-4 py-2 rounded-md text-xs text-stone-500 border border-stone-300 bg-stone-100">Pre Testing</div>
     {% endif %}
     {% if ticket.status >= 2 %}
-        <div class="w-1/5 mr-4 px-4 py-2 rounded-md font-medium text-xs text-sky-500 border border-sky-300 bg-sky-100">In Progress</div>
+        <div class="w-1/5 mr-4 px-4 py-2 rounded-md font-medium text-xs text-sky-700 border border-sky-700 bg-sky-100">In Progress</div>
         {% else %}
         <div class="w-1/5 mr-4 px-4 py-2 rounded-md text-xs text-stone-500 border border-stone-300 bg-stone-100">In Progress</div>
     {% endif %}
@@ -57,8 +57,12 @@
 
     <div class="w-1/3 px-4 flex flex-col items-center">
         <div class="w-full mb-8 shadow-sm border border-stone-300 bg-white">
-            <div class="w-full px-4 py-2 border-b border-stone-300 bg-stone-200">
+            <div class="w-full px-4 py-2 flex flex-row justify-between items-center border-b border-stone-300 bg-stone-200">
                 <h4 class="font-medium text-xs text-stone-700">Ticket Details</h4>
+
+                <button _="" class="opacity-50 hover:opacity-90">
+                    <img src="{{ globals.icons_url }}/png/note-pencil-duotone.png" class="h-4">
+                </button>
             </div>
 
             <div class="px-4 py-2">
@@ -80,8 +84,15 @@
         </div>
 
         <div class="w-full mb-8 shadow-sm border border-stone-300 bg-white">
-            <div class="w-full px-4 py-2 border-b border-stone-300 bg-stone-200">
-                <h4 class="font-medium text-xs text-stone-700"><a href="{{ customer.link }}" class="hover:text-stone-900 hover:underline">Customer Details</a></h4>
+            <div class="w-full px-4 py-2 flex flex-row justify-between items-center border-b border-stone-300 bg-stone-200">
+                <img src="{{ globals.icons_url }}/png/arrow-square-out-duotone.png" class="mr-4 h-4">
+                <a href="{{ customer.link }}" class="font-medium text-xs text-stone-700 hover:text-sky-500 hover:underline">Customer Details</a>
+
+                <div class="flex-grow"></div>
+
+                <button _="" class="opacity-50 hover:opacity-90">
+                    <img src="{{ globals.icons_url }}/png/note-pencil-duotone.png" class="h-4">
+                </button>
             </div>
 
             <div class="px-4 py-2">
@@ -103,8 +114,15 @@
         </div>
 
         <div class="w-full shadow-sm border border-stone-300 bg-white">
-            <div class="w-full px-4 py-2 border-b border-stone-300 bg-stone-200">
-                <h4 class="font-medium text-xs text-stone-700"><a href="{{ device.link }}" class="hover:text-stone-900 hover:underline">Device Details</a></h4>
+            <div class="w-full px-4 py-2 flex flex-row justify-start items-center border-b border-stone-300 bg-stone-200">
+                <img src="{{ globals.icons_url }}/png/arrow-square-out-duotone.png" class="mr-4 h-4">
+                <a href="{{ device.link }}" class="font-medium text-xs text-stone-700 hover:text-sky-500 hover:underline">Device Details</a>
+
+                <div class="flex-grow"></div>
+
+                <button _="" class="opacity-50 hover:opacity-90">
+                    <img src="{{ globals.icons_url }}/png/note-pencil-duotone.png" class="h-4">
+                </button>
             </div>
 
             <div class="px-4 py-2">

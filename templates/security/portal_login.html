@@ -1,0 +1,26 @@
+<!-- Background Container -->
+<div class="absolute top-0 left-0 -z-10 h-screen w-screen bg-gradient-to-bl from-stone-50 to-stone-200">
+    
+</div>
+
+<!-- Information Container-->
+<div class="row-start-0 row-span-2 col-start-0 col-span-full px-6 flex flex-col justify-center align-middle items-start">
+    <h2 class="font-medium text-lg text-sky-500">RSMS</h2>
+    <h1 class="mb-4 font-bold text-3xl text-stone-900">Hello!</h1>
+    <p class="text-md text-stone-700">
+        Sign in with your email address and access code to view your tickets.
+    </p>
+</div>
+
+<!-- Form Container -->
+<div class="row-start-3 row-span-2 col-start-0 col-span-full px-6 flex flex-col justify-center align-middle items-start">
+    <form hx-post="{{ globals.base_url }}/portal" class="w-full">
+        <label for="email_address" class="font-medium text-sm text-stone-900">Email Address</label>
+        <input required type="text" name="email_address" id="email_address" class="w-full mt-2 mb-6 form-input rounded-md border-stone-300 focus:border-sky-500 bg-white"><br>
+
+        <label for="access_code" class="font-medium text-sm text-stone-900">Access Code</label>
+        <input name="access_code" type="text" id="access_code" class="w-full mt-2 mb-12 form-input rounded-md border-stone-300 focus:border-sky-500 bg-white"><br>
+
+        <input type="submit" value="Sign in" class="form-input px-6 py-2 font-medium text-sm text-white rounded-md border-none bg-sky-500 hover:bg-sky-700">
+    </form>
+</div>

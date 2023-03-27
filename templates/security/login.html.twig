@@ -1,5 +1,9 @@
 {% extends "base.html.twig" %}
 
+{% block errors %}
+    {% include "/errors/modal.html.twig" %}
+{% endblock %}
+
 {% block content %}
 <div class="h-full row-span-full col-start-0 col-span-6 flex flex-col justify-center align-middle items-center bg-white">
     <div class="w-full my-4 px-32 text-left">

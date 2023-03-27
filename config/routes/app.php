@@ -19,7 +19,8 @@ use Slim\Routing\RouteCollectorProxy;
 use App\Controller\CustomerController;
 use App\Controller\SecurityController;
 use App\Controller\DashboardController;
-use App\Middleware\LocalAuthMiddleware;
+use App\Controller\ErrorController;
+use App\Middleware\AuthMiddleware;
 
 return function (App $app)
 {
@@ -45,18 +46,18 @@ return function (App $app)
 
         $workshop->get('/create/{context}', [WorkshopController::class, 'viewCreate']);
         $workshop->get('/notice/{notice}', [WorkshopController::class, 'getNotice']);
-    })->add(LocalAuthMiddleware::class);
+    })->add(AuthMiddleware::class);
 
     $app->group('/admin', function(RouteCollectorProxy $admin) {
         $admin->get('/users', [AdminController::class, 'viewUsers']);
         $admin->get('/user/{id}', [AdminController::class, 'viewUser']);
 
         $admin->get('/settings', [AdminController::class, 'viewSettings']);
-    })->add(LocalAuthMiddleware::class);
+    })->add(AuthMiddleware::class);
 
     $app->group('/dashboard', function(RouteCollectorProxy $dashboard) {
         $dashboard->get('/get/stats', [DashboardController::class, 'getStats']);
-    })->add(LocalAuthMiddleware::class);
+    })->add(AuthMiddleware::class);
 
     $app->group('/users', function (RouteCollectorProxy $users) {
         $users->get('/get', [UserController::class, 'getUserRecords']);
@@ -65,18 +66,19 @@ return function (App $app)
         $users->put('/create', [AccountController::class]);
         $users->put('/update', [AccountController::class]);
         $users->put('/delete', [AccountController::class]);
-    })->add(LocalAuthMiddleware::class);
+    })->add(AuthMiddleware::class);
 
     $app->group('/customers', function (RouteCollectorProxy $customers) {
-        $customers->get('/get/creator', [CustomerController::class, 'getCreator']);
-
         $customers->get('/get', [CustomerController::class, 'getRecords']);
         $customers->get('/get/{id}', [CustomerController::class, 'getRecord']);
+        $customers->get('/create', [CustomerController::class, 'getCreateForm']);
 
         $customers->post('/create', [CustomerController::class, 'create']);
+        $customers->post('/search', [CustomerController::class, 'searchRecords']);
+
         $customers->put('/update', [CustomerController::class]);
         $customers->delete('/delete/{id}', [CustomerController::class, 'delete']);
-    })->add(LocalAuthMiddleware::class);
+    })->add(AuthMiddleware::class);
 
     $app->group('/tickets', function (RouteCollectorProxy $tickets) {
         $tickets->get('/get/creator', [TicketController::class, 'getCreator']);
@@ -87,14 +89,21 @@ return function (App $app)
         $tickets->put('/create', [TicketController::class]);
         $tickets->put('/update', [TicketController::class]);
         $tickets->put('/delete', [TicketController::class]);
-    })->add(LocalAuthMiddleware::class);
+    })->add(AuthMiddleware::class);
 
     $app->group('/devices', function (RouteCollectorProxy $devices) {
         $devices->get('/get', [DeviceController::class, 'getRecords']);
         $devices->get('/get/{id}', [DeviceController::class, 'getRecord']);
+        $devices->get('/create', [DeviceController::class, 'getCreateForm']);
 
-        $devices->put('/create', [DeviceController::class]);
+        $devices->post('/create', [DeviceController::class, 'create']);
         $devices->put('/update', [DeviceController::class]);
         $devices->put('/delete', [DeviceController::class]);
-    })->add(LocalAuthMiddleware::class);
+    })->add(AuthMiddleware::class);
+
+    $app->group('/errors', function (RouteCollectorProxy $error) {
+        $error->get('/not-found', [ErrorController::class, 'notFoundError']);
+
+        $error->delete('/clear', [ErrorController::class, 'clearAll']);
+    })->add(AuthMiddleware::class);
 };

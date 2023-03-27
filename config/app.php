@@ -27,6 +27,9 @@ return [
             'password' => $_ENV['DB_PASS']
         ]
     ],
+    'guardian' => [
+        'key_name' => $_ENV['KEY_NAME'],
+    ],
     'session' => [
         'secure' => false,
         'httponly' => true,

@@ -1,4 +1,4 @@
-<div class="w-full shadow-sm border border-stone-300 bg-white">
+<div id="main-table" class="w-full shadow-sm border border-stone-300 bg-white">
 <table class="w-full table-auto">
     <thead class="text-left border-b border-stone-300 bg-stone-200">
         {% for key, col in table.cols.headers %}
@@ -10,7 +10,12 @@
         <tr class="hover:bg-stone-100 transition ease-in-out duration-100">
         {% for key, row in item %}
             {% if row is iterable %}
-                <td class="px-4 py-4 font-medium text-sm hover:underline "><a href="{{ row.link }}">{{ row.text }}</a></td>
+                <td class="px-4 py-4 font-medium text-sm hover:underline">
+                    <a href="{{ row.link }}" class="inline-flex flex-row items-center text-sky-500">
+                        <img src="{{ globals.icons_url }}/svg/arrow-square-out-duotone.svg" class="mr-4 h-4">
+                        {{ row.text }}
+                    </a>
+                </td>
             {% else %}
                 <td class="px-4 py-2 font-medium text-sm">{{ row }}</td>
             

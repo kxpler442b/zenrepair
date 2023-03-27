@@ -16,6 +16,7 @@ use Slim\Views\Twig;
 use Slim\Psr7\Request;
 use Slim\Psr7\Response;
 use App\Interface\SessionInterface;
+use DateTime;
 use Psr\Container\ContainerInterface;
 
 class DashboardController

@@ -26,5 +26,6 @@ define('VIEWS_PATH', __DIR__ . '/../templates');
 define('FAVICON_URL', '/favicon.ico');
 define('CSS_URL', '/css');
 define('ASSETS_URL', '/assets');
+define('ICONS_URL', '/icons');
 define('HTMX_URL', '/htmx/htmx.min.js');
 define('HYPR_URL', '/htmx/hyperscript.min.js');

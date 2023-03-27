@@ -13,6 +13,8 @@ declare(strict_types = 1);
 namespace App\Controller;
 
 use App\Interface\LocalAccountProviderInterface;
+use DateTime;
+
 use App\Interface\SessionInterface;
 use App\Service\CustomerService;
 use App\Service\DeviceService;
@@ -44,21 +46,37 @@ class WorkshopController
 
     public function viewCreate(Request $request, Response $response, array $args): Response
     {
-        if($args['context'] == 'customer') {
-            $context = [
-                'name' => 'customer',
-                'Name' => 'Customer'
-            ];
-        }
+        $context = $args['context'];
 
-        $data = [
-            'page' => [
-                'title' => 'Create - RSMS',
-                'context' => $context
-            ],
+        $whitelist = array('customer', 'device');
+
+        $rules = [
+            'required' => ['context'],
+            'in' => $whitelist
         ];
 
-        return $this->twig->render($response, '/workshop/create_view.html.twig', $data);
+        $v = new Validator([
+            'context' => $context
+        ]);
+
+        $v->rules($rules);
+
+        if($v->validate()) {
+
+            $data = [
+                'page' => [
+                    'context' => [
+                        'name' => $context,
+                        'Name' => ucwords($context)
+                    ]
+                ]
+            ];
+
+            return $this->twig->render($response, '/workshop/create_view.html.twig', $data);
+        }
+        else {
+            return $response->withStatus(404);
+        }
     }
 
     /**
@@ -106,7 +124,7 @@ class WorkshopController
             ]
         ];
 
-        return $this->twig->render($response, '/dashboard/dashboard.html.twig', $data);
+        return $this->twig->render($response, '/user/settings.html.twig', $data);
     }
 
     public function viewDashboard(Request $request, Response $response): Response
@@ -216,15 +234,17 @@ class WorkshopController
 
     public function viewDevices(Request $request, Response $response): Response
     {
+        $errors = $this->session->get('errors');
+
         $data = [
-            'sidebar_required' => true,
             'page' => [
                 'title' => 'Devices - RSMS',
                 'context' => [
                     'name' => 'device',
                     'Name' => 'Device'
                 ]
-            ]
+            ],
+            'errors' => $errors
         ];
 
         return $this->twig->render($response, '/workshop/list_view.html.twig', $data);
@@ -232,13 +252,14 @@ class WorkshopController
 
     public function viewDevice(Request $request, Response $response, array $args): Response
     {
+        $errors = $this->session->get('errors');
+
         $deviceId = $args['id'];
         $device = $this->deviceService->getByUuid($deviceId);
 
         $display_name = $device->getManufacturer().' '.$device->getModel();
 
         $data = [
-            'sidebar_required' => true,
             'page' => [
                 'title' => $display_name . ' - RSMS',
                 'context' => [
@@ -249,7 +270,8 @@ class WorkshopController
                     'id' => $deviceId,
                     'display_name' => $display_name
                 ]
-            ]
+            ],
+            'errors' => $errors
         ];
 
         return $this->twig->render($response, '/workshop/single_view.html.twig', $data);

@@ -9,6 +9,7 @@
 
 declare(strict_types = 1);
 
+use App\Interface\AuthInterface;
 use Slim\App;
 use function DI\get;
 use Slim\Views\Twig;
@@ -30,7 +31,9 @@ use Psr\Http\Message\ResponseFactoryInterface;
 use App\Interface\LocalAccountProviderInterface;
 use App\Interface\LocalAuthInterface;
 use App\Service\AddressService;
+use App\Service\AuthService;
 use App\Service\CustomerService;
+use App\Support\Guardian;
 
 return [
     App::class => function (ContainerInterface $container)
@@ -38,19 +41,23 @@ return [
         AppFactory::setContainer($container);
 
         $middleware = require CONFIG_PATH . '/middleware.php';
-        $routes = require CONFIG_PATH . '/routes.php';
+        $app_routes = require CONFIG_PATH . '/routes/app.php';
+        $portal_routes = require CONFIG_PATH . '/routes/portal.php';
 
         $app = AppFactory::create();
 
-        $routes($app);
+        $app_routes($app);
+        $portal_routes($app);
         $middleware($app);
 
         return $app;
     },
+
     Config::class => create(Config::class)->constructor
     (
         require CONFIG_PATH . '/app.php',
     ),
+
     EntityManager::class => function (Config $config)
     {
         Type::addType('uuid', 'Ramsey\Uuid\Doctrine\UuidType');
@@ -64,6 +71,7 @@ return [
 
         return new EntityManager($connection, $orm_config);
     },
+
     Twig::class => function (Config $config)
     {
         $twig = Twig::create(VIEWS_PATH, [
@@ -80,6 +88,7 @@ return [
                 'favicon_url' => FAVICON_URL,
                 'css_url' => CSS_URL,
                 'assets_url' => ASSETS_URL,
+                'icons_url' => ICONS_URL,
                 'htmx_url' => HTMX_URL
             ]
         );
@@ -95,11 +104,14 @@ return [
         
         return $twig;
     },
+
     ResponseFactoryInterface::class => fn(App $app) => $app->getResponseFactory(),
+
     LocalAccountProviderInterface::class => function(ContainerInterface $container)
     {
         return new LocalAccountService($container->get(EntityManager::class));
     },
+
     CustomerService::class => function(ContainerInterface $container)
     {
         return new CustomerService($container->get(EntityManager::class));
@@ -120,6 +132,25 @@ return [
     {
         return new Session($config->get('session'));
     },
+
+    AuthInterface::class => function(ContainerInterface $c, Config $config)
+    {
+        $keyname = $config->get('guardian.key_name');
+
+        if(file_exists(__DIR__ . '/../keys/'.$keyname) && file_exists(__DIR__ . '/../keys/'.$keyname.'.pub'))
+        {
+            $keys = array(
+                'private_key' => file_get_contents(__DIR__ . '/../keys/'.$keyname),
+                'public_key' => file_get_contents(__DIR__ . '/../keys/'.$keyname.'.pub')
+            );
+        }
+
+        return new AuthService(
+            $c,
+            $keys
+        );
+    },
+
     LocalAuthInterface::class => function(ContainerInterface $container)
     {
         return new LocalAuthService($container->get(LocalAccountService::class), $container->get(SessionInterface::class));

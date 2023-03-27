@@ -7,10 +7,10 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <!-- Inter Font -->
+    <!-- Space Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
     <!-- Tailwind Stylesheet -->
     <link type="text/css" href="{{ globals.css_url }}/output.css" rel="stylesheet">
@@ -20,11 +20,11 @@
 
     <title>{{ page.title }}</title>
 </head>
-<body class="h-screen overflow-y-hidden bg-stone-100">
+<body class="h-screen overflow-y-hidden bg-stone-50">
 
-{% include "errors.html.twig" %}
+{% include "/errors/modal.html.twig" %}
 
-<div class="h-full grid grid-rows-layout grid-cols-10 2xl:grid-cols-12">
+<div class="h-full grid grid-rows-6 grid-cols-3 md:grid-rows-layout md:grid-cols-layout 2xl:grid-cols-layout_2xl">
     {% block navigation %}{% endblock %}
 
     {% block content %}{% endblock %}

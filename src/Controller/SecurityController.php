@@ -15,15 +15,15 @@ use Slim\Views\Twig;
 use Slim\Psr7\Request;
 use Slim\Psr7\Response;
 use Valitron\Validator;
-use App\Service\LocalAuthService;
-use App\Interface\LocalAuthInterface;
+use App\Interface\AuthInterface;
 use App\Interface\SessionInterface;
 use Psr\Container\ContainerInterface;
-use DateTime;
+use App\Interface\LocalAccountProviderInterface;
 
 class SecurityController
 {
-    private readonly LocalAuthService $auth;
+    private readonly AuthInterface $auth;
+    private readonly LocalAccountProviderInterface $users;
 
     private readonly SessionInterface $session;
     private readonly Twig $twig;
@@ -35,7 +35,8 @@ class SecurityController
      */
     public function __construct(ContainerInterface $c)
     {
-        $this->auth = $c->get(LocalAuthInterface::class);
+        $this->auth = $c->get(AuthInterface::class);
+        $this->users = $c->get(LocalAccountProviderInterface::class);
 
         $this->session = $c->get(SessionInterface::class);
         $this->twig = $c->get(Twig::class);
@@ -62,8 +63,7 @@ class SecurityController
                 'title' => 'Sign in - RSMS',
                 'context' => 'Security'
             ],
-            'errors' => $errors,
-            'error_timestamp' => $this->session->get('error_timestamp')
+            'errors' => $errors
         ];
 
         return $this->twig->render($response, '/security/login.html.twig', $twig_data);
@@ -71,53 +71,55 @@ class SecurityController
 
     public function authUser(Request $request, Response $response) : Response
     {
-        $email = $_POST['email'];
-        $password = $_POST['password'];
+        $fields = $request->getParsedBody();
+
+        $auth = [
+            'email' => $fields['email'],
+            'password' => $fields['password']
+        ];
 
         $rules = [
             'required' => ['email', 'password'],
             'email' => 'email'
         ];
 
-        $v = new Validator([
-            'email' => $email,
-            'password' => $password
-        ]);
+        $v = new Validator($auth);
 
         $v->rules($rules);
 
-        $datetime = new DateTime('now');
-
-        if($this->session->exists('errors')) {
+        if($this->session->exists('errors'))
+        {
             $this->session->delete('errors');
-            $this->session->delete('error_timestamp');
         }
 
-        if($v->validate()) {
-            if ($this->auth->attemptAuth($email, $password)) {
-                return $response->withHeader('Location', '/workshop/dashboard')
-                                ->withStatus(302);
-            }
-            else {
-                $this->session->store('errors', $v->errors());
-                $this->session->store('error_timestamp', $datetime->format('H:i:s'));
+        if($v->validate() && $this->auth->authenticate($auth['email'], $auth['password']))
+        {
+            $user = $this->users->getAccountByEmail($auth['email']);
 
-                return $response->withHeader('Location', '/')
-                                ->withStatus(302);
-            }
+            $this->session->store('user', [
+                'uuid' => $user->getUuid()->toString(),
+                'info' => [
+                    'email' => $user->getEmail(),
+                    'first_name' => $user->getFirstName(),
+                    'last_name' => $user->getLastName()
+                ]
+            ]);
+
+            return $response->withHeader('Location', BASE_URL . '/workshop/dashboard')
+                            ->withStatus(302);
         }
-        else {
+        else
+        {
             $this->session->store('errors', $v->errors());
-            $this->session->store('error_timestamp', $datetime->format('H:i:s'));
 
-            return $response->withHeader('Location', '/')
+            return $response->withHeader('Location', BASE_URL)
                             ->withStatus(302);
         }
     }
 
     public function logout(Request $request, Response $response) : Response
     {
-        $this->auth->deauth();
+        $this->auth->deauthenticate();
 
         return $response->withHeader('Location', '/')
                         ->withStatus(302);

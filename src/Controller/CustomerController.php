@@ -114,7 +114,7 @@ class CustomerController
             if($address != null) {
                 $this->addressService->create([
                     'line_one' => $address['line_one'],
-                    'line_two' => $address['line_one'],
+                    'line_two' => $address['line_two'],
                     'town' => $address['town'],
                     'county' => $address['county'],
                     'postcode' => $address['postcode'],
@@ -137,7 +137,7 @@ class CustomerController
         }
     }
 
-    public function getCreator(Request $request, Response $response) : Response
+    public function getCreateForm(Request $request, Response $response) : Response
     {
         $twig_data = [
             'page' => [
@@ -233,6 +233,41 @@ class CustomerController
                 'last_updated' => $customer->getUpdated()->format('d-m-Y H:i:s')
             );
         };
+
+        $twig_data = [
+            'page' => [
+                'context' => [
+                    'name' => 'customer',
+                    'Name' => 'Customer'
+                ]
+            ],
+            'table' => [
+                'cols' => [
+                    'headers' => ['Name', 'Email Address', 'Mobile Number', 'Created', 'Last Updated']
+                ],
+                'rows' => $data
+            ]
+        ];
+
+        return $this->twig->render($response, '/workshop/fragments/table.html.twig', $twig_data);
+    }
+
+    public function searchRecords(Request $request, Response $response): Response
+    {
+        $body= $request->getParsedBody();
+
+        $customer = $this->customerService->getByEmail($body['search']);
+
+        $data[$customer->getUuid()->toString()] = array(
+                [
+                    'link' => BASE_URL . '/workshop/customer/' . $customer->getUuid()->toString(),
+                    'text' => $customer->getFirstName().' '.$customer->getLastName()
+                ],
+                'email' => $customer->getEmail(),
+                'mobile' => $customer->getMobile(),
+                'created' => $customer->getCreated()->format('d-m-Y'),
+                'last_updated' => $customer->getUpdated()->format('d-m-Y H:i:s')
+        );
 
         $twig_data = [
             'page' => [

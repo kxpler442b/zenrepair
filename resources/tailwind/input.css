@@ -4,14 +4,12 @@
 
 @tailwindcss forms;
 
-@layer utilities {
-    .box-shadow-black {
-        box-shadow: 0.125rem 0.125rem 0px 0px #000; 
-    };
-}
+@layer components {
+    .btn-primary-icon {
+        @apply px-4 py-2 inline-flex flex-row items-center font-medium text-sm text-white rounded-sm border-none bg-green-500 hover:bg-green-700;
+    }
 
-@layer utilities {
-    .box-shadow-lime {
-        box-shadow: 0.125rem 0.125rem 0px 0px #fff; 
-    };
+    .btn-primary {
+        @apply px-4 py-2 font-medium text-sm text-white rounded-sm border-none bg-green-500 hover:bg-green-700;
+    }
 }

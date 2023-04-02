@@ -24,6 +24,7 @@
             </div>
         </div>
 
+        {% if devices.rows|length > 0 %}
         <div class="w-full my-4 text-left">
             <h2 class="font-semibold text-xl text-stone-700">{{ page.record.display_name }}'s Devices </h2>
         </div>
@@ -50,6 +51,7 @@
                 </tbody>
             </table>
         </div>
+        {% endif %}
 
     </div>
 

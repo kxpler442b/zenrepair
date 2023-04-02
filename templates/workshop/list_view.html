@@ -1,22 +1,14 @@
-<div class="row-start-0 row-span-1 col-start-2 col-end-13 px-6 flex flex-row justify-center align-middle items-center">
-    <h2 class="font-semibold text-2xl text-stone-700">{{ page.context.Name }}s</h2>
-
-    <div class="flex-grow"></div>
-
-    <div class="w-1/3 mr-4">
-        <input class="form-input text-xs rounded-md border-stone-300 hover:border-sky-500 focus:border-sky-500 focus:ring-transparent" type="search" 
-            name="search" placeholder="Search {{ page.context.Name }}s..." 
-            hx-post="{{ globals.base_url }}/{{ page.context.name }}s/search" 
-            hx-trigger="keyup changed delay:500ms, search" 
-            hx-target="#main-table"
-            hx-swap="outerHTML"
-            hx-indicator=".htmx-indicator">
-    </div>
-    
-    <a href="{{ globals.base_url }}/workshop/create/{{ page.context.name }}" class="block px-4 py-2 font-medium text-sm text-white rounded-md hover:shadow-sm bg-sky-500 hover:bg-sky-700">New {{ page.context.Name }}</a>
+<div class="row-start-2 row-end-2 col-start-3 2xl:col-start-2 col-end-13 px-6 flex flex-row items-center">
+    <h2 class="font-semibold text-2xl text-stone-900">{{ page.context.Name }}s</h2> 
 </div>
 
-<div class="row-start-2 row-span-4 col-start-2 col-end-13 px-6 py-4 flex flex-col justify-start align-middle items-start">
+<div class="row-start-3 row-end-3 col-start-3 2xl:col-start-2 col-end-13 px-6 flex flex-row justify-start align-middle items-center space-x-4">
+    
+    <a href="{{ globals.base_url }}/workshop/create/{{ page.context.name }}" class="btn-primary">New {{ page.context.Name }}</a>
+
+</div>
+
+<div class="row-start-4 row-end-6 col-start-3 2xl:col-start-2 col-end-13 px-6 py-4 flex flex-col justify-start align-middle items-start">
 
     <div class="w-full flex flex-row justify-center align-middle items-start">
 
@@ -33,7 +25,7 @@
 
     </div>
 
-    <div class="w-full overflow-y-scroll">
+    <div class="w-full">
         <div id="main-table" hx-get="{{ globals.base_url }}/{{ page.context.name }}s/get" hx-swap="outerHTML" hx-trigger="load">
             <!-- Load table fragment with HTMX -->
     

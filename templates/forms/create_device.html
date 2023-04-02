@@ -51,11 +51,15 @@
                 <h3 class="font-medium text-xs text-stone-700">Device Owner</h3>
             </div>
             <div class="px-6 py-4">
-                <p class="font-mono text-xs text-red-500">
-                    // TODO: Active Search
-                </p>
-                <form id="device-owner" method="POST" class="w-1/2">
+                <form id="device-owner" class="w-1/2">
 
+                    <input class="form-input w-full mt-2 mb-4 text-sm shadow-sm rounded-md border-stone-300 bg-white focus:ring-transparent" type="search" 
+                        name="search" placeholder="Begin Typing To Search Users..." 
+                        hx-post="{{ globals.base_url }}/customers/search"
+                        hx-trigger="keyup changed delay:500ms, search" 
+                        hx-target="#search-results">
+
+                        <div id="search-results"></div>
                 </form>
             </div>
         </div>

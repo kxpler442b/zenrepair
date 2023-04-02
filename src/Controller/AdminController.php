@@ -43,6 +43,7 @@ class AdminController
         }
 
         $data = [
+            'zone' => 'admin',
             'page' => [
                 'title' => 'Users - RSMS',
                 'context' => [
@@ -67,7 +68,7 @@ class AdminController
         $userDisplayName = $user->getFirstName() . ' ' . $user->getLastName();
 
         $data = [
-            'sidebar_required' => true,
+            'zone' => 'admin',
             'page' => [
                 'title' => $userDisplayName . ' - RSMS',
                 'context' => [
@@ -87,7 +88,14 @@ class AdminController
     public function viewSettings(Request $request, Response $response): Response
     {
         $data = [
-
+            'zone' => 'admin',
+            'page' => [
+                'title' => 'Application Settings - RSMS',
+                'context' => [
+                    'name' => 'admin',
+                    'Name' => 'Admin'
+                ],
+            ]
         ];
 
         return $this->twig->render($response, '/admin/settings_view.html.twig', $data);
@@ -95,7 +103,7 @@ class AdminController
 
     private function verifyAdminStatus(): bool
     {
-        $user = $this->users->getAccountByUuid($this->session->get('user_uuid'));
+        $user = $this->users->getAccountByUuid($this->session->get('user')['uuid']);
         $group = $user->getGroup();
 
         if ($group->getPrivLevel() == 0) {

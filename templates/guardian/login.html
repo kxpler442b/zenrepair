@@ -1,0 +1,50 @@
+{% extends "base.html.twig" %}
+
+{% block errors %}
+    {% include "/errors/modal.html.twig" %}
+{% endblock %}
+
+{% block content %}
+<div class="h-full row-start-0 row-span-full col-start-1 col-span-4 2xl:col-span-2 px-12 flex flex-col justify-start align-middle items-center bg-black">
+
+    <div class="h-12"></div>
+    
+    <div class="w-full py-12 border-b border-neutral-700">
+        <h1 class="mb-2 font-medium text-3xl text-white">Sign in</h1>
+
+        <p class="font-medium text-sm text-white">
+            Don't have an account? <a href="#" class="underline text-green-500 hover:text-green-700">Request an account</a>
+        </p>
+    </div>
+
+    <div class="w-full py-12 border-b border-neutral-700">
+        <form hx-post="{{ globals.base_url }}/login" hx-swap="none" class="w-full">
+            <label for="email" class="w-full inline-flex flex-row justify-between items-center font-medium text-xs text-white">
+                <span>Email Address</span>
+                <span>
+                    <a href="#" class="underline text-green-500 hover:text-green-700">Forgot Email?</a>
+                </span>
+            </label>
+            <input type="text" name="email" id="email" placeholder="user@email.com" class="form-input w-full mt-2 mb-6 py-2.5 text-sm text-white border-x-transparent focus:border-x-transparent border-t-transparent focus:border-t-transparent border-b border-neutral-500 bg-neutral-800 focus:border-green-500 focus:ring-transparent transition ease-in-out duration-100">
+            
+            <label for="password" class="font-medium text-xs text-white">Password</label>
+            <input type="password" name="password" id="password" class="form-input w-full mt-2 mb-6 py-2.5 text-sm text-white border-x-transparent focus:border-x-transparent border-t-transparent focus:border-t-transparent border-b border-neutral-500 bg-neutral-800 focus:border-green-500 focus:ring-transparent transition ease-in-out duration-100">
+
+            <div class="h-6"></div>
+
+            <button _="on click trigger submit" class="w-full px-4 py-2.5 flex flex-row justify-between items-center font-medium text-sm text-white text-left border-none bg-green-500 hover:bg-green-700">
+                Continue
+                <svg class="h-5" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"></path>
+                </svg>
+            </button>
+        </form>
+    </div>
+
+</div>
+
+<div class="h-full row-start-0 row-span-full col-start-5 2xl:col-start-3 col-end-13 bg-black bg-[url('http://localhost:8080/assets/pattern0.png')] bg-contain bg-origin-content">
+
+</div>
+{% endblock %}
+

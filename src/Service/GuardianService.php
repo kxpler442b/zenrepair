@@ -9,12 +9,12 @@ declare(strict_types = 1);
 namespace App\Service;
 
 use App\Support\Guardian;
-use App\Interface\AuthInterface;
+use App\Interface\SessionInterface;
+use App\Interface\GuardianInterface;
 use Psr\Container\ContainerInterface;
 use App\Interface\LocalAccountProviderInterface;
-use App\Interface\SessionInterface;
 
-class AuthService implements AuthInterface
+class GuardianService implements GuardianInterface
 {
     protected Guardian $guardian;
 

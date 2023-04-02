@@ -12,9 +12,6 @@ declare(strict_types = 1);
 
 namespace App\Controller;
 
-use App\Interface\LocalAccountProviderInterface;
-use DateTime;
-
 use App\Interface\SessionInterface;
 use App\Service\CustomerService;
 use App\Service\DeviceService;
@@ -64,6 +61,7 @@ class WorkshopController
         if($v->validate()) {
 
             $data = [
+                'zone' => 'workshop',
                 'page' => [
                     'context' => [
                         'name' => $context,
@@ -115,6 +113,7 @@ class WorkshopController
     public function viewSettings(Request $request, Response $response): Response
     {
         $data = [
+            'zone' => 'workshop',
             'page' => [
                 'title' => 'Settings - RSMS',
                 'context' => [
@@ -132,6 +131,7 @@ class WorkshopController
         $errors = $this->session->get('errors');
 
         $data = [
+            'zone' => 'workshop',
             'page' => [
                 'title' => 'Dashboard - RSMS',
                 'context' => [
@@ -148,6 +148,7 @@ class WorkshopController
     public function viewTickets(Request $request, Response $response): Response
     {
         $data = [
+            'zone' => 'workshop',
             'page' => [
                 'title' => 'Tickets - RSMS',
                 'context' => [
@@ -171,7 +172,7 @@ class WorkshopController
         $displayName = $ticket->getSubject().' For '.$deviceName;
 
         $data = [
-            'sidebar_required' => true,
+            'zone' => 'workshop',
             'page' => [
                 'title' => $displayName . ' - RSMS',
                 'context' => [
@@ -193,7 +194,7 @@ class WorkshopController
         $errors = $this->session->get('errors');
 
         $data = [
-            'sidebar_required' => true,
+            'zone' => 'workshop',
             'page' => [
                 'title' => 'Customers - RSMS',
                 'context' => [
@@ -215,7 +216,7 @@ class WorkshopController
         $display_name = $customer->getFirstName() . ' ' . $customer->getLastName();
 
         $data = [
-            'sidebar_required' => true,
+            'zone' => 'workshop',
             'page' => [
                 'title' => $display_name . ' - RSMS',
                 'context' => [
@@ -237,6 +238,7 @@ class WorkshopController
         $errors = $this->session->get('errors');
 
         $data = [
+            'zone' => 'workshop',
             'page' => [
                 'title' => 'Devices - RSMS',
                 'context' => [
@@ -260,6 +262,7 @@ class WorkshopController
         $display_name = $device->getManufacturer().' '.$device->getModel();
 
         $data = [
+            'zone' => 'workshop',
             'page' => [
                 'title' => $display_name . ' - RSMS',
                 'context' => [

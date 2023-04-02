@@ -9,31 +9,27 @@
 
 declare(strict_types = 1);
 
-use App\Interface\AuthInterface;
 use Slim\App;
-use function DI\get;
 use Slim\Views\Twig;
 use App\Support\Config;
 use function DI\create;
 use App\Support\Session;
-use App\Service\LocalAuthService;
 use Doctrine\ORM\ORMSetup;
 use Slim\Factory\AppFactory;
 use \Doctrine\DBAL\Types\Type;
 use App\Service\DeviceService;
 use App\Service\TicketService;
+use App\Service\AddressService;
 use Doctrine\ORM\EntityManager;
+use App\Service\CustomerService;
+use App\Service\GuardianService;
 use Doctrine\DBAL\DriverManager;
 use App\Interface\SessionInterface;
+use App\Interface\GuardianInterface;
 use App\Service\LocalAccountService;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use App\Interface\LocalAccountProviderInterface;
-use App\Interface\LocalAuthInterface;
-use App\Service\AddressService;
-use App\Service\AuthService;
-use App\Service\CustomerService;
-use App\Support\Guardian;
 
 return [
     App::class => function (ContainerInterface $container)
@@ -41,13 +37,17 @@ return [
         AppFactory::setContainer($container);
 
         $middleware = require CONFIG_PATH . '/middleware.php';
+
+        $auth_routes = require CONFIG_PATH . '/routes/guardian.php';
         $app_routes = require CONFIG_PATH . '/routes/app.php';
         $portal_routes = require CONFIG_PATH . '/routes/portal.php';
 
         $app = AppFactory::create();
 
+        $auth_routes($app);
         $app_routes($app);
         $portal_routes($app);
+
         $middleware($app);
 
         return $app;
@@ -133,7 +133,7 @@ return [
         return new Session($config->get('session'));
     },
 
-    AuthInterface::class => function(ContainerInterface $c, Config $config)
+    GuardianInterface::class => function(ContainerInterface $c, Config $config)
     {
         $keyname = $config->get('guardian.key_name');
 
@@ -145,14 +145,9 @@ return [
             );
         }
 
-        return new AuthService(
+        return new GuardianService(
             $c,
             $keys
         );
-    },
-
-    LocalAuthInterface::class => function(ContainerInterface $container)
-    {
-        return new LocalAuthService($container->get(LocalAccountService::class), $container->get(SessionInterface::class));
-    },
+    }
 ];

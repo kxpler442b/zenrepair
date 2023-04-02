@@ -17,20 +17,12 @@ use App\Controller\DeviceController;
 use App\Controller\TicketController;
 use Slim\Routing\RouteCollectorProxy;
 use App\Controller\CustomerController;
-use App\Controller\SecurityController;
 use App\Controller\DashboardController;
 use App\Controller\ErrorController;
-use App\Middleware\AuthMiddleware;
+use App\Middleware\GuardianMiddleware;
 
 return function (App $app)
 {
-    $app->group('/', function (RouteCollectorProxy $auth) {
-        $auth->get('', [SecurityController::class, 'index']);
-        $auth->get('logout', [SecurityController::class, 'logout']);
-
-        $auth->post('', [SecurityController::class, 'authUser']);
-    });
-
     $app->group('/workshop', function(RouteCollectorProxy $workshop) {
         $workshop->get('/dashboard', [WorkshopController::class, 'viewDashboard']);
         $workshop->get('/settings', [WorkshopController::class, 'viewSettings']);
@@ -46,18 +38,18 @@ return function (App $app)
 
         $workshop->get('/create/{context}', [WorkshopController::class, 'viewCreate']);
         $workshop->get('/notice/{notice}', [WorkshopController::class, 'getNotice']);
-    })->add(AuthMiddleware::class);
+    })->add(GuardianMiddleware::class);
 
     $app->group('/admin', function(RouteCollectorProxy $admin) {
         $admin->get('/users', [AdminController::class, 'viewUsers']);
         $admin->get('/user/{id}', [AdminController::class, 'viewUser']);
 
         $admin->get('/settings', [AdminController::class, 'viewSettings']);
-    })->add(AuthMiddleware::class);
+    })->add(GuardianMiddleware::class);
 
     $app->group('/dashboard', function(RouteCollectorProxy $dashboard) {
         $dashboard->get('/get/stats', [DashboardController::class, 'getStats']);
-    })->add(AuthMiddleware::class);
+    })->add(GuardianMiddleware::class);
 
     $app->group('/users', function (RouteCollectorProxy $users) {
         $users->get('/get', [UserController::class, 'getUserRecords']);
@@ -66,7 +58,7 @@ return function (App $app)
         $users->put('/create', [AccountController::class]);
         $users->put('/update', [AccountController::class]);
         $users->put('/delete', [AccountController::class]);
-    })->add(AuthMiddleware::class);
+    })->add(GuardianMiddleware::class);
 
     $app->group('/customers', function (RouteCollectorProxy $customers) {
         $customers->get('/get', [CustomerController::class, 'getRecords']);
@@ -78,7 +70,7 @@ return function (App $app)
 
         $customers->put('/update', [CustomerController::class]);
         $customers->delete('/delete/{id}', [CustomerController::class, 'delete']);
-    })->add(AuthMiddleware::class);
+    })->add(GuardianMiddleware::class);
 
     $app->group('/tickets', function (RouteCollectorProxy $tickets) {
         $tickets->get('/get/creator', [TicketController::class, 'getCreator']);
@@ -89,7 +81,7 @@ return function (App $app)
         $tickets->put('/create', [TicketController::class]);
         $tickets->put('/update', [TicketController::class]);
         $tickets->put('/delete', [TicketController::class]);
-    })->add(AuthMiddleware::class);
+    })->add(GuardianMiddleware::class);
 
     $app->group('/devices', function (RouteCollectorProxy $devices) {
         $devices->get('/get', [DeviceController::class, 'getRecords']);
@@ -99,11 +91,11 @@ return function (App $app)
         $devices->post('/create', [DeviceController::class, 'create']);
         $devices->put('/update', [DeviceController::class]);
         $devices->put('/delete', [DeviceController::class]);
-    })->add(AuthMiddleware::class);
+    })->add(GuardianMiddleware::class);
 
     $app->group('/errors', function (RouteCollectorProxy $error) {
         $error->get('/not-found', [ErrorController::class, 'notFoundError']);
 
         $error->delete('/clear', [ErrorController::class, 'clearAll']);
-    })->add(AuthMiddleware::class);
+    })->add(GuardianMiddleware::class);
 };

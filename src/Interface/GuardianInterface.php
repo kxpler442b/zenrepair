@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace App\Interface;
 
-interface AuthInterface
+interface GuardianInterface
 {
     public function authenticate(string $email, string $password): bool;
 

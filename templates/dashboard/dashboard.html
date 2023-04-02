@@ -1,30 +1,30 @@
-<div class="row-start-0 row-span-1 col-start-2 col-end-13 px-6 flex flex-row justify-center align-middle items-center">
-    <h2 class="font-semibold text-2xl text-stone-700">{{ user.info.first_name }}'s {{ page.context.Name }}</h2>
+<div class="row-start-2 row-end-4 col-start-1 col-end-13 flex flex-row justify-center items-center bg-green-700">
 
-    <div class="flex-grow"></div>
+    <!-- Title Container -->
+    <div class="h-full w-1/3 px-6 pt-12">
+        <h2 class="font-semibold text-3xl text-white">{{ user.info.first_name }}'s {{ page.context.Name }}</h2>
+    </div>
+
+    <div class="h-full w-2/3 bg-[url('http://localhost:8080/assets/pattern1.png')] bg-origin bg-cover bg-no-repeat">
+
+    </div>
+
 </div>
 
-<div class="row-start-2 row-span-4 col-start-2 col-end-13 px-6 py-4 flex flex-col justify-start align-middle items-start">
+<div class="row-start-4 row-end-6 col-start-1 col-end-13 px-6 py-4 flex flex-col justify-start align-middle items-start">
 
-    <div class="w-full flex flex-row justify-start align-middle items-start overflow-x-scroll">
+    <!-- Ticket Stats -->
+    <div class="w-full rounded-sm shadow-sm border border-stone-300 bg-white">
 
-        {% if stats|length == 0 %}
-        <div class="px-4 py-2 flex flex-row justify-start items-center text-stone-500">
-            <img src="{{ globals.icons_url }}/png/question-duotone.png" class="mr-4 h-7 opacity-70">
-            <h2 class="text-xl">You aren't tracking any statistics.</h2>
+        <div class="w-full px-2 py-1.5 border-b border-stone-300 bg-stone-200">
+            <h3 class="font-semibold text-sm text-stone-700">Ticket Stats</h3>
         </div>
-        {% endif %}
 
-        {% for title, value in stats %}
-        <div class="mr-4 px-6 py-4 flex flex-col justify-center align-middle items-start shadow-sm border border-stone-300 bg-white">
-            <div class="mb-4">
-                <h2 class="text-6xl text-stone-700">{{ value }}</h2>
-            </div>
-            <div>
-                <h3 class="font-medium text-md text-stone-700">{{ title }}</h3>
-            </div>
+        <div class="w-full p-4">
+            <p class="font-mono text-red-500">
+                show stats here
+            </p>
         </div>
-        {% endfor %}
 
     </div>
 

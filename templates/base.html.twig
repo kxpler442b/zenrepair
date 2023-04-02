@@ -13,28 +13,26 @@
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
     <!-- Tailwind Stylesheet -->
-    <link type="text/css" href="{{ globals.css_url }}/output.css" rel="stylesheet">
+    <link type="text/css" href="{{ globals.css_url }}/app.css" rel="stylesheet">
 
     <!-- Link favicon -->
     <link rel="icon" type="image/x-icon" href="{{ globals.favicon_url }}">
 
     <title>{{ page.title }}</title>
 </head>
-<body class="h-screen overflow-y-hidden bg-stone-50">
+<body class="h-screen bg-stone-50">
 
 {% include "/errors/modal.html.twig" %}
 
-<div class="h-full grid grid-rows-6 grid-cols-3 md:grid-rows-layout md:grid-cols-layout 2xl:grid-cols-layout_2xl">
-    {% block navigation %}{% endblock %}
+<div class="h-full grid grid-rows-layout grid-cols-8 2xl:grid-rows-layout_2xl 2xl:grid-cols-layout_2xl">
+
+    {% block h_nav %}{% endblock %}
+
+    {% block v_nav %}{% endblock %}
 
     {% block content %}{% endblock %}
-</div>
 
-{% if debug.enabled == true %}
-    <div class="absolute bottom-0 left-0 w-full px-4 py-2 flex flex-row justify-center align-middle items-center">
-        <p class="font-mono text-xs text-red-500">APP DEBUG MODE ENABLED, PHP {{ debug.phpversion }}</p>
-    </div>
-{% endif %}
+</div>
 
 </body>
 

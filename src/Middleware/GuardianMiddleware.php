@@ -6,22 +6,22 @@ namespace App\Middleware;
 
 use Slim\App;
 use Slim\Views\Twig;
-use App\Interface\AuthInterface;
 use App\Interface\SessionInterface;
+use App\Interface\GuardianInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 
-class AuthMiddleware implements MiddlewareInterface
+class GuardianMiddleware implements MiddlewareInterface
 {
     private readonly ResponseFactoryInterface $responseFactory;
-    private readonly AuthInterface $auth;
+    private readonly GuardianInterface $auth;
     private readonly SessionInterface $session;
     private readonly Twig $twig;
 
-    public function __construct(ResponseFactoryInterface $responseFactory, AuthInterface $auth, SessionInterface $session, Twig $twig)
+    public function __construct(ResponseFactoryInterface $responseFactory, GuardianInterface $auth, SessionInterface $session, Twig $twig)
     {
         $this->responseFactory = $responseFactory;
         $this->auth = $auth;
@@ -36,7 +36,7 @@ class AuthMiddleware implements MiddlewareInterface
         return new self(
             $app->getResponseFactory(ResponseFactoryInterface::class),
 
-            $c->get(AuthInterface::class),
+            $c->get(GuardianInterface::class),
             $c->get(SessionInterface::class),
             $c->get(Twig::class)
         );
@@ -60,6 +60,6 @@ class AuthMiddleware implements MiddlewareInterface
             return $handler->handle($request);
         }
 
-        return $this->responseFactory->createResponse(302)->withHeader('Location', '/');
+        return $this->responseFactory->createResponse(302)->withHeader('Location', '/login');
     }
 }

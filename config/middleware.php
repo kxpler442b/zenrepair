@@ -13,7 +13,7 @@ use Slim\App;
 use Slim\Views\Twig;
 use Slim\Views\TwigMiddleware;
 use App\Interface\SessionInterface;
-use App\Middleware\SessionMiddleware;
+use App\Http\Middleware\SessionMiddleware;
 
 return function (App $app)
 {

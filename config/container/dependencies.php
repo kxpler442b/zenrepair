@@ -30,6 +30,7 @@ use App\Service\LocalAccountService;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use App\Interface\LocalAccountProviderInterface;
+use Auth0\SDK\Auth0;
 
 return [
     App::class => function (ContainerInterface $container)
@@ -38,15 +39,15 @@ return [
 
         $middleware = require CONFIG_PATH . '/middleware.php';
 
-        $auth_routes = require CONFIG_PATH . '/routes/guardian.php';
-        $app_routes = require CONFIG_PATH . '/routes/app.php';
-        $portal_routes = require CONFIG_PATH . '/routes/portal.php';
+        $authRoutes = require CONFIG_PATH . '/routes/auth0.php';
+        $appRoutes = require CONFIG_PATH . '/routes/app.php';
+        $restRoutes = require CONFIG_PATH . '/routes/rest.php';
 
         $app = AppFactory::create();
 
-        $auth_routes($app);
-        $app_routes($app);
-        $portal_routes($app);
+        $authRoutes($app);
+        $appRoutes($app);
+        $restRoutes($app);
 
         $middleware($app);
 
@@ -70,6 +71,16 @@ return [
         $connection = DriverManager::getConnection($config->get('doctrine.connection'));
 
         return new EntityManager($connection, $orm_config);
+    },
+
+    Auth0::class => function(Config $config)
+    {
+        return new Auth0([
+            'domain' => $config->get('auth0.domain'),
+            'clientId' => $config->get('auth0.client_id'),
+            'clientSecret' => $config->get('auth0.client_secret'),
+            'cookieSecret' => $config->get('auth0.cookie_secret')
+        ]);
     },
 
     Twig::class => function (Config $config)

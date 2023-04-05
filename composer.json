@@ -15,7 +15,10 @@
         }
     ],
     "config": {
-        "process-timeout": 0
+        "process-timeout": 0,
+        "allow-plugins": {
+            "php-http/discovery": true
+        }
     },
     "scripts": {
         "start": "php -S localhost:8080 -t public/"
@@ -35,6 +38,10 @@
         "ramsey/uuid-doctrine": "^2.0",
         "tightenco/collect": "^9.52",
         "firebase/php-jwt": "^6.4",
-        "nesbot/carbon": "^2.66"
+        "nesbot/carbon": "^2.66",
+        "auth0/auth0-php": "^8.5",
+        "guzzlehttp/guzzle": "^7.5",
+        "guzzlehttp/psr7": "^2.4",
+        "http-interop/http-factory-guzzle": "^1.2"
     }
 }

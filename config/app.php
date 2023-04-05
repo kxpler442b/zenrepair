@@ -27,8 +27,11 @@ return [
             'password' => $_ENV['DB_PASS']
         ]
     ],
-    'guardian' => [
-        'key_name' => $_ENV['KEY_NAME'],
+    'auth0' => [
+        'client_id' => $_ENV['AUTH0_CLIENT_ID'],
+        'domain' => $_ENV['AUTH0_DOMAIN'],
+        'client_secret' => $_ENV['AUTH0_CLIENT_SECRET'],
+        'cookie_secret' => $_ENV['AUTH0_COOKIE_SECRET']
     ],
     'session' => [
         'secure' => false,

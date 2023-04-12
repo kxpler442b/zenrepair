@@ -51,7 +51,7 @@ class AuthController
                             ->withStatus(302);
         }
 
-        return $response->withHeader('Location', BASE_URL . '/dashboard')
+        return $response->withHeader('Location', BASE_URL . '/workshop/dashboard')
                         ->withStatus(302);
     }
 
@@ -83,7 +83,7 @@ class AuthController
     {
         $this->auth0->exchange(BASE_URL . '/callback');
 
-        return $response->withHeader('Location', BASE_URL . '/dashboard')
+        return $response->withHeader('Location', BASE_URL . '/workshop/dashboard')
                         ->withStatus(302);
     }
 

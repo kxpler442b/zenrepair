@@ -14,10 +14,13 @@ use Slim\App;
 use Slim\Routing\RouteCollectorProxy;
 use App\Http\Controller\UserController;
 use App\Http\Middleware\AuthMiddleware;
+use App\Http\Controller\DeviceController;
+use App\Http\Controller\TicketController;
+use App\Http\Controller\CustomerController;
 
 return function(App $app)
 {
-    $app->group('users', function(RouteCollectorProxy $users) {
+    $app->group('/users', function(RouteCollectorProxy $users) {
 
         $users->get('', [UserController::class, 'index']);
         $users->get('/new', [UserController::class, 'new']);
@@ -32,7 +35,7 @@ return function(App $app)
 
     })->add(AuthMiddleware::class);
 
-    $app->group('customers', function(RouteCollectorProxy $customers) {
+    $app->group('/customers', function(RouteCollectorProxy $customers) {
 
         $customers->get('', [CustomerController::class, 'index']);
         $customers->get('/new', [CustomerController::class, 'new']);
@@ -47,7 +50,7 @@ return function(App $app)
 
     })->add(AuthMiddleware::class);
 
-    $app->group('tickets', function(RouteCollectorProxy $tickets) {
+    $app->group('/tickets', function(RouteCollectorProxy $tickets) {
 
         $tickets->get('', [TicketController::class, 'index']);
         $tickets->get('/new', [TicketController::class, 'new']);
@@ -62,7 +65,7 @@ return function(App $app)
 
     })->add(AuthMiddleware::class);
 
-    $app->group('devices', function(RouteCollectorProxy $devices) {
+    $app->group('/devices', function(RouteCollectorProxy $devices) {
 
         $devices->get('', [DeviceController::class, 'index']);
         $devices->get('/new', [DeviceController::class, 'new']);

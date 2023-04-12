@@ -99,7 +99,8 @@ if($customerService->getByEmail('gemini@fish.com') == null)
     ]);
 
     $addresses->create([
-        'line_one' => '1 Blue Street',
+        'line_one' => 'Flat 23 Block P',
+        'line_two' => '4B Neptune House',
         'town' => 'Seatown',
         'county' => 'Shellshire',
         'postcode' => 'SH1 C04',

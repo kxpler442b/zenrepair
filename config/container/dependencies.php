@@ -40,13 +40,13 @@ return [
         $middleware = require CONFIG_PATH . '/middleware.php';
 
         $authRoutes = require CONFIG_PATH . '/routes/auth0.php';
-        $appRoutes = require CONFIG_PATH . '/routes/app.php';
+        $workshopRoutes = require CONFIG_PATH . '/routes/workshop.php';
         $restRoutes = require CONFIG_PATH . '/routes/rest.php';
 
         $app = AppFactory::create();
 
         $authRoutes($app);
-        $appRoutes($app);
+        $workshopRoutes($app);
         $restRoutes($app);
 
         $middleware($app);

@@ -1,0 +1,42 @@
+<!-- Header container -->
+<div class="row-start-2 row-span-2 col-start-1 col-span-full flex flex-row justify-start items-center space-x-4 bg-stone-900">
+
+    <div class="px-8">
+        <h1 class="font-title font-bold text-4xl text-white">{{ ticket.subject }} for {{ customer.firstName }} {{ customer.lastName }}</h1>
+    </div>
+
+</div>
+
+<div class="row-start-4 row-span-full col-start-1 col-span-3 flex flex-col justify-start align-middle items-start space-x-4 border border-red-500">
+    #
+</div>
+
+<div class="row-start-4 row-span-full col-start-4 col-span-full pr-4 pb-4 flex flex-col justify-start align-middle items-start">
+    
+    <div class="w-full h-10 flex flex-row justify-start items-center bg-stone-800">
+    
+        <button _="on click put #ticket_details into #ticket_container" class="h-full px-8 font-medium text-xs text-stone-300 hover:text-sky-500 border-b border-stone-700 hover:border-sky-500">
+            Details
+        </button>
+
+        <button _="on click put #ticket_notes into #ticket_container" class="h-full px-8 font-medium text-xs text-stone-300 hover:text-sky-500 border-b border-stone-700 hover:border-sky-500">
+            Notes
+        </button>
+
+        <div class="h-full flex-grow border-b border-stone-700"></div>
+
+    </div>
+
+    <div id="ticket_container" class="w-full flex-grow text-white bg-stone-800"></div>
+
+    <div class="hidden">
+        <div id="ticket_details" class="">
+            details
+        </div>
+    
+        <div id="ticket_notes" class="">
+            notes
+        </div>
+    </div>
+
+</div>

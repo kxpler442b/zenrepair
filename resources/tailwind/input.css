@@ -5,11 +5,7 @@
 @tailwindcss forms;
 
 @layer components {
-    .btn-primary-icon {
-        @apply px-4 py-2 inline-flex flex-row items-center font-medium text-sm text-white rounded-sm border-none bg-green-500 hover:bg-green-700;
-    }
-
-    .btn-primary {
-        @apply px-4 py-2 font-medium text-sm text-white rounded-sm border-none bg-green-500 hover:bg-green-700;
+    .h-nav-link {
+        @apply h-full px-4 inline-flex items-center font-medium text-md text-white hover:text-green-500 hover:bg-white;
     }
 }

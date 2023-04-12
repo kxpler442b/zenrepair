@@ -91,14 +91,12 @@ class TicketController
                 ]
             ],
             'table' => [
-                'cols' => [
-                    'headers' => ['#', 'Subject', 'Customer', 'Created', 'Status', 'Issue Type', 'Technician', 'Last Updated']
-                ],
+                'cols' => ['#', 'Subject', 'Customer', 'Created', 'Status', 'Issue Type', 'Technician', 'Last Updated'],
                 'rows' => $data
             ]
         ];
 
-        return $this->twig->render($response, '/app/fragments/table.html.twig', $twig_data);
+        return $this->twig->render($response, '/workshop/fragments/table.html.twig', $twig_data);
     }
 
     /**
@@ -136,37 +134,31 @@ class TicketController
         $device = $ticket->getDevice();
         $customer = $ticket->getCustomer();
 
-        $twig_data = [
+        $twigData = [
             'ticket' => [
                 'status' => $ticket->getStatus(),
-                'details' => [
-                    'Job ID' => $ticket->getId(),
-                    'Subject' => $ticket->getSubject(),
-                    'Issue Type' => $ticket->getIssueType(),
-                ]
+                'jobId' => $ticket->getId(),
+                'subject' => $ticket->getSubject(),
+                'issueType' => $ticket->getIssueType(),
             ],
             'device' => [
                 'link' => BASE_URL . '/workshop/device/' . $device->getUuid()->toString(),
-                'details' => [
-                    'Manufacturer' => $device->getManufacturer(),
-                    'Model' => $device->getModel(),
-                    'Serial' => $device->getSerial(),
-                    'IMEI' => $device->getImei(),
-                    'Locator' => $device->getLocator()
-                ] 
+                'manufacturer' => $device->getManufacturer(),
+                'model' => $device->getModel(),
+                'serial' => $device->getSerial(),
+                'imei' => $device->getImei(),
+                'locator' => $device->getLocator()
             ],
             'customer' => [
                 'link' => BASE_URL . '/workshop/customer/' . $customer->getUuid()->toString(),
-                'details' => [
-                    'First Name' => $customer->getFirstName(),
-                    'Last Name' => $customer->getLastName(),
-                    'Email Address' => $customer->getEmail(),
-                    'Mobile Number' => $customer->getMobile()
-                ]
+                'firstName' => $customer->getFirstName(),
+                'lastName' => $customer->getLastName(),
+                'email' => $customer->getEmail(),
+                'mobile' => $customer->getMobile()
             ],
         ];
 
-        return $this->twig->render($response, '/app/fragments/ticket_view.html.twig', $twig_data);
+        return $this->twig->render($response, '/workshop/fragments/ticket_view.html', $twigData);
     }
 
     /**

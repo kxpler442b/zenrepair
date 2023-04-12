@@ -34,7 +34,7 @@ class UserService
     {
         $this->em = $c->get(EntityManager::class);
         
-        $this->repo = $this->getRepository();
+        $this->getRepository();
     }
 
     /**

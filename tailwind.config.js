@@ -7,16 +7,15 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["'Space Grotesk'", ...defaultTheme.fontFamily.sans],
+        title: ["'Space Grotesk'", ...defaultTheme.fontFamily.sans],
+        sans: ["'Inter'", ...defaultTheme.fontFamily.sans],
         mono: ["'Space Mono'", ...defaultTheme.fontFamily.mono]
       },
       gridTemplateRows: {
-        'layout': '48px 64px 48px repeat(8, minmax(0, 1fr))',
-        'layout_2xl': '48px 64px 48px repeat(2, minmax(0, 1fr))'
+        'layout': '48px 48px 92px repeat(3, minmax(0, 1fr))'
       },
       gridTemplateColumns: {
-        'layout': 'repeat(16, minmax(0, 1fr))',
-        'layout_2xl': '300px repeat(10, minmax(0, 1fr))'
+        'layout': 'repeat(12, minmax(0, 1fr))',
       },
     }
   },

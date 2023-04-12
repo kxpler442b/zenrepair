@@ -7,20 +7,20 @@
 
     <meta author="Benjamin Moss">
 
-    <!-- Space Fonts -->
+    <!-- Space & Inter Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@300;400;500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 
     <!-- Tailwind CSS -->
     <link href="{{ globals.css_url }}/app.css" rel="stylesheet" type="text/css">
 
     <title>{{ page.title }}</title>
 </head>
-<body class="h-screen">
+<body class="h-screen bg-stone-900">
 
 <!-- Main content container -->
-<div class="h-full grid grid-rows-6 grid-cols-12">
+<div class="h-full grid grid-rows-layout gap-y-4 grid-cols-layout gap-x-6">
 
     {% block h_nav %}{% endblock %}
 
@@ -33,4 +33,11 @@
 </div>
 
 </body>
+
+<!-- HTMX -->
+<script src="https://unpkg.com/htmx.org@1.8.6" integrity="sha384-Bj8qm/6B+71E6FQSySofJOUjA/gq330vEqjFx9LakWybUySyI1IQHwPtbTU7bNwx" crossorigin="anonymous"></script>
+
+<!-- HyperScript -->
+<script src="https://unpkg.com/hyperscript.org@0.9.8"></script>
+
 </html>

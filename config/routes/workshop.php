@@ -13,19 +13,14 @@ use Slim\App;
 use Slim\Routing\RouteCollectorProxy;
 use App\Http\Middleware\AuthMiddleware;
 use App\Http\Controller\WorkshopController;
-use App\Http\Controller\DashboardController;
 
 return function (App $app)
 {
-    $app->group('/dashboard', function(RouteCollectorProxy $dashboard) {
-
-        $dashboard->get('', [DashboardController::class, 'index']);
-
-    })->add(AuthMiddleware::class);
-
     $app->group('/workshop', function(RouteCollectorProxy $workshop) {
 
-        $workshop->get('', [WorkshopController::class, 'index']);
+        $workshop->get('/dashboard', [WorkshopController::class, 'dashboard']);
+        $workshop->get('/{context}', [WorkshopController::class, 'listView']);
+        $workshop->get('/{context}/{id}', [WorkshopController::class, 'singleView']);
         
-    });
+    })->add(AuthMiddleware::class);
 };

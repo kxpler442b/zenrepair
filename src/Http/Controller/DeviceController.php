@@ -78,14 +78,12 @@ class DeviceController
                 ]
             ],
             'table' => [
-                'cols' => [
-                    'headers' => ['Name', 'Serial Number', 'Owner', 'Created', 'Last Updated']
-                ],
+                'cols' => ['Name', 'Serial Number', 'Owner', 'Created', 'Last Updated'],
                 'rows' => $data
             ]
         ];
 
-        return $this->twig->render($response, '/app/fragments/table.html.twig', $twig_data);
+        return $this->twig->render($response, '/workshop/fragments/table.html.twig', $twig_data);
     }
 
     /**

@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Users controller.
+ * Workshop controller.
  * 
  * @author Benjamin Moss <p2595849@mydmu.ac.uk>
  * 
@@ -17,30 +17,131 @@ use Slim\Views\Twig;
 use Slim\Psr7\Request;
 use Slim\Psr7\Response;
 use Psr\Container\ContainerInterface;
+use Valitron\Validator;
 
-class UserController
+class WorkshopController
 {
     private readonly Twig $twig;
     private readonly SessionInterface $session;
 
+    /**
+     * Constructor method.
+     */
     public function __construct(ContainerInterface $c)
     {
         $this->twig = $c->get(Twig::class);
         $this->session = $c->get(SessionInterface::class);
     }
 
-    public function index(Request $request, Response $response): Response
+    /**
+     * Returns the Workshop dashboard view.
+     *
+     * @param Request $request
+     * @param Response $response
+     * 
+     * @return Response
+     */
+    public function dashboard(Request $request, Response $response): Response
     {
         $twig_data = [
             'page' => [
-                'title' => 'Workshop - RSMS',
+                'title' => 'Dashboard',
                 'context' => [
-                    'name' => 'workshop',
-                    'Name' => 'Workshop'
+                    'name' => 'dashboard',
+                    'Name' => 'Dashboard'
                 ]
             ]
         ];
 
-        return $this->twig->render($response, '/app/workshop_view.html.twig', $twig_data);
+        return $this->twig->render($response, '/workshop/dashboard_view.html.twig', $twig_data);
+    }
+
+    /**
+     * Returns a list view for the given context if it is found in the whitelist.
+     *
+     * @param Request $request
+     * @param Response $response
+     * @param array $args
+     * 
+     * @return Response
+     */
+    public function listView(Request $request, Response $response, array $args): Response
+    {
+        $context = $args['context'];
+
+        $whitelist = array('customers', 'tickets', 'devices');
+
+        /**
+         * Throw a 404 error if the context is not found.
+         */
+        if(!in_array($context, $whitelist))
+        {
+            return $response->withHeader('Location', BASE_URL . '/workshop/dashboard')
+                            ->withStatus(404);
+        }
+
+        if($this->session->exists('errors'))
+        {
+            $errors = $this->session->get('errors');
+        }
+        else
+        {
+            $errors = null;
+        }
+
+        $twigData = [
+            'page' => [
+                'title' => ucwords($context) . ' - RSMS',
+                'context' => [
+                    'endpoint' => implode('', [BASE_URL, '/', $context]),
+                    'name' => rtrim($context, 's'),
+                    'Name' => ucwords(rtrim($context, 's'))
+                ],
+            ],
+            'errors' => $errors
+        ];
+
+        return $this->twig->render($response, '/workshop/list_view.html.twig', $twigData);
+    }
+
+    public function singleView(Request $request, Response $response, array $args): Response
+    {
+        $context = $args['context'];
+        $uuid = $args['id'];
+
+        $whitelist = array('customer', 'ticket', 'device');
+
+        /**
+         * Throw a 404 error if the context is not found.
+         */
+        if(!in_array($context, $whitelist))
+        {
+            return $response->withHeader('Location', BASE_URL . '/workshop/dashboard')
+                            ->withStatus(404);
+        }
+
+        if($this->session->exists('errors'))
+        {
+            $errors = $this->session->get('errors');
+        }
+        else
+        {
+            $errors = null;
+        }
+
+        $twigData = [
+            'page' => [
+                'title' => ucwords($context) . ' - RSMS',
+                'context' => [
+                    'endpoint' => implode('', [BASE_URL, '/', $context, 's']),
+                    'name' => implode('', [$context, 's']),
+                    'Name' => ucwords(implode('', [$context, 's']))
+                ],
+                'recordId' => $uuid
+            ],
+            'errors' => $errors
+        ];
+
+        return $this->twig->render($response, '/workshop/single_view.html.twig', $twigData);
     }
 }

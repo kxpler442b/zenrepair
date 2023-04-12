@@ -1,0 +1,57 @@
+{% extends "base.html.twig" %}
+
+{% block h_nav %}
+    {% include "h_nav.html" %}
+{% endblock %}
+
+{% block content %}
+
+<!-- Header container -->
+<div class="row-start-2 row-span-2 col-start-1 col-span-full flex flex-row justify-start items-center space-x-4 bg-stone-900">
+
+    <div class="px-8">
+        <h1 class="font-title font-bold text-4xl text-white">Dashboard</h1>
+    </div>
+
+</div>
+
+<!-- Noticeboard container -->
+<div class="mx-8 p-4 row-start-4 row-span-2 col-start-1 col-span-full flex flex-row justify-start items-center space-x-4 shadow-sm bg-stone-800">
+    
+    <div class="w-64 h-full p-4 flex flex-col justify-start align-start items-start space-y-4 shadow-sm bg-gradient-to-br from-sky-500 to-indigo-500">
+
+        <h3 class="font-title font-semibold text-2xl text-white">Learn</h3>
+
+        <p class="block text-xs text-white">
+            Eos accusantium iusto et distinctio impedit in laboriosam perspiciatis ea beatae sint eos corporis dolorum ea voluptatum fugiat sit nulla quis. Aut 
+            reprehenderit consequuntur ea aperiam odio 33 quam dolorum ea voluptates ullam.
+        </p>
+
+    </div>
+
+    <div class="w-64 h-full p-4 flex flex-col justify-start align-start items-start space-y-4 shadow-sm bg-stone-700">
+
+        <h3 class="font-title font-semibold text-sm text-white">How to create a ticket</h3>
+
+        <p class="block text-xs text-white">
+            Lorem ipsum dolor sit amet. Qui quas temporibus et quia esse qui repellendus asperiores ad animi vitae ut repudiandae voluptas in sapiente possimus non 
+            perferendis dolorem.<br>
+            <br>
+            Et tempore deleniti aut dolorem perferendis sed illo quis est dolor consequatur eos explicabo voluptas aut adipisci laborum ut autem 
+            maiores.
+        </p>
+
+        <div class="flex-grow"></div>
+
+        <a href="#" class="w-full p-2 inline-flex flex-row justify-between items-center font-medium text-xs text-white hover:bg-stone-600">
+
+            Read More (About 2 Minutes)
+            <svg class="h-4" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#ffffff" viewBox="0 0 256 256"><path d="M184,80V208a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8V80a8,8,0,0,1,8-8H176A8,8,0,0,1,184,80Z" opacity="0.2"></path><path d="M224,104a8,8,0,0,1-16,0V59.32l-66.33,66.34a8,8,0,0,1-11.32-11.32L196.68,48H152a8,8,0,0,1,0-16h64a8,8,0,0,1,8,8Zm-40,24a8,8,0,0,0-8,8v72H48V80h72a8,8,0,0,0,0-16H48A16,16,0,0,0,32,80V208a16,16,0,0,0,16,16H176a16,16,0,0,0,16-16V136A8,8,0,0,0,184,128Z"></path></svg>
+
+        </a>
+        
+    </div>
+
+</div>
+
+{% endblock %}

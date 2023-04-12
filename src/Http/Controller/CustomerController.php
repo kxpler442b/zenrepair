@@ -74,14 +74,12 @@ class CustomerController
                 ]
             ],
             'table' => [
-                'cols' => [
-                    'headers' => ['Name', 'Email Address', 'Group', 'Created', 'Last Updated']
-                ],
+                'cols' => ['Name', 'Email Address', 'Group', 'Created', 'Last Updated'],
                 'rows' => $data
             ]
         ];
 
-        return $this->twig->render($response, '/app/fragments/table.html.twig', $twig_data);
+        return $this->twig->render($response, '/workshop/fragments/table.html.twig', $twig_data);
     }
 
     /**

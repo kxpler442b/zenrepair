@@ -1,0 +1,108 @@
+<header class="row-start-2 row-end-3 col-start-1 col-span-full flex flex-col justify-center align-middle items-center shadow-sm rounded-bl-md rounded-br-md bg-sky-500">
+    
+    <div class="w-full h-36 px-6 flex flex-row justify-between items-center">
+
+        <div class="inline-flex flex-col justify-center items-start space-y-4">
+
+            <div class="flex flex-row justify-center items-center">
+                <a href="{{ globals.base_url }}/workshop/{{ page.context.name }}" class="font-title font-medium text-sm text-white hover:underline">{{ page.context.Name }}</a>
+            </div>
+
+            <h2 class="font-title font-semibold text-4xl text-white">{{ page.record.display_name }}</h2>
+        </div>
+
+    </div>
+
+</header>
+
+<sidebar class="row-start-3 row-span-full col-start-1 col-span-3 px-6 pt-6 flex flex-col justify-start items-center space-y-6">
+
+    <div class="w-full rounded-sm border border-stone-300 bg-stone-800">
+
+        <div class="w-full px-6 py-2 border-b border-stone-300 bg-stone-300">
+            <h4 class="font-title font-medium text-sm text-stone-700">Ticket Details</h4>
+        </div>
+        
+        <div class="w-full px-6 py-4 bg-stone-800">
+            
+            <table class="table-auto w-full text-sm text-white">
+                <thead>
+                    <th class="w-1/3"></th>
+                    <th class="w-2/3"></th>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="py-2 font-semibold">Status</td>
+                        {% if ticket.status == 0 %}
+                            <td><span class="px-4 py-1 text-xs text-white rounded-full border border-white bg-stone-700">New</span></td>
+                        {% endif %}
+                    </tr>
+                    <tr>
+                        <td class="py-2 font-semibold">Issue Type</td>
+                        <td>{{ ticket.issueType }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+    <div class="w-full rounded-sm border border-stone-300 bg-stone-800">
+
+        <div class="w-full px-6 py-2 border-b border-stone-300 bg-stone-300">
+            <h4 class="font-title font-medium text-sm text-stone-700">Customer Details</h4>
+        </div>
+        
+        <div class="w-full px-6 py-4 bg-stone-800">
+            
+            <table class="table-auto w-full text-sm text-white">
+                <thead>
+                    <th class="w-1/3"></th>
+                    <th class="w-2/3"></th>
+                </thead>
+                <tbody>
+                    {% for key, value in customer.details %}
+                        <tr>
+                            <td class="py-2 font-semibold">{{ key }}</td>
+                            <td>{{ value }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+    </div>
+
+</sidebar>
+
+<content class="row-start-3 row-span-full col-start-4 col-span-full px-6 pt-6 flex flex-col justify-start items-center space-y-4">
+
+    <div class="w-full rounded-sm border border-stone-300 bg-stone-800">
+
+        <div class="w-full px-6 py-2 border-b border-stone-300 bg-stone-800">
+            <h4 class="font-title font-medium text-sm text-stone-300">Labour Log</h4>
+        </div>
+        
+        <div class="w-full bg-stone-800">
+            
+            
+
+        </div>
+
+    </div>
+
+    <div class="w-full rounded-sm border border-stone-300 bg-stone-800">
+
+        <div class="w-full px-6 py-2 border-b border-stone-300 bg-stone-800">
+            <h4 class="font-title font-medium text-sm text-stone-300">Communications</h4>
+        </div>
+        
+        <div class="w-full bg-stone-800">
+            
+            
+
+        </div>
+
+    </div>
+
+</content>

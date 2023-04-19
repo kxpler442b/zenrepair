@@ -12,7 +12,7 @@ module.exports = {
         mono: ["'Space Mono'", ...defaultTheme.fontFamily.mono]
       },
       gridTemplateRows: {
-        'layout': '48px 48px 92px repeat(3, minmax(0, 1fr))'
+        'layout': '48px 144px repeat(5, minmax(0, 1fr))'
       },
       gridTemplateColumns: {
         'layout': 'repeat(12, minmax(0, 1fr))',

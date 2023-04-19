@@ -53,7 +53,7 @@ class WorkshopController
             ]
         ];
 
-        return $this->twig->render($response, '/workshop/dashboard_view.html.twig', $twig_data);
+        return $this->twig->render($response, '/workshop/dashboard/dashboard_view.html.twig', $twig_data);
     }
 
     /**
@@ -101,7 +101,7 @@ class WorkshopController
             'errors' => $errors
         ];
 
-        return $this->twig->render($response, '/workshop/list_view.html.twig', $twigData);
+        return $this->twig->render($response, '/workshop/list/list_view.html.twig', $twigData);
     }
 
     public function singleView(Request $request, Response $response, array $args): Response
@@ -142,6 +142,6 @@ class WorkshopController
             'errors' => $errors
         ];
 
-        return $this->twig->render($response, '/workshop/single_view.html.twig', $twigData);
+        return $this->twig->render($response, '/workshop/single/single_view.html.twig', $twigData);
     }
 }

@@ -83,7 +83,7 @@ class DeviceController
             ]
         ];
 
-        return $this->twig->render($response, '/workshop/fragments/table.html.twig', $twig_data);
+        return $this->twig->render($response, '/workshop/list/fragments/table.html', $twig_data);
     }
 
     /**
@@ -117,8 +117,15 @@ class DeviceController
 
         $owner = $device->getCustomer();
 
+        $context = 'device';
+
         $twig_data = [
             'page' => [
+                'context' => [
+                    'endpoint' => implode('', [BASE_URL, '/', $context, 's']),
+                    'name' => implode('', [$context, 's']),
+                    'Name' => ucwords(implode('', [$context, 's']))
+                ],
                 'record' => [
                     'display_name' => $deviceDisplayName
                 ],
@@ -135,13 +142,11 @@ class DeviceController
             ],
             'owner' => [
                 'link' => BASE_URL . '/workshop/customer/' . $owner->getUuid()->toString(),
-                'details' => [
-                    'Name' => $owner->getFirstName().' '.$owner->getLastName()
-                ] 
+                'name' => $owner->getFirstName().' '.$owner->getLastName()
             ]
         ];
 
-        return $this->twig->render($response, '/app/fragments/device_view.html.twig');
+        return $this->twig->render($response, '/workshop/single/fragments/device.html', $twig_data);
     }
 
     /**

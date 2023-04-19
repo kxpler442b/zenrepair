@@ -19,12 +19,12 @@ return [
         'cache_dir' => STORAGE_PATH . '/cache/doctrine',
         'entity_dir' => [APP_PATH . '/Domain'],
         'connection' => [
-            'driver' => 'pdo_mysql',
-            'host' => $_ENV['MARIADB_HOST'],
-            'port' => $_ENV['MARIADB_PORT'],
-            'dbname' => $_ENV['MARIADB_DATABASE_NAME'],
-            'user' => $_ENV['MARIADB_USER'],
-            'password' => $_ENV['MARIADB_PASSWORD']
+            'driver' => $_ENV['DB_DRIVER'],
+            'host' => $_ENV['DB_HOST'],
+            'port' => $_ENV['DB_PORT'],
+            'dbname' => $_ENV['DB_NAME'],
+            'user' => $_ENV['DB_USER'],
+            'password' => $_ENV['DB_PASSWORD']
         ]
     ],
     'auth0' => [

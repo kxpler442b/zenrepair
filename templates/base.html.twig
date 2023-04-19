@@ -19,16 +19,13 @@
 </head>
 <body class="h-screen bg-stone-900">
 
-<!-- Main content container -->
-<div class="h-full grid grid-rows-layout gap-y-4 grid-cols-layout gap-x-6">
+<div class="h-full grid grid-rows-layout grid-cols-layout">
 
-    {% block h_nav %}{% endblock %}
+    {% include "nav.html.twig" %}
 
-    {% block v_nav %}{% endblock %}
+    {% block sidebar %} {% endblock %}
 
-    {% block content %}{% endblock %}
-
-    {% block sidebar %}{% endblock %}
+    {% block content %} {% endblock %}
 
 </div>
 

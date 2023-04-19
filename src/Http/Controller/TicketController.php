@@ -96,7 +96,7 @@ class TicketController
             ]
         ];
 
-        return $this->twig->render($response, '/workshop/fragments/table.html.twig', $twig_data);
+        return $this->twig->render($response, '/workshop/list/fragments/table.html', $twig_data);
     }
 
     /**
@@ -134,7 +134,19 @@ class TicketController
         $device = $ticket->getDevice();
         $customer = $ticket->getCustomer();
 
+        $context = 'ticket';
+
         $twigData = [
+            'page' => [
+                'context' => [
+                    'endpoint' => implode('', [BASE_URL, '/', $context, 's']),
+                    'name' => implode('', [$context, 's']),
+                    'Name' => ucwords(implode('', [$context, 's']))
+                ],
+                'record' => [
+                    'display_name' => implode(' ', [$ticket->getSubject(), 'for', $customer->getFirstName(), $customer->getLastName()])
+                ]
+            ],
             'ticket' => [
                 'status' => $ticket->getStatus(),
                 'jobId' => $ticket->getId(),
@@ -151,14 +163,16 @@ class TicketController
             ],
             'customer' => [
                 'link' => BASE_URL . '/workshop/customer/' . $customer->getUuid()->toString(),
-                'firstName' => $customer->getFirstName(),
-                'lastName' => $customer->getLastName(),
-                'email' => $customer->getEmail(),
-                'mobile' => $customer->getMobile()
+                'details' => [
+                    'First Name' => $customer->getFirstName(),
+                    'Last Name' => $customer->getLastName(),
+                    'Email Address' => $customer->getEmail(),
+                    'Mobile Number' => $customer->getMobile()
+                ]
             ],
         ];
 
-        return $this->twig->render($response, '/workshop/fragments/ticket_view.html', $twigData);
+        return $this->twig->render($response, '/workshop/single/fragments/ticket.html', $twigData);
     }
 
     /**

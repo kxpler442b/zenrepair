@@ -79,7 +79,7 @@ class CustomerController
             ]
         ];
 
-        return $this->twig->render($response, '/workshop/fragments/table.html.twig', $twig_data);
+        return $this->twig->render($response, '/workshop/list/fragments/table.html', $twig_data);
     }
 
     /**
@@ -146,8 +146,15 @@ class CustomerController
             );
         }
 
+        $context = 'customer';
+
         $twig_data = [
             'page' => [
+                'context' => [
+                    'endpoint' => implode('', [BASE_URL, '/', $context, 's']),
+                    'name' => implode('', [$context, 's']),
+                    'Name' => ucwords(implode('', [$context, 's']))
+                ],
                 'record' => [
                     'display_name' => $customerDisplayName
                 ],
@@ -163,14 +170,12 @@ class CustomerController
             ],
             'addresses' => $addresses,
             'devices' => [
-                'cols' => [
-                    'headers' => ['Device Name', 'Serial Number', 'IMEI', 'Created', 'Last Updated']
-                ],
+                'cols' => ['Device Name', 'Serial Number', 'IMEI', 'Created', 'Last Updated'],
                 'rows' => $devices
             ]
         ];
 
-        return $this->twig->render($response, '/app/fragments/customer_view.html.twig', $twig_data);
+        return $this->twig->render($response, '/workshop/single/fragments/customer.html', $twig_data);
     }
 
     /**

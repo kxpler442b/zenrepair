@@ -32,6 +32,8 @@ class TicketController
     private readonly Twig $twig;
     private readonly SessionInterface $session;
 
+    private string $context = 'ticket';
+
     /**
      * Constructor method.
      *
@@ -68,11 +70,11 @@ class TicketController
             $data[$ticket->getUuid()->toString()] = array(
                 'id' => $ticket->getId(),
                 [
-                    'link' => BASE_URL . '/workshop/ticket/' . $ticket->getUuid()->toString(),
+                    'link' => BASE_URL . '/workshop/view/ticket/' . $ticket->getUuid()->toString(),
                     'text' => $ticket->getSubject()
                 ],
                 [
-                    'link' => BASE_URL . '/workshop/customer/' . $customer->getUuid()->toString(),
+                    'link' => BASE_URL . '/workshop/view/customer/' . $customer->getUuid()->toString(),
                     'text' => $customer->getFirstName().' '.$customer->getLastName()
                 ],
                 'created' => $ticket->getCreated()->format('d-m-Y'),
@@ -109,13 +111,17 @@ class TicketController
      */
     public function new(Request $request, Response $response): Response
     {
-        $twig_data = [
+        $twigData = [
             'page' => [
-                'title' => 'Tickets'
-            ]
+                'context' => [
+                    'endpoint' => implode('', [BASE_URL, '/', $this->context, 's']),
+                    'name' => implode('', [$this->context, 's']),
+                    'Name' => ucwords(implode('', [$this->context, 's']))
+                ]
+            ],
         ];
 
-        return $this->twig->render($response, '/app/forms/ticket_create.html.twig');
+        return $this->twig->render($response, '/workshop/create/fragments/ticket.html', $twigData);
     }
 
     /**
@@ -134,14 +140,14 @@ class TicketController
         $device = $ticket->getDevice();
         $customer = $ticket->getCustomer();
 
-        $context = 'ticket';
+        $this->context = 'ticket';
 
         $twigData = [
             'page' => [
                 'context' => [
-                    'endpoint' => implode('', [BASE_URL, '/', $context, 's']),
-                    'name' => implode('', [$context, 's']),
-                    'Name' => ucwords(implode('', [$context, 's']))
+                    'endpoint' => implode('', [BASE_URL, '/', $this->context, 's']),
+                    'name' => implode('', [$this->context, 's']),
+                    'Name' => ucwords(implode('', [$this->context, 's']))
                 ],
                 'record' => [
                     'display_name' => implode(' ', [$ticket->getSubject(), 'for', $customer->getFirstName(), $customer->getLastName()])

@@ -109,12 +109,7 @@ class WorkshopController
         $context = $args['context'];
         $uuid = $args['id'];
 
-        $whitelist = array('customer', 'ticket', 'device');
-
-        /**
-         * Throw a 404 error if the context is not found.
-         */
-        if(!in_array($context, $whitelist))
+        if(!$this->whitelist($context))
         {
             return $response->withHeader('Location', BASE_URL . '/workshop/dashboard')
                             ->withStatus(404);
@@ -143,5 +138,56 @@ class WorkshopController
         ];
 
         return $this->twig->render($response, '/workshop/single/single_view.html.twig', $twigData);
+    }
+
+    public function createView(Request $request, Response $response, array $args): Response
+    {
+        $context = $args['context'];
+        $uuid = $args['id'];
+
+        if(!$this->whitelist($context))
+        {
+            return $response->withHeader('Location', BASE_URL . '/workshop/dashboard')
+                            ->withStatus(404);
+        }
+
+        if($this->session->exists('errors'))
+        {
+            $errors = $this->session->get('errors');
+        }
+        else
+        {
+            $errors = null;
+        }
+
+        $twigData = [
+            'page' => [
+                'title' => ucwords($context) . ' - RSMS',
+                'context' => [
+                    'endpoint' => implode('', [BASE_URL, '/', $context, 's']),
+                    'name' => implode('', [$context, 's']),
+                    'Name' => ucwords(implode('', [$context, 's']))
+                ],
+                'recordId' => $uuid
+            ],
+            'errors' => $errors
+        ];
+
+        return $this->twig->render($response, '/workshop/create/create_view.html.twig', $twigData);
+    }
+
+    private function whitelist(string $context): bool
+    {
+        $whitelist = array('customer', 'ticket', 'device');
+
+        /**
+         * Return True only if the context exists in the whitelist, else return False.
+         */
+        if(in_array($context, $whitelist))
+        {
+            return true;
+        }
+
+        return false;
     }
 }

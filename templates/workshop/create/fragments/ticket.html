@@ -1,0 +1,50 @@
+<header class="row-start-2 row-end-3 col-start-1 col-span-full flex flex-col justify-center align-middle items-center shadow-sm rounded-bl-md rounded-br-md bg-sky-500">
+    
+    <div class="w-full h-36 px-6 flex flex-row justify-between items-center">
+
+        <div class="inline-flex flex-col justify-center items-start space-y-4">
+
+            <div class="flex flex-row justify-center items-center">
+                <a href="{{ globals.base_url }}/workshop/view/{{ page.context.name }}" class="font-title font-medium text-sm text-white hover:underline">{{ page.context.Name }}</a>
+            </div>
+
+            <h2 class="font-title font-semibold text-4xl text-white">Create a new ticket</h2>
+        </div>
+
+    </div>
+
+</header>
+
+<content class="row-start-3 row-span-full col-start-3 col-span-8 px-6 pt-6 flex flex-col justify-start items-center space-y-4">
+
+    <div class="w-full rounded-sm border border-stone-300 bg-stone-800">
+
+        <div class="w-full px-6 py-2 border-b border-stone-300 bg-stone-800">
+            <h4 class="font-title font-medium text-sm text-stone-300">Details</h4>
+        </div>
+            
+        <div class="w-full px-6 py-4 text-white bg-stone-800">
+                
+            <form id="ticket_details" class="w-full">
+
+                <label for="subject" class="font-medium text-sm">Subject</label><br>
+                <input type="text" name="subject" id="subject" class="w-1/2 mt-2 mb-4 rounded-sm border border-stone-300 focus:border-sky-500 bg-transparent focus:bg-stone-700 focus:ring-sky-500 transition ease-in-out duration-100"><br>
+
+                <label for="issue_type" class="font-medium text-sm">Issue Type</label><br>
+                <select name="issue_type" id="issue_type" class="w-1/2 mt-2 mb-4 rounded-sm border border-stone-300 focus:border-sky-500 bg-transparent focus:bg-stone-700 focus:ring-sky-500 transition ease-in-out duration-100">
+                    <option value="hardware" selected>Hardware</option>
+                    <option value="hardware">Software</option>
+                </select><br>
+
+                <label for="user" class="font-medium text-sm">Technician</label><br>
+                <select name="user" id="user" class="w-1/2 mt-2 mb-4 rounded-sm border border-stone-300 focus:border-sky-500 bg-transparent focus:bg-stone-700 focus:ring-sky-500 transition ease-in-out duration-100">
+                    <option value="id">Benjamin Moss</option>
+                </select>
+
+            </form>   
+    
+        </div>
+    
+    </div>
+
+</content>

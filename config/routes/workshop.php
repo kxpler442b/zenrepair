@@ -19,8 +19,9 @@ return function (App $app)
     $app->group('/workshop', function(RouteCollectorProxy $workshop) {
 
         $workshop->get('/dashboard', [WorkshopController::class, 'dashboard']);
-        $workshop->get('/{context}', [WorkshopController::class, 'listView']);
-        $workshop->get('/{context}/{id}', [WorkshopController::class, 'singleView']);
+        $workshop->get('/view/{context}', [WorkshopController::class, 'listView']);
+        $workshop->get('/view/{context}/{id}', [WorkshopController::class, 'singleView']);
+        $workshop->get('/new/{context}', [WorkshopController::class, 'createView']);
         
     })->add(AuthMiddleware::class);
 };

@@ -13,6 +13,7 @@ declare(strict_types = 1);
 namespace App\Service;
 
 use App\Domain\Customer;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\Persistence\ObjectRepository;
@@ -63,6 +64,23 @@ class CustomerService
     public function getAll(): ?array
     {
         return $this->repo->findAll();
+    }
+
+    public function search(string $search): ?array
+    {
+        $qb = $this->repo->createQueryBuilder('c');
+
+        $result = $qb->where($qb->expr()->orX(
+                                $qb->expr()->like('c.email', ':search'),
+                                $qb->expr()->like('c.first_name', ':search'),
+                                $qb->expr()->like('c.last_name', ':search'),
+                                $qb->expr()->like('c.mobile', ':search')
+                            ))
+                    ->setParameter('search', implode('', [$search, '%']))
+                    ->getQuery()
+                    ->getResult();
+
+        return $result;
     }
 
     public function update(string $uuid, array $data): bool

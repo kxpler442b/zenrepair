@@ -1,11 +1,11 @@
 <?php
 
 /**
- * User Accounts Service.
+ * User Service.
  * 
  * @author Benjamin Moss <p2595849@mydmu.ac.uk>
  * 
- * Date: 20/03/23
+ * Date: 27/02/23
  */
 
 declare(strict_types = 1);
@@ -13,71 +13,118 @@ declare(strict_types = 1);
 namespace App\Service;
 
 use App\Domain\User;
-use Ramsey\Uuid\Uuid;
+use App\Domain\Group;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
-use Psr\Container\ContainerInterface;
 use Doctrine\Persistence\ObjectRepository;
-use Doctrine\Common\Collections\Collection;
 
 class UserService
 {
     private readonly EntityManager $em;
-    private ObjectRepository|EntityRepository $repo;
+    private ObjectRepository|EntityRepository $userRepo;
+    private ObjectRepository|EntityRepository $groupRepo;
 
     /**
-     * Constructor method.
+     * Constructor method
      *
-     * @param ContainerInterface $c
+     * @param EntityManager $em
      */
-    public function __construct(ContainerInterface $c)
+    public function __construct(EntityManager $em)
     {
-        $this->em = $c->get(EntityManager::class);
-        
-        $this->getRepository();
+        $this->em = $em;
+
+        $this->setUserRepository();
+        $this->setGroupRepository();
     }
 
-    /**
-     * Returns a User object or null.
-     *
-     * @param integer $id
-     * 
-     * @return User|null
-     */
-    public function getById(int $id): ?User
+    public function __destruct() {}
+
+    public function createUser(array $data): void
     {
-        return $this->repo->findOneBy(['id' => $id]);
+        $user = new User();
+        $group = $this->getGroupByName($data['group'] ?? 'default');
+
+        $user->setEmail($data['email']);
+        $user->setPassword(password_hash($data['password'], PASSWORD_BCRYPT, ['cost' => 12]));
+        $user->setFirstName($data['first_name']);
+        $user->setLastName($data['last_name'] ?? 'null');
+        $user->setGroup($group);
+        $user->setUuid();
+        $user->setCreated();
+        $user->setUpdated();
+
+        $this->em->persist($user);
+        $this->em->flush();
     }
 
-    /**
-     * Returns a User object or null.
-     *
-     * @param Uuid $uuid
-     * 
-     * @return User|null
-     */
-    public function getByUuid(Uuid $uuid): ?User
+    public function createGroup(array $data): void
     {
-        return $this->repo->findOneBy(['uuid' => $uuid]);
+        $group = new Group();
+
+        $group->setName($data['name']);
+        $group->setPrivLevel($data['priv_level'] ?? 3);
+        $group->setUuid();
+        $group->setCreated();
+        $group->setUpdated();
+
+        $this->em->persist($group);
+        $this->em->flush();
     }
 
-    /**
-     * Returns a doctrine collection of Users.
-     *
-     * @return Collection|null
-     */
-    public function getAll(): ?Collection
+    public function getByUuid(string $uuid): ?User
     {
-        return $this->repo->getAll();
+        return $this->userRepo->findOneBy(['uuid' => $uuid]);
     }
 
-    /**
-     * Sets the private repository class.
-     *
-     * @return void
-     */
-    private function getRepository(): void
+    public function getByEmail(string $email): ?User
     {
-        $this->em->getRepository(User::class);
+        return $this->userRepo->findOneBy(['email' => $email]);
+    }
+
+    public function getByGroup(string $group_id): ?User
+    {
+        return $this->userRepo->findOneBy(['id' => $group_id]);
+    }
+
+    public function getUsers(): ?array
+    {
+        return $this->userRepo->findAll();
+    }
+
+    public function getUsersInGroup(string $group_name): ?array
+    {
+        $group = $this->getGroupByName($group_name);
+
+        return $this->userRepo->findBy(['group' => $group->getUuid()->toString()]);
+    }
+
+    public function getGroupById(string $uuid): ?Group
+    {
+        return $this->groupRepo->findOneBy(['uuid' => $uuid]);
+    }
+
+    public function getGroupByName(string $name): ?Group
+    {
+        return $this->groupRepo->findOneBy(['name' => $name]);
+    }
+
+    public function updateUser(string $id, array $data): void
+    {
+        // TODO: Implement account update function.
+    }
+
+    public function deleteUser(string $id): void
+    {
+        // TODO: Implement account deletion function.
+    }
+
+    private function setUserRepository(): void
+    {
+        $this->userRepo = $this->em->getRepository(User::class);
+    }
+
+    private function setGroupRepository(): void
+    {
+        $this->groupRepo = $this->em->getRepository(Group::class);
     }
 }

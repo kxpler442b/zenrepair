@@ -13,10 +13,10 @@ declare(strict_types = 1);
 use Slim\App;
 use Slim\Routing\RouteCollectorProxy;
 use App\Http\Controller\UserController;
-use App\Http\Middleware\AuthMiddleware;
 use App\Http\Controller\DeviceController;
 use App\Http\Controller\TicketController;
 use App\Http\Controller\CustomerController;
+use App\Auth\Middleware\LocalAuthMiddleware;
 
 return function(App $app)
 {
@@ -33,7 +33,7 @@ return function(App $app)
 
         $users->delete('/delete', [UserController::class, 'delete']);
 
-    })->add(AuthMiddleware::class);
+    })->add(LocalAuthMiddleware::class);
 
     $app->group('/customers', function(RouteCollectorProxy $customers) {
 
@@ -43,12 +43,13 @@ return function(App $app)
         $customers->get('/{id}/edit', [CustomerController::class, 'edit']);
         
         $customers->post('/create', [CustomerController::class, 'create']);
+        $customers->post('/search/{format}', [CustomerController::class, 'search']);
 
         $customers->put('/update', [CustomerController::class, 'update']);
 
         $customers->delete('/delete', [CustomerController::class, 'delete']);
 
-    })->add(AuthMiddleware::class);
+    })->add(LocalAuthMiddleware::class);
 
     $app->group('/tickets', function(RouteCollectorProxy $tickets) {
 
@@ -63,7 +64,7 @@ return function(App $app)
 
         $tickets->delete('/delete', [TicketController::class, 'delete']);
 
-    })->add(AuthMiddleware::class);
+    })->add(LocalAuthMiddleware::class);
 
     $app->group('/devices', function(RouteCollectorProxy $devices) {
 
@@ -73,10 +74,11 @@ return function(App $app)
         $devices->get('/{id}/edit', [DeviceController::class, 'edit']);
         
         $devices->post('/create', [DeviceController::class, 'create']);
+        $devices->post('/search/{format}', [DeviceController::class, 'search']);
 
         $devices->put('/update', [DeviceController::class, 'update']);
 
         $devices->delete('/delete', [DeviceController::class, 'delete']);
 
-    })->add(AuthMiddleware::class);
+    })->add(LocalAuthMiddleware::class);
 };

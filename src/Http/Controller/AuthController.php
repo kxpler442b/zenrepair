@@ -12,15 +12,19 @@ declare(strict_types = 1);
 
 namespace App\Http\Controller;
 
-use Auth0\SDK\Auth0;
+use Slim\Views\Twig;
 use Slim\Psr7\Request;
 use Slim\Psr7\Response;
+use Valitron\Validator;
+use App\Interface\SessionInterface;
 use Psr\Container\ContainerInterface;
+use App\Auth\Contract\AuthProviderContract;
 
 class AuthController
 {
-    private readonly Auth0 $auth0;
-    private ?object $session;
+    private readonly AuthProviderContract $auth;
+    private readonly Twig $twig;
+    private readonly SessionInterface $session;
 
     /**
      * Constructor method.
@@ -29,8 +33,9 @@ class AuthController
      */
     public function __construct(ContainerInterface $c)
     {
-        $this->auth0 = $c->get(Auth0::class);
-        $this->session = null;
+        $this->auth = $c->get(AuthProviderContract::class);
+        $this->twig = $c->get(Twig::class);
+        $this->session = $c->get(SessionInterface::class);
     }
 
     /**
@@ -43,20 +48,22 @@ class AuthController
      */
     public function index(Request $request, Response $response): Response
     {
-        $this->session = $this->auth0->getCredentials();
-
-        if($this->session === null)
+        if($this->auth->verify())
         {
-            return $response->withHeader('Location', BASE_URL . '/login')
-                            ->withStatus(302);
+            return $response->withHeader('Location', implode('', [BASE_URL, '/workshop/dashboard']))->withStatus(302);
         }
 
-        return $response->withHeader('Location', BASE_URL . '/workshop/dashboard')
-                        ->withStatus(302);
+        $twigData = [
+            'page' => [
+                'title' => 'Log in - RSMS'
+            ]
+        ];
+
+        return $this->twig->render($response, '/auth/auth.html.twig', $twigData);
     }
 
     /**
-     * Redirects the User to the Auth0 service.
+     * Tries to authenticate the user.
      *
      * @param Request $request
      * @param Response $response
@@ -65,26 +72,42 @@ class AuthController
      */
     public function login(Request $request, Response $response): Response
     {
-        $this->auth0->clear();
+        $this->auth->clear();
 
-        return $response->withHeader('Location', $this->auth0->login(BASE_URL . '/callback'))
-                            ->withStatus(302); 
-    }
+        $body = $request->getParsedBody();
 
-    /**
-     * Handles the response from the Auth0 service.
-     *
-     * @param Request $request
-     * @param Response $response
-     * 
-     * @return Response
-     */
-    public function callback(Request $request, Response $response): Response
-    {
-        $this->auth0->exchange(BASE_URL . '/callback');
+        $validatorRules = [
+            'required' => [
+                'user.email',
+                'user.password'
+            ],
+            'email' => [
+                'user.email'
+            ]
+        ];
 
-        return $response->withHeader('Location', BASE_URL . '/workshop/dashboard')
-                        ->withStatus(302);
+        $user = [
+            'email' => $body['email'],
+            'password' => $body['password']
+        ];
+
+        $v = new Validator([
+            'user' => $user
+        ]);
+
+        $v->rules($validatorRules);
+
+        if(!$v->validate())
+        {
+            return $response->withHeader('HX-Location', BASE_URL)->withStatus(302);
+        }
+
+        if(!$this->auth->login($user['email'], $user['password']))
+        {
+            return $response->withHeader('HX-Location', BASE_URL)->withStatus(302);
+        }
+
+        return $response->withHeader('HX-Location', implode('', [BASE_URL, '/workshop/view/dashboard']))->withStatus(302);
     }
 
     /**
@@ -97,9 +120,8 @@ class AuthController
      */
     public function logout(Request $request, Response $response)
     {
-        $this->auth0->clear();
+        $this->auth->clear();
 
-        return $response->withHeader('Location', BASE_URL . '/login')
-                        ->withStatus(302);
+        return $response->withHeader('Location', BASE_URL)->withStatus(302);
     }
 }

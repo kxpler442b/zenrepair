@@ -143,11 +143,10 @@ class WorkshopController
     public function createView(Request $request, Response $response, array $args): Response
     {
         $context = $args['context'];
-        $uuid = $args['id'];
 
         if(!$this->whitelist($context))
         {
-            return $response->withHeader('Location', BASE_URL . '/workshop/dashboard')
+            return $response->withHeader('Location', BASE_URL . '/workshop/view/dashboard')
                             ->withStatus(404);
         }
 
@@ -168,7 +167,6 @@ class WorkshopController
                     'name' => implode('', [$context, 's']),
                     'Name' => ucwords(implode('', [$context, 's']))
                 ],
-                'recordId' => $uuid
             ],
             'errors' => $errors
         ];

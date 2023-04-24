@@ -9,12 +9,16 @@
 
 declare(strict_types = 1);
 
+use App\Auth\Contract\AuthProviderContract;
+use App\Auth\Provider\LocalAuthProvider;
 use Slim\App;
+use Auth0\SDK\Auth0;
 use Slim\Views\Twig;
 use App\Support\Config;
 use function DI\create;
 use App\Support\Session;
 use Doctrine\ORM\ORMSetup;
+use App\Service\UserService;
 use Slim\Factory\AppFactory;
 use \Doctrine\DBAL\Types\Type;
 use App\Service\DeviceService;
@@ -26,11 +30,8 @@ use App\Service\GuardianService;
 use Doctrine\DBAL\DriverManager;
 use App\Interface\SessionInterface;
 use App\Interface\GuardianInterface;
-use App\Service\LocalAccountService;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
-use App\Interface\LocalAccountProviderInterface;
-use Auth0\SDK\Auth0;
 
 return [
     App::class => function (ContainerInterface $container)
@@ -39,7 +40,7 @@ return [
 
         $middleware = require CONFIG_PATH . '/middleware.php';
 
-        $authRoutes = require CONFIG_PATH . '/routes/auth0.php';
+        $authRoutes = require CONFIG_PATH . '/routes/auth.php';
         $workshopRoutes = require CONFIG_PATH . '/routes/workshop.php';
         $restRoutes = require CONFIG_PATH . '/routes/rest.php';
 
@@ -118,9 +119,9 @@ return [
 
     ResponseFactoryInterface::class => fn(App $app) => $app->getResponseFactory(),
 
-    LocalAccountProviderInterface::class => function(ContainerInterface $container)
+    UserService::class => function(ContainerInterface $container)
     {
-        return new LocalAccountService($container->get(EntityManager::class));
+        return new UserService($container->get(EntityManager::class));
     },
 
     CustomerService::class => function(ContainerInterface $container)
@@ -139,9 +140,15 @@ return [
     {
         return new DeviceService($container->get(EntityManager::class));
     },
+
     SessionInterface::class => function(Config $config)
     {
         return new Session($config->get('session'));
+    },
+
+    AuthProviderContract::class => function(ContainerInterface $c)
+    {
+        return new LocalAuthProvider($c->get(UserService::class), $c->get(SessionInterface::class));
     },
 
     GuardianInterface::class => function(ContainerInterface $c, Config $config)

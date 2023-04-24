@@ -1,20 +1,31 @@
-<div class="w-full flex flex-col justify-start items-center rounded-sm border border-stone-300 bg-stone-800">
+<div class="w-full flex flex-col justify-start items-center shadow-sm bg-white">
 
     <div class="w-full py-4 flex flex-row justify-between align-middle items-center">
+
+        <div class="h-full w-1/2 px-6 inline-flex flex-row justify-start items-center space-x-4">
+            <button hx-get="{{ globals.base_url }}/{{ page.context.name }}s/new" hx-target="body" hx-swap="beforeend" class="h-full px-4 py-2 font-medium text-xs text-white rounded-sm bg-sky-500 hover:bg-sky-700">New {{ page.context.Name }}</button>
+            
+            <input type="search" 
+                name="search" placeholder="Search {{ page.context.name }}..." 
+                hx-post="{{ globals.base_url }}/{{ page.context.name }}s/search/table"
+                hx-trigger="keyup changed delay:500ms, search" 
+                hx-target="#results"
+                hx-swap="outerHTML"
+                class="form-input w-1/2 h-full text-xs rounded-sm border-stone-500 focus:border-sky-500 bg-stone-100 focus:bg-white focus:ring-sky-500 transition ease-in-out duration-100">
+
+        </div>
         
         <div class="px-6">
-            <h3 class="font-medium text-md text-stone-300">Showing 00 of 00</h3>
-        </div>
-
-        <div class="h-full w-1/2 px-6 inline-flex flex-row justify-end items-center space-x-4">
-            <input type="search" placeholder="Search {{ page.context.name }}s..." class="w-1/2 text-xs text-white placeholder-stone-300 rounded-sm border-stone-200 bg-transparent focus:ring-transparent focus:border-sky-500 focus:bg-stone-500 transition ease-in-out duration-100">
-
-            <a href="{{ globals.base_url }}/workshop/new/{{ page.context.name }}" class="h-full px-4 py-1.5 font-medium text-sm text-white rounded-sm bg-sky-500 hover:bg-sky-700">New {{ page.context.Name }}</a>
+            <h3 class="font-medium text-md text-stone-700">Showing 00 of 00</h3>
         </div>
 
     </div>
 
-    <table class="table-auto w-full text-white">
+    <pre>
+        {{ dump(validationErrors )}}
+    </pre>
+
+    <table id="results" class="table-auto w-full text-white">
         <thead class="text-left border-y border-stone-300 bg-stone-300">
             <tr>
                 {% for col in table.cols %}
@@ -24,7 +35,7 @@
         </thead>
         <tbody class="divide-y divide-stone-300">
         {% for row in table.rows %}
-            <tr class="hover:bg-stone-700 transition ease-in-out duration-100">
+            <tr class="text-stone-700 hover:bg-stone-200 transition ease-in-out duration-100">
                 {% for key, data in row %}
                 {% if data is iterable %}
                     <td class="px-6 py-4 font-medium text-sm hover:underline">

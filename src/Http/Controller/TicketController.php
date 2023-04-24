@@ -111,6 +111,8 @@ class TicketController
      */
     public function new(Request $request, Response $response): Response
     {
+        $user = $this->session->get('auth');
+
         $twigData = [
             'page' => [
                 'context' => [
@@ -119,6 +121,7 @@ class TicketController
                     'Name' => ucwords(implode('', [$this->context, 's']))
                 ]
             ],
+            'user' => $user
         ];
 
         return $this->twig->render($response, '/workshop/create/fragments/ticket.html', $twigData);
@@ -191,13 +194,12 @@ class TicketController
      */
     public function edit(Request $request, Response $response): Response
     {
-        $twig_data = [
-            'page' => [
-                'title' => 'Tickets'
-            ]
+
+        $twigData = [
+            
         ];
 
-        return $this->twig->render($response, '/app/forms/ticket_edit.html.twig');
+        return $this->twig->render($response, '/app/forms/ticket_edit.html.twig', $twigData);
     }
 
     /**

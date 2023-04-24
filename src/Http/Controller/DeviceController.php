@@ -28,6 +28,8 @@ class DeviceController
     private readonly Twig $twig;
     private readonly SessionInterface $session;
 
+    private string $context = 'device';
+
     /**
      * Constructor method.
      *
@@ -60,7 +62,7 @@ class DeviceController
 
             $data[$device->getUuid()->toString()] = array(
                 [
-                    'link' => BASE_URL . '/workshop/device/' . $device->getUuid()->toString(),
+                    'link' => BASE_URL . '/workshop/view/device/' . $device->getUuid()->toString(),
                     'text' => $device->getManufacturer().' '.$device->getModel()
                 ],
                 'serial' => $device->getSerial(),
@@ -73,14 +75,16 @@ class DeviceController
         $twig_data = [
             'page' => [
                 'context' => [
-                    'name' => 'device',
-                    'Name' => 'Device'
-                ]
+                    'endpoint' => implode('', [BASE_URL, '/', $this->context, 's']),
+                    'name' => $this->context,
+                    'Name' => ucwords($this->context)
+                ],
             ],
             'table' => [
                 'cols' => ['Name', 'Serial Number', 'Owner', 'Created', 'Last Updated'],
                 'rows' => $data
-            ]
+            ],
+            'validationErrors' => $this->session->get('validationErrors')
         ];
 
         return $this->twig->render($response, '/workshop/list/fragments/table.html', $twig_data);
@@ -96,9 +100,17 @@ class DeviceController
      */
     public function new(Request $request, Response $response): Response
     {
+        $twigData = [
+            'page' => [
+                'context' => [
+                    'endpoint' => implode('', [BASE_URL, '/', $this->context, 's']),
+                    'name' => $this->context,
+                    'Name' => ucwords($this->context)
+                ],
+            ]
+        ];
 
-
-        return $this->twig->render($response, '/app/forms/device_create.html.twig');
+        return $this->twig->render($response, '/workshop/create/fragments/device.html', $twigData);
     }
 
     /**
@@ -119,7 +131,7 @@ class DeviceController
 
         $context = 'device';
 
-        $twig_data = [
+        $twigData = [
             'page' => [
                 'context' => [
                     'endpoint' => implode('', [BASE_URL, '/', $context, 's']),
@@ -141,12 +153,12 @@ class DeviceController
                 ]
             ],
             'owner' => [
-                'link' => BASE_URL . '/workshop/customer/' . $owner->getUuid()->toString(),
+                'link' => BASE_URL . '/workshop/view/customer/' . $owner->getUuid()->toString(),
                 'name' => $owner->getFirstName().' '.$owner->getLastName()
             ]
         ];
 
-        return $this->twig->render($response, '/workshop/single/fragments/device.html', $twig_data);
+        return $this->twig->render($response, '/workshop/single/fragments/device.html', $twigData);
     }
 
     /**
@@ -187,6 +199,7 @@ class DeviceController
                 'device.model',
                 'device.serial',
                 'device.imei',
+                'device.locator',
                 'device.customer'
             ],
             'requiredWith' => [
@@ -195,7 +208,8 @@ class DeviceController
             'alphaNum' => [
                 'device.manufacturer',
                 'device.serial',
-                'device.imei'
+                'device.imei',
+                'device.locator'
             ],
             'lengthMin' => [
                 ['device.imei', 13]
@@ -204,7 +218,8 @@ class DeviceController
                 ['device.manufacturer', 64],
                 ['device.model', 64],
                 ['device.serial', 32],
-                ['device.imei', 16]
+                ['device.imei', 16],
+                ['device.locator', 16]
             ],
         ];
 
@@ -213,6 +228,7 @@ class DeviceController
             'model' => $body['device_model'],
             'serial' => $body['device_serial'],
             'imei' => $body['device_imei'],
+            'locator' => $body['device_locator'],
             'customer' => $body['device_customer']
         ];
 
@@ -224,9 +240,9 @@ class DeviceController
 
         if(!$validator->validate())
         {
-            $this->session->store('validationErrors', $validator->errors());
+            $this->session->store('validationErrors', $device);
 
-            return $response->withStatus(400);
+            return $response->withHeader('HX-Location', implode('', [BASE_URL, '/workshop/view/devices']))->withStatus(400);
         }
 
         $this->devices->create([
@@ -234,10 +250,85 @@ class DeviceController
             'model' => $device['model'],
             'serial' => $device['serial'],
             'imei' => $device['imei'],
-            'customer' => $this->customers->getByUuid($device['customer'])
+            'locator' => $device['locator'],
+            'owner' => $this->customers->getByUuid($device['customer'])
         ]);
 
-        return $response->withStatus(200);
+        return $response->withHeader('HX-Location', implode('', [BASE_URL, '/workshop/view/devices']))->withStatus(200);
+    }
+
+    /**
+     * Search the database for a given record and return a HTML fragment using the specified format.
+     *
+     * @param Request $request
+     * @param Response $response
+     * 
+     * @return Response
+     */
+    public function search(Request $request, Response $response, array $args): Response
+    {
+        $format = $args['format'];
+        $search = $request->getParsedBody()['search'];
+
+        if($format == 'select')
+        {
+            $devices = [];
+            $results = $this->devices->search($search);
+
+            foreach($results as &$device)
+            {
+                $devices[$device->getUuid()->toString()] = array(
+                    'display_name' => $device->getManufacturer().' '.$device->getModel(),
+                    'identifier' => $device->getSerial()
+                );
+            };
+
+            $twigData = [
+                'options' => $devices
+            ];
+
+            return $this->twig->render($response, '/workshop/search/select.html', $twigData);
+        }
+        if($format == 'table')
+        {
+            $devices = [];
+            $results = $this->devices->search($search);
+
+            foreach($results as &$device)
+            {
+                $owner = $device->getCustomer();
+
+                $devices[$device->getUuid()->toString()] = array(
+                    [
+                        'link' => BASE_URL . '/workshop/view/device/' . $device->getUuid()->toString(),
+                        'text' => $device->getManufacturer().' '.$device->getModel()
+                    ],
+                    'serial' => $device->getSerial(),
+                    'owner' => $owner->getFirstName().' '.$owner->getLastName(),
+                    'created' => $device->getCreated()->format('d-m-Y H:i:s'),
+                    'last_updated' => $device->getUpdated()->format('d-m-Y H:i:s')
+                );
+            }
+
+            $twigData = [
+                'page' => [
+                    'title' => 'Devices',
+                    'context' => [
+                        'endpoint' => implode('', [BASE_URL, '/', $this->context, 's']),
+                        'name' => implode('', [$this->context, 's']),
+                        'Name' => ucwords(implode('', [$this->context, 's']))
+                    ],
+                ],
+                'table' => [
+                    'cols' => ['Name', 'Serial Number', 'Owner', 'Created', 'Last Updated'],
+                    'rows' => $devices
+                ],
+            ];
+
+            return $this->twig->render($response, '/workshop/search/table.html', $twigData);
+        }
+
+        return $response->withStatus(400);
     }
     
     /**

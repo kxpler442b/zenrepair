@@ -1,0 +1,7 @@
+{% for id, data in options %}
+    
+    <option value="{{ id }}">
+        {{ data.display_name }} ({{ data.identifier }})
+    </option>
+
+{% endfor %}

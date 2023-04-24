@@ -64,6 +64,22 @@ class DeviceService
         return $this->em->getRepository(Device::class)->findAll();
     }
 
+    public function search(string $search): ?array
+    {
+        $qb = $this->repo->createQueryBuilder('d');
+
+        $result = $qb->where($qb->expr()->orX(
+                                $qb->expr()->like('d.manufacturer', ':search'),
+                                $qb->expr()->like('d.model', ':search'),
+                                $qb->expr()->like('d.serial', ':search')
+                            ))
+                    ->setParameter('search', implode('', [$search, '%']))
+                    ->getQuery()
+                    ->getResult();
+
+        return $result;
+    }
+
     public function update(string $id, array $data): void
     {
         $customer = $this->em->find(Device::class, $id);

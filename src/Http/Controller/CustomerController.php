@@ -26,6 +26,8 @@ class CustomerController
     private readonly Twig $twig;
     private readonly SessionInterface $session;
 
+    private string $context = 'customer';
+
     /**
      * Constructor method.
      *
@@ -55,7 +57,7 @@ class CustomerController
         {
             $data[$customer->getUuid()->toString()] = array(
                 [
-                    'link' => BASE_URL . '/workshop/customer/' . $customer->getUuid()->toString(),
+                    'link' => BASE_URL . '/workshop/view/customer/' . $customer->getUuid()->toString(),
                     'text' => $customer->getFirstName().' '.$customer->getLastName()
                 ],
                 'email' => $customer->getEmail(),
@@ -69,14 +71,16 @@ class CustomerController
             'page' => [
                 'title' => 'Customers',
                 'context' => [
-                    'name' => 'customer',
-                    'Name' => 'Customer'
-                ]
+                    'endpoint' => implode('', [BASE_URL, '/', $this->context, 's']),
+                    'name' => $this->context,
+                    'Name' => ucwords($this->context)
+                ],
             ],
             'table' => [
-                'cols' => ['Name', 'Email Address', 'Group', 'Created', 'Last Updated'],
+                'cols' => ['Name', 'Email Address', 'Mobile Number', 'Created', 'Last Updated'],
                 'rows' => $data
-            ]
+            ],
+            'validationErrors' => $this->session->get('validationErrors')
         ];
 
         return $this->twig->render($response, '/workshop/list/fragments/table.html', $twig_data);
@@ -92,13 +96,17 @@ class CustomerController
      */
     public function new(Request $request, Response $response): Response
     {
-        $twig_data = [
+        $twigData = [
             'page' => [
-                'title' => 'Customers'
+                'context' => [
+                    'endpoint' => implode('', [BASE_URL, '/', $this->context, 's']),
+                    'name' => $this->context,
+                    'Name' => ucwords($this->context)
+                ],
             ]
         ];
 
-        return $this->twig->render($response, '/app/forms/customer_create.html.twig');
+        return $this->twig->render($response, '/workshop/create/fragments/customer.html', $twigData);
     }
 
     /**
@@ -115,20 +123,6 @@ class CustomerController
         $customer = $this->customers->getByUuid($customerId);
         $customerDisplayName = $customer->getFirstName() . ' ' . $customer->getLastName();
 
-        $addresses = [];
-        $addressArray = $customer->getAddresses();
-
-        foreach($addressArray as &$address)
-        {
-            $addresses[$address->getUuid()->toString()] = array(
-                'Line One' => $address->getLineOne(),
-                'Line Two' => $address->getLineTwo(),
-                'Town / City' => $address->getTown(),
-                'County' => $address->getCounty(),
-                'Postcode' => $address->getPostcode()
-            );
-        }
-
         $devices = [];
         $deviceArray = $customer->getDevices();
 
@@ -136,7 +130,7 @@ class CustomerController
         {
             $devices[$device->getUuid()->toString()] = array(
                 [
-                    'link' => BASE_URL . '/workshop/device/' . $device->getUuid()->toString(),
+                    'link' => BASE_URL . '/workshop/view/device/' . $device->getUuid()->toString(),
                     'text' => $device->getManufacturer().' '.$device->getModel()
                 ],
                 'serial' => $device->getSerial(),
@@ -146,14 +140,12 @@ class CustomerController
             );
         }
 
-        $context = 'customer';
-
         $twig_data = [
             'page' => [
                 'context' => [
-                    'endpoint' => implode('', [BASE_URL, '/', $context, 's']),
-                    'name' => implode('', [$context, 's']),
-                    'Name' => ucwords(implode('', [$context, 's']))
+                    'endpoint' => implode('', [BASE_URL, '/', $this->context, 's']),
+                    'name' => implode('', [$this->context, 's']),
+                    'Name' => ucwords(implode('', [$this->context, 's']))
                 ],
                 'record' => [
                     'display_name' => $customerDisplayName
@@ -168,7 +160,6 @@ class CustomerController
                     'Mobile Number' => $customer->getMobile()
                 ]
             ],
-            'addresses' => $addresses,
             'devices' => [
                 'cols' => ['Device Name', 'Serial Number', 'IMEI', 'Created', 'Last Updated'],
                 'rows' => $devices
@@ -245,7 +236,7 @@ class CustomerController
         {
             $this->session->store('validationErrors', $validator->errors());
             
-            return $response->withStatus(400);
+            return $response->withHeader('HX-Location', implode('', [BASE_URL, '/workshop/view/customers']))->withStatus(400);
         }
 
         $this->customers->create([
@@ -255,7 +246,79 @@ class CustomerController
             'mobile' => $customer['mobile']
         ]);
 
-        return $response->withStatus(200);
+        return $response->withHeader('HX-Location', implode('', [BASE_URL, '/workshop/view/customers']))->withStatus(200);
+    }
+
+    /**
+     * Search the database for a given record and return a HTML fragment using the specified format.
+     *
+     * @param Request $request
+     * @param Response $response
+     * 
+     * @return Response
+     */
+    public function search(Request $request, Response $response, array $args): Response
+    {
+        $format = $args['format'];
+        $search = $request->getParsedBody()['search'];
+
+        if($format == 'select')
+        {
+            $customers = [];
+            $result = $this->customers->search($search);
+
+            foreach($result as &$customer)
+            {
+                $customers[$customer->getUuid()->toString()] = array(
+                    'display_name' => implode(' ', [$customer->getFirstName(), $customer->getLastName()]),
+                    'identifier' => $customer->getEmail()
+                );
+            };
+
+            $twigData = [
+                'options' => $customers
+            ];
+
+            return $this->twig->render($response, '/workshop/search/select.html', $twigData);
+        }
+        if($format == 'table')
+        {
+            $customers = [];
+            $results = $this->customers->search($search);
+
+            foreach($results as &$customer)
+            {
+                $data[$customer->getUuid()->toString()] = array(
+                    [
+                        'link' => BASE_URL . '/workshop/view/customer/' . $customer->getUuid()->toString(),
+                        'text' => $customer->getFirstName().' '.$customer->getLastName()
+                    ],
+                    'email' => $customer->getEmail(),
+                    'mobile' => $customer->getMobile(),
+                    'created' => $customer->getCreated()->format('d-m-Y'),
+                    'last_updated' => $customer->getUpdated()->format('d-m-Y H:i:s')
+                );
+            };
+
+            $twigData = [
+                'page' => [
+                    'title' => 'Customers',
+                    'context' => [
+                        'endpoint' => implode('', [BASE_URL, '/', $this->context, 's']),
+                        'name' => implode('', [$this->context, 's']),
+                        'Name' => ucwords(implode('', [$this->context, 's']))
+                    ],
+                ],
+                'table' => [
+                    'cols' => ['Name', 'Email Address', 'Group', 'Created', 'Last Updated'],
+                    'rows' => $data
+                ],
+            ];
+
+            return $this->twig->render($response, '/workshop/search/table.html', $twigData);
+        }
+
+        return $response->withStatus(400);
     }
     
     /**

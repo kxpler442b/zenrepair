@@ -1,0 +1,80 @@
+<?php
+
+/**
+ * Local authentication provider.
+ * 
+ * @author Benjamin Moss <p2595849@my365.dmu.ac.uk>
+ * 
+ * Date: 20/03/23
+ */
+
+declare(strict_types = 1);
+
+namespace App\Auth\Provider;
+
+use App\Auth\Contract\AuthProviderContract;
+use App\Interface\SessionInterface;
+use App\Service\UserService;
+
+class LocalAuthProvider implements AuthProviderContract
+{
+    private readonly UserService $users;
+    private readonly SessionInterface $session;
+
+    public function __construct(UserService $userService, SessionInterface $session)
+    {
+        $this->users = $userService;
+        $this->session = $session;
+    }
+
+    public function login(string $email, string $password): bool
+    {
+        if($this->session->exists('auth'))
+        {
+            $this->session->delete('auth');
+        }
+
+        $user = $this->users->getByEmail($email);
+
+        if($user == null || !password_verify($password, $user->getPassword()))
+        {
+            return false;
+        }        
+
+        $this->session->store('auth', [
+            'id' => $user->getUuid()->toString(),
+            'first_name' => $user->getFirstName(),
+            'last_name' => $user->getLastName(),
+            'email' => $user->getEmail()
+        ]);
+
+        return true;
+    }
+
+    public function verify(): bool
+    {
+        if(!$this->session->exists('auth'))
+        {
+            return false;
+        }
+
+        $auth = $this->session->get('auth');
+
+        $user = $this->users->getByEmail($auth['email']);
+
+        if($user == null)
+        {
+            return false;
+        }
+
+        return true;
+    }
+
+    public function clear(): void
+    {
+        if($this->session->exists('auth'))
+        {
+            $this->session->delete('auth');
+        }
+    }
+}

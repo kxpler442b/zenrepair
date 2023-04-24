@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Registers Auth0 routes.
+ * Registers authentication routes.
  * 
  * @author B Moss <p2595849@mydmu.ac.uk>
  * 
@@ -19,9 +19,8 @@ return function(App $app)
     $app->group('/', function(RouteCollectorProxy $auth) {
 
         $auth->get('', [AuthController::class, 'index']);
-        $auth->get('login', [AuthController::class, 'login']);
-        $auth->get('callback', [AuthController::class, 'callback']);
         $auth->get('logout', [AuthController::class, 'logout']);
-        
+
+        $auth->post('login', [AuthController::class, 'login']);
     });
 };

@@ -1,0 +1,23 @@
+<content class="row-start-1 row-span-full col-start-1 col-span-full flex flex-row justify-center align-middle items-center bg-stone-100">
+
+    <div class="w-96 px-6 py-12 flex flex-col justify-center align-middle items-center space-y-6 shadow-sm rounded-md border border-stone-300 bg-white">
+
+        <h2 class="italic font-title font-bold text-2xl text-sky-500">RSMS</h2>
+        <h1 class="text-xl text-black">Log in to continue</h1>
+
+        <div class="w-full text-left">
+            <form id="auth" class="w-full">
+                
+                <label for="email" class="font-semibold text-xs text-stone-900">Email Address</label><br>
+                <input type="text" name="email" id="email" class="form-input w-full my-2 mb-4 text-sm rounded-sm border-stone-500 focus:border-sky-500 bg-stone-50 focus:bg-white focus:ring-sky-500"><br>
+
+                <label for="password" class="font-semibold text-xs text-stone-900">Password</label><br>
+                <input type="password" name="password" id="password" class="form-input w-full my-2 mb-6 text-sm rounded-sm border-stone-500 focus:border-sky-500 bg-stone-50 focus:bg-white focus:ring-sky-500"><br>
+
+                <button hx-post="{{ globals.base_url }}/login" hx-trigger="click" hx-include="#auth" class="w-full mt-4 py-2 text-sm text-white rounded-sm bg-sky-500 hover:bg-sky-700">Continue</button>
+
+            </form>
+        </div>
+    </div>
+
+</content>

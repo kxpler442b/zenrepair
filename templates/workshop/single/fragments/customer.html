@@ -1,11 +1,11 @@
-<header class="row-start-2 row-end-3 col-start-1 col-span-full flex flex-col justify-center align-middle items-center shadow-sm rounded-bl-md rounded-br-md bg-sky-500">
+<header class="row-start-2 row-end-3 col-start-1 col-span-full flex flex-col justify-center align-middle items-center bg-stone-900">
     
     <div class="w-full h-36 px-6 flex flex-row justify-between items-center">
 
         <div class="inline-flex flex-col justify-center items-start space-y-4">
 
             <div class="flex flex-row justify-center items-center">
-                <a href="{{ globals.base_url }}/workshop/{{ page.context.name }}" class="font-title font-medium text-sm text-white hover:underline">{{ page.context.Name }}</a>
+                <a href="{{ globals.base_url }}/workshop/view/{{ page.context.name }}" class="font-title font-medium text-sm text-white hover:underline">{{ page.context.Name }}</a>
             </div>
 
             <h2 class="font-title font-semibold text-4xl text-white">{{ page.record.display_name }}</h2>
@@ -17,15 +17,15 @@
 
 <sidebar class="row-start-3 row-span-full col-start-1 col-span-3 px-6 pt-6 flex flex-col justify-start items-center">
 
-    <div class="w-full rounded-sm border border-stone-300 bg-stone-800">
+    <div class="w-full shadow-sm rounded-sm border border-stone-300 bg-white">
 
         <div class="w-full px-6 py-2 border-b border-stone-300 bg-stone-300">
             <h4 class="font-title font-medium text-sm text-stone-700">Customer Details</h4>
         </div>
         
-        <div class="w-full px-6 py-4 bg-stone-800">
+        <div class="w-full px-6 py-4">
             
-            <table class="table-auto w-full text-sm text-white">
+            <table class="table-auto w-full text-sm text-stone-900">
                 <thead>
                     <th class="w-1/3"></th>
                     <th class="w-2/3"></th>
@@ -47,25 +47,25 @@
 
 <content class="row-start-3 row-span-full col-start-4 col-span-full px-6 pt-6 flex flex-col justify-start items-center space-y-4">
 
-    <div class="w-full rounded-sm border border-stone-300 bg-stone-800">
+    <div class="w-full shadow-sm rounded-sm border border-stone-300 bg-white">
 
-        <div class="w-full px-6 py-2 border-b border-stone-300 bg-stone-800">
-            <h4 class="font-title font-medium text-sm text-stone-300">Devices</h4>
+        <div class="w-full px-6 py-2 border-b border-stone-300 bg-stone-300">
+            <h4 class="font-title font-semibold text-xs text-stone-700">Devices</h4>
         </div>
         
-        <div class="w-full bg-stone-800">
+        <div class="w-full">
             
             <table class="table-auto w-full text-white">
-                <thead class="text-left border-y border-stone-300 bg-stone-300">
+                <thead class="text-left bg-stone-500">
                     <tr>
                         {% for col in devices.cols %}
-                            <th class="px-6 py-1.5 font-title font-medium text-sm text-stone-700">{{ col }}</th>
+                            <th class="px-6 py-1.5 font-title font-medium text-sm text-stone-100">{{ col }}</th>
                         {% endfor %}
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-stone-300">
                 {% for row in devices.rows %}
-                    <tr class="hover:bg-stone-700 transition ease-in-out duration-100">
+                    <tr class="hover:bg-stone-100 transition ease-in-out duration-100">
                         {% for key, data in row %}
                         {% if data is iterable %}
                             <td class="px-6 py-4 font-medium text-sm hover:underline">
@@ -76,7 +76,7 @@
                             </td>
                         {% else %}
         
-                            <td class="px-6 py-2 font-medium text-sm">{{ data }}</td>
+                            <td class="px-6 py-2 font-medium text-sm text-stone-900">{{ data }}</td>
                     
                         {% endif %}
                         {% endfor %}

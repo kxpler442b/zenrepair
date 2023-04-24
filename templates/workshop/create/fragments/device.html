@@ -1,0 +1,72 @@
+<div id="modal" _="on closeModal remove me" class="fixed top-0 bottom-0 left-0 right-0 z-50 flex flex-col justify-center align-middle items-center bg-black/70">
+
+    <div class="w-1/4 flex flex-col justify-start items-start shadow-sm rounded-md bg-stone-50">
+		
+        <div class="w-full px-6 pt-12 pb-6 rounded-tl-md rounded-tr-md bg-stone-900">
+            <h1 class="font-title font-medium text-xl text-white">Create a new device</h1>
+        </div>
+
+        <div class="w-full p-6 py-2 bg-stone-300">
+            <h3 class="font-semibold text-xs text-stone-700">Device Information</h3>
+        </div>
+
+        <form id="create" class="w-full px-6 py-6 grid grid-rows-none grid-cols-2 gap-x-6">
+
+            <div class="col-start-1 col-span-full">
+                <label for="device_manufacturer" class="font-semibold text-xs text-stone-900">Manufacturer</label><br>
+                <input required type="text" name="device_manufacturer" id="device_manufacturer" class="form-input w-full my-2 mb-4 text-sm rounded-sm border-stone-500 focus:border-sky-500 bg-stone-50 focus:bg-white focus:ring-sky-500"><br>
+            </div>
+
+            <div class="col-start-1 col-span-full">
+                <label for="device_model" class="font-semibold text-xs text-stone-900">Model</label><br>
+                <input required type="text" name="device_model" id="device_model" class="form-input w-full my-2 mb-4 text-sm rounded-sm border-stone-500 focus:border-sky-500 bg-stone-50 focus:bg-white focus:ring-sky-500"><br>
+            </div>
+
+            <div class="col-start-1 col-span-full">
+                <label for="device_serial" class="font-semibold text-xs text-stone-900">Serial Number</label><br>
+                <input required type="text" name="device_serial" id="device_serial" class="form-input w-full my-2 mb-4 text-sm rounded-sm border-stone-500 focus:border-sky-500 bg-stone-50 focus:bg-white focus:ring-sky-500"><br>
+            </div>
+
+            <div class="col-start-1 col-span-full">
+                <label for="device_imei" class="font-semibold text-xs text-stone-900">IMEI</label><br>
+                <input type="text" name="device_imei" id="device_imei" class="form-input w-full my-2 mb-4 text-sm rounded-sm border-stone-500 focus:border-sky-500 bg-stone-50 focus:bg-white focus:ring-sky-500"><br>
+            </div>
+
+            <div class="col-start-1 col-span-full">
+                <label for="device_locator" class="font-semibold text-xs text-stone-900">Locator</label><br>
+                <input type="text" name="device_locator" id="device_locator" class="form-input w-full my-2 mb-4 text-sm rounded-sm border-stone-500 focus:border-sky-500 bg-stone-50 focus:bg-white focus:ring-sky-500"><br>
+            </div>
+
+            <div class="col-start-1 col-span-full">
+                <label for="search" class="font-semibold text-xs text-stone-900">Owner</label><br>
+
+                <input type="search" 
+                    name="search" id="device_owner_search" placeholder="Begin typing to search for a customer..." 
+                    hx-post="{{ globals.base_url }}/customers/search/select"
+                    hx-trigger="keyup changed delay:500ms, search" 
+                    hx-target="#device_owner_search_results"
+                    hx-swap="innerHTML"
+                    class="form-input w-full my-2 mb-4 text-sm rounded-sm border-stone-500 focus:border-sky-500 bg-stone-50 focus:bg-white focus:ring-sky-500">
+
+                <select id="device_owner_search_results" name="device_customer"
+                        hx-post="{{ globals.base_url }}/customers/search/select"
+                        hx-trigger="load"
+                        hx-swap="innerHTML"
+                        class="form-input w-full my-2 mb-4 text-sm rounded-sm border-stone-500 focus:border-sky-500 bg-stone-50 focus:bg-white focus:ring-sky-500">
+    
+                <option value="" selected>Select a customer</option>
+                </select>
+            </div>
+
+        </form>
+
+        <div class="px-6 pb-10 flex flex-row justify-center items-center space-x-6">
+
+            <button _="" hx-post="{{ page.context.endpoint }}/create" hx-include="#create" hx-swap="none" class="px-6 py-2 text-md text-white rounded-sm bg-sky-500 hover:bg-sky-700">Create</button>
+		    
+            <button _="on click trigger closeModal" class="px-6 py-2 text-md text-red-500 hover:text-red-700 rounded-sm border border-red-500 hover:border-red-700 bg-red-50 hover:bg-red-100">Cancel</button>
+
+        </div>
+	</div>
+
+</div>

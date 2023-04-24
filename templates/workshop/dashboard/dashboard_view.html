@@ -1,0 +1,14 @@
+<div class="row-start-2 row-span-2 col-start-1 col-span-full">
+    <input type="search" 
+       name="search" placeholder="Begin Typing To Search Users..." 
+       hx-post="{{ globals.base_url }}/customers/search/select"
+       hx-trigger="keyup changed delay:500ms, search" 
+       hx-target="#search-results"
+       hx-swap="innerHTML">
+
+    <button hx-post="{{ globals.base_url }}/customers/search/select" hx-trigger="keyup changed delay:500ms, search" hx-include="#search"  class="w-1/3">Click Me!</button>
+</div>
+
+<select id="search-results">
+    
+</select>

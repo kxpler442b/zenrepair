@@ -17,11 +17,11 @@
 
     <title>{{ page.title }}</title>
 </head>
-<body class="h-screen bg-stone-900">
+<body class="h-screen bg-stone-100">
 
 <div class="h-full grid grid-rows-layout grid-cols-layout">
 
-    {% include "nav.html.twig" %}
+    {% block nav %} {% endblock %}
 
     {% block sidebar %} {% endblock %}
 

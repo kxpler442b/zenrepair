@@ -13,7 +13,8 @@ declare(strict_types = 1);
 namespace App\Auth\Middleware;
 
 use Slim\App;
-use Auth0\SDK\Auth0;
+use Slim\Views\Twig;
+use App\Interface\SessionInterface;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Server\MiddlewareInterface;
@@ -25,6 +26,8 @@ use Psr\Http\Message\ResponseFactoryInterface;
 class LocalAuthMiddleware implements MiddlewareInterface
 {
     private readonly AuthProviderContract $auth;
+    private readonly SessionInterface $session;
+    private readonly Twig $twig;
     private readonly ResponseFactoryInterface $responseFactory;
 
     /**
@@ -33,9 +36,11 @@ class LocalAuthMiddleware implements MiddlewareInterface
      * @param Auth0 $auth0
      * @param ResponseFactoryInterface $responseFactory
      */
-    public function __construct(AuthProviderContract $auth, ResponseFactoryInterface $responseFactory)
+    public function __construct(AuthProviderContract $auth, SessionInterface $session, Twig $twig, ResponseFactoryInterface $responseFactory)
     {
         $this->auth = $auth;
+        $this->session = $session;
+        $this->twig = $twig;
         $this->responseFactory = $responseFactory;
     }
 
@@ -49,8 +54,10 @@ class LocalAuthMiddleware implements MiddlewareInterface
     public static function create(App $app, ContainerInterface $c)
     {
         $auth = $c->get(AuthProviderContract::class);
+        $session = $c->get(SessionInterface::class);
+        $twig = $c->get(Twig::class);
 
-        return new self($auth, $app->getResponseFactory());
+        return new self($auth, $session, $twig, $app->getResponseFactory());
     }
 
     /**
@@ -67,6 +74,16 @@ class LocalAuthMiddleware implements MiddlewareInterface
         {
             return $this->responseFactory->createResponse(302)->withHeader('Location', BASE_URL);
         }
+
+        $state = $this->session->get('auth');
+
+        $this->twig->getEnvironment()->addGlobal('auth', [
+            'uuid' => $state['id'],
+            'email' => $state['email'],
+            'first_name' => $state['first_name'],
+            'last_name' => $state['last_name'],
+            'api_key' => $state['api_key']
+        ]);
 
         return $handler->handle($request);
     }

@@ -6,7 +6,7 @@
 
 declare(strict_types = 1);
 
-use App\Interface\LocalAccountProviderInterface;
+use App\Service\UserService;
 use App\Service\AddressService;
 use App\Service\CustomerService;
 use App\Service\DeviceService;
@@ -14,39 +14,39 @@ use App\Service\TicketService;
 
 $c = require __DIR__ . '/../../bootstrap.php';
 
-$accountProvider = $c->get(LocalAccountProviderInterface::class);
+$users = $c->get(UserService::class);
 $customerService = $c->get(CustomerService::class);
 $deviceService = $c->get(DeviceService::class);
 $ticketService = $c->get(TicketService::class);
 $addresses = $c->get(AddressService::class);
 
-if($accountProvider->getGroupByName('admins') == null)
+if($users->getGroupByName('admins') == null)
 {
-    $accountProvider->createGroup([
+    $users->createGroup([
         'name' => 'admins',
         'priv_level' => 0
     ]);
 }
 
-if($accountProvider->getGroupByName('technicians') == null)
+if($users->getGroupByName('technicians') == null)
 {
-    $accountProvider->createGroup([
+    $users->createGroup([
         'name' => 'technicians',
         'priv_level' => 1
     ]);
 }
 
-if($accountProvider->getGroupByName('guests') == null)
+if($users->getGroupByName('guests') == null)
 {
-    $accountProvider->createGroup([
+    $users->createGroup([
         'name' => 'guests',
         'priv_level' => 2
     ]);
 }
 
-if($accountProvider->getAccountByEmail('admin@email.com') == null)
+if($users->getByEmail('admin@email.com') == null)
 {
-    $accountProvider->createAccount([
+    $users->createUser([
         'email' => 'admin@email.com',
         'password' => 'hello',
         'first_name' => 'Benjamin',
@@ -55,9 +55,9 @@ if($accountProvider->getAccountByEmail('admin@email.com') == null)
     ]);
 }
 
-if($accountProvider->getAccountByEmail('technician@email.com') == null)
+if($users->getByEmail('technician@email.com') == null)
 {
-    $accountProvider->createAccount([
+    $users->createUser([
         'email' => 'technician@email.com',
         'password' => 'hello',
         'first_name' => 'Jaques',
@@ -166,7 +166,7 @@ if($deviceService->getBySerial('DDWMDVULZPUMD2SC') == null)
 
 if($ticketService->getById(1) == null)
 {
-    $t = $accountProvider->getAccountByEmail('admin@email.com');
+    $t = $users->getByEmail('admin@email.com');
     $cst = $customerService->getByEmail('harry@cat.com');
     $d = $deviceService->getBySerial('2ZQLNN8TJ4PNL8PV');
 

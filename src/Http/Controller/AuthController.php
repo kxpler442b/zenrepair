@@ -75,39 +75,101 @@ class AuthController
         $this->auth->clear();
 
         $body = $request->getParsedBody();
+        $context = $request->getHeader('HX-Trigger')[0];
 
-        $validatorRules = [
-            'required' => [
-                'user.email',
-                'user.password'
-            ],
-            'email' => [
-                'user.email'
+        if($context == 'user')
+        {
+            $validatorRules = [
+                'required' => [
+                    'user.email',
+                    'user.password'
+                ],
+                'email' => [
+                    'user.email'
+                ]
+            ];
+    
+            $user = [
+                'email' => $body['email'],
+                'password' => $body['password']
+            ];
+    
+            $v = new Validator([
+                'user' => $user
+            ]);
+    
+            $v->rules($validatorRules);
+    
+            if(!$v->validate())
+            {
+                return $response->withHeader('HX-Location', BASE_URL)->withStatus(302);
+            }
+    
+            if(!$this->auth->login($user['email'], $user['password']))
+            {
+                return $response->withHeader('HX-Location', BASE_URL)->withStatus(302);
+            }
+    
+            return $response->withHeader('HX-Location', implode('', [BASE_URL, '/workshop/view/tickets']))->withStatus(302);
+        }
+
+        if($context == 'customer')
+        {
+            $validatorRules = [
+                'required' => [
+                    'customer.email',
+                    'customer.access_code'
+                ],
+                'email' => ['customer.email'],
+                'numeric' => ['customer.access_code'],
+                'lengthMax' => [['customer.access_code', 12]]
+            ];
+    
+            $customer = [
+                'email' => $body['email'],
+                'access_code' => $body['access_code']
+            ];
+    
+            $v = new Validator([
+                'customer' => $customer
+            ]);
+    
+            $v->rules($validatorRules);
+    
+            if(!$v->validate())
+            {
+                return $response->withHeader('HX-Location', BASE_URL)->withStatus(302);
+            }
+    
+            if($customer['access_code'] == '01234567')
+            {
+                return $response->withHeader('HX-Location', implode('', [BASE_URL, '/portal']))->withStatus(302);
+            }
+        }
+
+        else return $response->withHeader('HX-Location', implode('', [BASE_URL, '/workshop/view/tickets']))->withStatus(302);
+    }
+
+    public function getLoginForm(Request $request, Response $response, array $args): Response
+    {
+        $form = $args['name'];
+
+        $rules = [
+            'in' => [
+                'user',
+                'customer'
             ]
         ];
 
-        $user = [
-            'email' => $body['email'],
-            'password' => $body['password']
-        ];
-
-        $v = new Validator([
-            'user' => $user
-        ]);
-
-        $v->rules($validatorRules);
+        $v = new Validator($form);
+        $v->rules($rules);
 
         if(!$v->validate())
         {
-            return $response->withHeader('HX-Location', BASE_URL)->withStatus(302);
+            return $response->withStatus(400);
         }
 
-        if(!$this->auth->login($user['email'], $user['password']))
-        {
-            return $response->withHeader('HX-Location', BASE_URL)->withStatus(302);
-        }
-
-        return $response->withHeader('HX-Location', implode('', [BASE_URL, '/workshop/view/dashboard']))->withStatus(302);
+        return $this->twig->render($response, implode('', ['/auth/forms/', $form, '.html']));
     }
 
     /**
@@ -118,7 +180,7 @@ class AuthController
      * 
      * @return Response
      */
-    public function logout(Request $request, Response $response)
+    public function logout(Request $request, Response $response): Response
     {
         $this->auth->clear();
 

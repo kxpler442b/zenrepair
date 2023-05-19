@@ -7,7 +7,7 @@
  * Date: 02/01/23
  */
 
-if($_ENV['APP_SSL'] == 0)
+if($_ENV['RSMS_APP_SSL'] == 0)
 {
     $prefix = 'http://';
 }
@@ -16,7 +16,7 @@ else
     $prefix = 'https://';
 }
 
-define('BASE_URL', $prefix . $_ENV['APP_HOSTNAME'] . ':' . $_ENV['APP_PORT']);
+define('BASE_URL', $prefix . $_ENV['RSMS_APP_BASE_URL']);
 
 define('APP_PATH', __DIR__ . '/../src');
 define('CONFIG_PATH', __DIR__);

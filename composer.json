@@ -26,22 +26,14 @@
     "require": {
         "slim/slim": "4.*",
         "slim/psr7": "^1.6",
+        "slim/twig-view": "^3.3",
+        "php-di/slim-bridge": "^3.3",
         "doctrine/dbal": "^3.5",
         "doctrine/orm": "^2.14",
         "doctrine/migrations": "^3.5",
-        "twig/twig": "^3.5",
-        "php-di/slim-bridge": "^3.3",
-        "vlucas/phpdotenv": "^5.5",
-        "vlucas/valitron": "^1.4",
-        "slim/twig-view": "^3.3",
         "symfony/cache": "^6.2",
         "ramsey/uuid-doctrine": "^2.0",
-        "tightenco/collect": "^9.52",
-        "firebase/php-jwt": "^6.4",
-        "nesbot/carbon": "^2.66",
-        "auth0/auth0-php": "^8.5",
-        "guzzlehttp/guzzle": "^7.5",
-        "guzzlehttp/psr7": "^2.4",
-        "http-interop/http-factory-guzzle": "^1.2"
+        "vlucas/phpdotenv": "^5.5",
+        "vlucas/valitron": "^1.4"
     }
 }

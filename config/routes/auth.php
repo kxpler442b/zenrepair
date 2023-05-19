@@ -16,11 +16,13 @@ use App\Http\Controller\AuthController;
 
 return function(App $app)
 {
-    $app->group('/', function(RouteCollectorProxy $auth) {
+    $app->group('', function(RouteCollectorProxy $auth) {
 
-        $auth->get('', [AuthController::class, 'index']);
-        $auth->get('logout', [AuthController::class, 'logout']);
+        $auth->get('/', [AuthController::class, 'index']);
+        $auth->get('/logout', [AuthController::class, 'logout']);
 
-        $auth->post('login', [AuthController::class, 'login']);
+        $auth->get('/form/{name}', [AuthController::class, 'getLoginForm']);
+
+        $auth->post('/login', [AuthController::class, 'login']);
     });
 };

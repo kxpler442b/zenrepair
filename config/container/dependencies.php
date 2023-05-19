@@ -12,7 +12,6 @@ declare(strict_types = 1);
 use App\Auth\Contract\AuthProviderContract;
 use App\Auth\Provider\LocalAuthProvider;
 use Slim\App;
-use Auth0\SDK\Auth0;
 use Slim\Views\Twig;
 use App\Support\Config;
 use function DI\create;
@@ -42,12 +41,14 @@ return [
 
         $authRoutes = require CONFIG_PATH . '/routes/auth.php';
         $workshopRoutes = require CONFIG_PATH . '/routes/workshop.php';
+        $portalRoutes = require CONFIG_PATH . '/routes/portal.php';
         $restRoutes = require CONFIG_PATH . '/routes/rest.php';
 
         $app = AppFactory::create();
 
         $authRoutes($app);
         $workshopRoutes($app);
+        $portalRoutes($app);
         $restRoutes($app);
 
         $middleware($app);
@@ -74,16 +75,6 @@ return [
         return new EntityManager($connection, $orm_config);
     },
 
-    Auth0::class => function(Config $config)
-    {
-        return new Auth0([
-            'domain' => $config->get('auth0.domain'),
-            'clientId' => $config->get('auth0.client_id'),
-            'clientSecret' => $config->get('auth0.client_secret'),
-            'cookieSecret' => $config->get('auth0.cookie_secret')
-        ]);
-    },
-
     Twig::class => function (Config $config)
     {
         $twig = Twig::create(VIEWS_PATH, [
@@ -104,15 +95,6 @@ return [
                 'htmx_url' => HTMX_URL
             ]
         );
-
-        if($config->get('debugEnabled')){
-            $twig->getEnvironment()->addGlobal(
-                'debug', [
-                    'enabled' => true,
-                    'phpversion' => phpversion()
-                ]
-            );
-        }
         
         return $twig;
     },
@@ -149,23 +131,5 @@ return [
     AuthProviderContract::class => function(ContainerInterface $c)
     {
         return new LocalAuthProvider($c->get(UserService::class), $c->get(SessionInterface::class));
-    },
-
-    GuardianInterface::class => function(ContainerInterface $c, Config $config)
-    {
-        $keyname = $config->get('guardian.key_name');
-
-        if(file_exists(__DIR__ . '/../keys/'.$keyname) && file_exists(__DIR__ . '/../keys/'.$keyname.'.pub'))
-        {
-            $keys = array(
-                'private_key' => file_get_contents(__DIR__ . '/../keys/'.$keyname),
-                'public_key' => file_get_contents(__DIR__ . '/../keys/'.$keyname.'.pub')
-            );
-        }
-
-        return new GuardianService(
-            $c,
-            $keys
-        );
     }
 ];

@@ -27,6 +27,14 @@ class LocalAuthProvider implements AuthProviderContract
         $this->session = $session;
     }
 
+    /**
+     * Authenticates a user
+     *
+     * @param string $email
+     * @param string $password
+     * 
+     * @return boolean
+     */
     public function login(string $email, string $password): bool
     {
         if($this->session->exists('auth'))
@@ -39,16 +47,29 @@ class LocalAuthProvider implements AuthProviderContract
         if($user == null || !password_verify($password, $user->getPassword()))
         {
             return false;
-        }        
+        }
+
+        $api_key = bin2hex(openssl_random_pseudo_bytes(32));
 
         $this->session->store('auth', [
             'id' => $user->getUuid()->toString(),
             'first_name' => $user->getFirstName(),
             'last_name' => $user->getLastName(),
-            'email' => $user->getEmail()
+            'email' => $user->getEmail(),
+            'api_key' => $api_key
         ]);
 
         return true;
+    }
+
+    /**
+     * This class does not require implementation.
+     *
+     * @return void
+     */
+    public function handleCallback(): void
+    {
+        
     }
 
     public function verify(): bool
@@ -58,9 +79,9 @@ class LocalAuthProvider implements AuthProviderContract
             return false;
         }
 
-        $auth = $this->session->get('auth');
+        $state = $this->session->get('auth');
 
-        $user = $this->users->getByEmail($auth['email']);
+        $user = $this->users->getByEmail($state['email']);
 
         if($user == null)
         {

@@ -224,7 +224,6 @@ class TicketController
                 'ticket.subject',
                 'ticket.issue_type',
                 'ticket.user',
-                'ticket.customer',
                 'ticket.device',
             ],
             'alphaNum' => [
@@ -234,9 +233,8 @@ class TicketController
 
         $ticket = [
             'subject' => $body['ticket_subject'],
-            'issue_type' => $body['ticket_issueType'],
+            'issue_type' => $body['ticket_issue_type'],
             'user' => $body['ticket_user'],
-            'customer' => $body['ticket_customer'],
             'device' => $body['ticket_device']
         ];
 
@@ -253,12 +251,15 @@ class TicketController
             return $response->withStatus(400);
         }
 
+        $device = $this->devices->getByUuid($ticket['device']);
+        $customer = $device->getCustomer();
+
         $this->tickets->create([
             'subject' => $ticket['subject'],
             'issue_type' => $ticket['issue_type'],
             'user' => $this->users->getByUuid($ticket['user']),
-            'customer' => $this->customers->getByUuid($ticket['customer']),
-            'device' => $this->devices->getByUuid($ticket['device'])
+            'customer' => $customer,
+            'device' => $device
         ]);
 
         return $response->withStatus(200);

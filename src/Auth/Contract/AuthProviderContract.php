@@ -16,6 +16,8 @@ interface AuthProviderContract
 {
     public function login(string $email, string $password): bool;
 
+    public function handleCallback(): void;
+
     public function verify(): bool;
 
     public function clear(): void;

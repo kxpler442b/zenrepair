@@ -12,10 +12,12 @@ module.exports = {
         mono: ["'Space Mono'", ...defaultTheme.fontFamily.mono]
       },
       gridTemplateRows: {
-        'layout': '48px 144px repeat(5, minmax(0, 1fr))'
+        'sm': '48px 144px repeat(3, minmax(0, 1fr))',
+        'md': '48px 144px repeat(5, minmax(0, 1fr))'
       },
       gridTemplateColumns: {
-        'layout': 'repeat(12, minmax(0, 1fr))',
+        'sm': 'repeat(6, minmax(0, 1fr))',
+        'md': 'repeat(12, minmax(0, 1fr))'
       },
     }
   },

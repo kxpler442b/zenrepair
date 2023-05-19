@@ -1,54 +1,76 @@
-<header class="row-start-2 row-end-3 col-start-1 col-span-full flex flex-col justify-center align-middle items-center shadow-sm rounded-bl-md rounded-br-md bg-sky-500">
-    
-    <div class="w-full h-36 px-6 flex flex-row justify-between items-center">
+<div id="modal" _="on closeModal remove me" class="fixed top-0 bottom-0 left-0 right-0 z-50 flex flex-col justify-center align-middle items-center bg-black/70">
 
-        <div class="inline-flex flex-col justify-center items-start space-y-4">
+    <div class="w-2/4 px-12 py-12 flex flex-col justify-start items-start space-y-4 shadow-sm rounded-sm bg-stone-50">
+		
+        <h1 class="font-title font-medium text-xl text-stone-900">Create a new Ticket</h1>
 
-            <div class="flex flex-row justify-center items-center">
-                <a href="{{ globals.base_url }}/workshop/view/{{ page.context.name }}" class="font-title font-medium text-sm text-white hover:underline">{{ page.context.Name }}</a>
+        <h3 class="text-sm text-stone-900">Basic Information</h3>
+
+        <div class="h-4"></div>
+
+        <form id="create" class="w-full grid grid-rows-none grid-cols-3 gap-x-6">
+
+            <div class="col-start-1 col-span-1">
+                <label for="ticket_subject" class="font-semibold text-xs text-stone-900">Subject</label><br>
+                <input required type="text" name="ticket_subject" id="ticket_subject" class="form-input w-full my-2 mb-4 text-sm rounded-sm border-stone-500 focus:border-green-500 bg-stone-50 focus:bg-white focus:ring-green-500"><br>
             </div>
 
-            <h2 class="font-title font-semibold text-4xl text-white">Create a new ticket</h2>
-        </div>
-
-    </div>
-
-</header>
-
-<content class="row-start-3 row-span-full col-start-3 col-span-8 px-6 pt-6 flex flex-col justify-start items-center space-y-4">
-
-    <pre class="text-white">
-        {{ dump(user) }}
-    </pre>
-
-    <div class="w-full rounded-sm border border-stone-300 bg-stone-800">
-
-        <div class="w-full px-6 py-2 border-b border-stone-300 bg-stone-800">
-            <h4 class="font-title font-medium text-sm text-stone-300">Details</h4>
-        </div>
-            
-        <div class="w-full px-6 py-4 text-white bg-stone-800">
-                
-            <form id="ticket_details" class="w-full">
-
-                <label for="subject" class="font-medium text-sm">Subject</label><br>
-                <input type="text" name="subject" id="subject" class="w-1/2 mt-2 mb-4 rounded-sm border border-stone-300 focus:border-sky-500 bg-transparent focus:bg-stone-700 focus:ring-sky-500 transition ease-in-out duration-100"><br>
-
-                <label for="issue_type" class="font-medium text-sm">Issue Type</label><br>
-                <select name="issue_type" id="issue_type" class="w-1/2 mt-2 mb-4 rounded-sm border border-stone-300 focus:border-sky-500 bg-transparent focus:bg-stone-700 focus:ring-sky-500 transition ease-in-out duration-100">
+            <div class="col-start-2 col-span-1">
+                <label for="ticket_issue_type" class="font-medium text-sm">Issue Type</label><br>
+                <select name="ticket_issue_type" id="ticket_issue_type" class="form-input w-full my-2 mb-4 text-sm rounded-sm border-stone-500 focus:border-green-500 bg-stone-50 focus:bg-white focus:ring-green-500">
                     <option value="hardware" selected>Hardware</option>
                     <option value="hardware">Software</option>
-                </select><br>
+                </select>
+            </div>
 
-                <label for="user" class="font-medium text-sm">Technician</label><br>
-                <select name="user" id="user" class="w-1/2 mt-2 mb-4 rounded-sm border border-stone-300 focus:border-sky-500 bg-transparent focus:bg-stone-700 focus:ring-sky-500 transition ease-in-out duration-100">
+            <div class="col-start-3 col-span-1">
+                <label for="ticket_status" class="font-medium text-sm">Initial Status</label><br>
+                <select name="ticket_status" id="ticket_status" class="form-input w-full my-2 mb-4 text-sm rounded-sm border-stone-500 focus:border-green-500 bg-stone-50 focus:bg-white focus:ring-green-500">
+                    <option value="0" selected>New</option>
+                    <option value="1">Pre Testing</option>
+                    <option value="2">In Progress</option>
+                    <option value="3">Post Testing</option>
+                    <option value="4">Completed</option>
+                    <option value="5">Stalled</option>
+                </select>
+            </div>
+
+            <div class="col-start-1 col-span-full">
+                <label for="ticket_user" class="font-semibold text-xs text-stone-900">Assigned Technician</label><br>
+
+                <select name="ticket_user" id="ticket_user" class="form-input w-full my-2 mb-4 text-sm rounded-sm border-stone-500 focus:border-green-500 bg-stone-50 focus:bg-white focus:ring-green-500">
                     <option value="id"> {{ user.first_name }} {{ user.last_name }} ({{ user.email }}) </option>
                 </select>
+            </div>
 
-            </form>   
+            <div class="col-start-1 col-span-full">
+                <label for="search" class="font-semibold text-xs text-stone-900">Device</label><br>
+
+                <input type="search" 
+                    name="search" id="device_owner_search" placeholder="Begin typing to search for a device..." 
+                    hx-post="{{ globals.base_url }}/devices/search/select"
+                    hx-trigger="keyup changed delay:500ms, search" 
+                    hx-target="#device_owner_search_results"
+                    hx-swap="innerHTML"
+                    class="form-input w-full my-2 mb-4 text-sm rounded-sm border-stone-500 focus:border-green-500 bg-stone-50 focus:bg-white focus:ring-green-500">
+
+                <select id="device_owner_search_results" name="ticket_device"
+                        hx-post="{{ globals.base_url }}/devices/search/select"
+                        hx-trigger="load"
+                        hx-swap="innerHTML"
+                        class="form-input w-full my-2 mb-4 text-sm rounded-sm border-stone-500 focus:border-green-500 bg-stone-50 focus:bg-white focus:ring-green-500">
     
+                <option value="" selected>Select a device</option>
+                </select>
+            </div>
+
+        </form>
+
+        <div class="flex flex-row justify-start items-center space-x-6">
+            <button _="" hx-post="{{ page.context.endpoint }}/create" hx-include="#create" hx-swap="none" class="px-6 py-2 text-xs text-white rounded-sm bg-green-500 hover:bg-green-700">Create</button>
+
+		    <button _="on click trigger closeModal" class="px-6 py-2 text-xs text-red-500 hover:text-red-700 rounded-sm border border-red-500 hover:border-red-700 bg-red-50 hover:bg-red-100">Cancel</button>
         </div>
-    
-    </div>
+	</div>
 
-</content>
+</div>

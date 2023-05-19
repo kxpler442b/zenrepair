@@ -16,4 +16,4 @@ $dotenv->load();
 
 require __DIR__ . '/config/constants.php';
 
-return require CONFIG_PATH . '/container/container.php';
+return require CONFIG_PATH . '/container/build.php';

@@ -140,6 +140,23 @@ class CustomerController
             );
         }
 
+        $tickets = [];
+        $ticketArray = $customer->getTickets();
+
+        foreach($ticketArray as &$ticket)
+        {
+            $tickets[$ticket->getUuid()->toString()] = array(
+                'id' => $ticket->getId(),
+                [
+                    'link' => BASE_URL . '/workshop/view/ticket/' . $ticket->getUuid()->toString(),
+                    'text' => $ticket->getSubject()
+                ],
+                'status' => $ticket->getStatus(),
+                'created' => $ticket->getCreated()->format('d-m-Y'),
+                'updated' => $ticket->getUpdated()->format('d-m-Y H:i:s')
+            );
+        }
+
         $twig_data = [
             'page' => [
                 'context' => [
@@ -163,6 +180,10 @@ class CustomerController
             'devices' => [
                 'cols' => ['Device Name', 'Serial Number', 'IMEI', 'Created', 'Last Updated'],
                 'rows' => $devices
+            ],
+            'tickets' => [
+                'cols' => ['#', 'Subject', 'Status', 'Created', 'Last Updated'],
+                'rows' => $tickets
             ]
         ];
 
@@ -348,6 +369,6 @@ class CustomerController
 
         $this->customers->delete($uuid);
 
-        return $response->withStatus(200);
+        return $response->withHeader('HX-Redirect', BASE_URL . '/workshop/view/customers')->withStatus(200);
     }
 }

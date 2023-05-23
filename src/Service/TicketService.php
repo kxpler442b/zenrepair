@@ -37,7 +37,7 @@ class TicketService
         $ticket->setSubject($data['subject']);
         $ticket->setIssueType($data['issue_type' ?? 'not set']);
         $ticket->setStatus($data['status'] ?? 0);
-        $ticket->setUser($data['technician']);
+        $ticket->setUser($data['user']);
         $ticket->setCustomer($data['customer']);
         $ticket->setDevice($data['device']);
         $ticket->setUuid();
@@ -71,9 +71,12 @@ class TicketService
         $ticket->setSubject($data['subject']);
     }
 
-    public function delete(string $id): void
+    public function delete(string $uuid): void
     {
-        
+        $ticket = $this->getByUuid($uuid);
+
+        $this->em->remove($ticket);
+        $this->em->flush();
     }
 
     /**

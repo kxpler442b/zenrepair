@@ -39,7 +39,7 @@
                 <label for="ticket_user" class="font-semibold text-xs text-stone-900">Assigned Technician</label><br>
 
                 <select name="ticket_user" id="ticket_user" class="form-input w-full my-2 mb-4 text-sm rounded-sm border-stone-500 focus:border-green-500 bg-stone-50 focus:bg-white focus:ring-green-500">
-                    <option value="id"> {{ user.first_name }} {{ user.last_name }} ({{ user.email }}) </option>
+                    <option value="{{ user.id }}"> {{ user.first_name }} {{ user.last_name }} ({{ user.email }}) </option>
                 </select>
             </div>
 

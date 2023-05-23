@@ -37,7 +37,7 @@ class Ticket
     #[Column(name:'status', type:'integer')]
     private int $status;
 
-    #[OneToMany(targetEntity: Note::class, mappedBy: 'ticket')]
+    #[OneToMany(targetEntity: Note::class, mappedBy: 'ticket', cascade: ['all'])]
     private ?Collection $notes;
 
     #[ManyToOne(targetEntity: User::class, inversedBy: 'tickets')]

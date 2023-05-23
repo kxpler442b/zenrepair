@@ -50,7 +50,7 @@ class AuthController
     {
         if($this->auth->verify())
         {
-            return $response->withHeader('Location', implode('', [BASE_URL, '/workshop/dashboard']))->withStatus(302);
+            return $response->withHeader('Location', implode('', [BASE_URL, '/workshop/view/tickets']))->withStatus(302);
         }
 
         $twigData = [

@@ -12,24 +12,25 @@ declare(strict_types = 1);
 
 namespace App\Http\Controller;
 
-use App\Interface\SessionInterface;
-use App\Service\CustomerService;
-use App\Service\DeviceService;
 use Slim\Views\Twig;
 use Slim\Psr7\Request;
 use Slim\Psr7\Response;
-use App\Service\TicketService;
-use App\Service\UserService;
-use Psr\Container\ContainerInterface;
 use Valitron\Validator;
+use App\Service\NoteService;
+use App\Service\UserService;
+use App\Service\DeviceService;
+use App\Service\TicketService;
+use App\Service\CustomerService;
+use App\Interface\SessionInterface;
+use Psr\Container\ContainerInterface;
 
 class TicketController
 {
-    private readonly TicketService $tickets;
-    private readonly UserService $users;
-    private readonly CustomerService $customers;
-    private readonly DeviceService $devices;
     private readonly Twig $twig;
+    private readonly NoteService $notes;
+    private readonly UserService $users;
+    private readonly DeviceService $devices;
+    private readonly TicketService $tickets;
     private readonly SessionInterface $session;
 
     private string $context = 'ticket';
@@ -41,11 +42,11 @@ class TicketController
      */
     public function __construct(ContainerInterface $c)
     {
-        $this->tickets = $c->get(TicketService::class);
-        $this->users = $c->get(UserService::class);
-        $this->customers = $c->get(CustomerService::class);
-        $this->devices = $c->get(DeviceService::class);
         $this->twig = $c->get(Twig::class);
+        $this->notes = $c->get(NoteService::class);
+        $this->users = $c->get(UserService::class);
+        $this->devices = $c->get(DeviceService::class);
+        $this->tickets = $c->get(TicketService::class);
         $this->session = $c->get(SessionInterface::class);
     }
 
@@ -137,6 +138,8 @@ class TicketController
      */
     public function show(Request $request, Response $response, array $args): Response
     {
+        $user = $this->session->get('auth');
+
         $ticketId = $args['id'];
         $ticket = $this->tickets->getByUuid($ticketId);
 
@@ -144,6 +147,23 @@ class TicketController
         $customer = $ticket->getCustomer();
 
         $this->context = 'ticket';
+
+        $notes = [];
+        $notesArray = $ticket->getNotes();
+
+        foreach($notesArray as &$note)
+        {
+            $author = $note->getAuthor();
+
+            $notes[$note->getUuid()->toString()] = array(
+                'id' => $note->getUuid(),
+                'title' => $note->getTitle(),
+                'content' => $note->getContent(),
+                'owner' => $author->getFirstName().' '.$author->getLastName(),
+                'created' => $note->getCreated()->format('d-m-Y H:i:s'),
+                'last_updated' => $note->getUpdated()->format('d-m-Y H:i:s')
+            );
+        }
 
         $twigData = [
             'page' => [
@@ -153,9 +173,11 @@ class TicketController
                     'Name' => ucwords(implode('', [$this->context, 's']))
                 ],
                 'record' => [
+                    'id' => $ticket->getUuid(),
                     'display_name' => implode(' ', [$ticket->getSubject(), 'for', $customer->getFirstName(), $customer->getLastName()])
                 ]
             ],
+            'user' => $user,
             'ticket' => [
                 'status' => $ticket->getStatus(),
                 'jobId' => $ticket->getId(),
@@ -179,6 +201,7 @@ class TicketController
                     'Mobile Number' => $customer->getMobile()
                 ]
             ],
+            'notes' => $notes
         ];
 
         return $this->twig->render($response, '/workshop/single/fragments/ticket.html', $twigData);
@@ -225,9 +248,6 @@ class TicketController
                 'ticket.issue_type',
                 'ticket.user',
                 'ticket.device',
-            ],
-            'alphaNum' => [
-                'ticket.subject'
             ]
         ];
 
@@ -262,7 +282,7 @@ class TicketController
             'device' => $device
         ]);
 
-        return $response->withStatus(200);
+        return $response->withHeader('HX-Redirect', BASE_URL . '/workshop/view/tickets')->withStatus(200);
     }
     
     /**
@@ -292,6 +312,6 @@ class TicketController
 
         $this->tickets->delete($uuid);
 
-        return $response->withStatus(200);
+        return $response->withHeader('HX-Redirect', BASE_URL . '/workshop/view/tickets')->withStatus(200);
     }
 }

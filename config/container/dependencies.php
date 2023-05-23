@@ -9,14 +9,13 @@
 
 declare(strict_types = 1);
 
-use App\Auth\Contract\AuthProviderContract;
-use App\Auth\Provider\LocalAuthProvider;
 use Slim\App;
 use Slim\Views\Twig;
 use App\Support\Config;
 use function DI\create;
 use App\Support\Session;
 use Doctrine\ORM\ORMSetup;
+use App\Service\NoteService;
 use App\Service\UserService;
 use Slim\Factory\AppFactory;
 use \Doctrine\DBAL\Types\Type;
@@ -25,11 +24,11 @@ use App\Service\TicketService;
 use App\Service\AddressService;
 use Doctrine\ORM\EntityManager;
 use App\Service\CustomerService;
-use App\Service\GuardianService;
 use Doctrine\DBAL\DriverManager;
 use App\Interface\SessionInterface;
-use App\Interface\GuardianInterface;
 use Psr\Container\ContainerInterface;
+use App\Auth\Provider\LocalAuthProvider;
+use App\Auth\Contract\AuthProviderContract;
 use Psr\Http\Message\ResponseFactoryInterface;
 
 return [
@@ -117,6 +116,10 @@ return [
     TicketService::class => function(ContainerInterface $container)
     {
         return new TicketService($container->get(EntityManager::class));
+    },
+    NoteService::class => function(ContainerInterface $container)
+    {
+        return new NoteService($container->get(EntityManager::class));
     },
     DeviceService::class => function(ContainerInterface $container)
     {

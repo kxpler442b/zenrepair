@@ -12,6 +12,7 @@ declare(strict_types = 1);
 
 use Slim\App;
 use Slim\Routing\RouteCollectorProxy;
+use App\Http\Controller\NoteController;
 use App\Http\Controller\UserController;
 use App\Http\Controller\DeviceController;
 use App\Http\Controller\TicketController;
@@ -47,7 +48,7 @@ return function(App $app)
 
         $customers->put('/update', [CustomerController::class, 'update']);
 
-        $customers->delete('/delete', [CustomerController::class, 'delete']);
+        $customers->delete('/delete/{id}', [CustomerController::class, 'delete']);
 
     })->add(LocalAuthMiddleware::class);
 
@@ -62,7 +63,20 @@ return function(App $app)
 
         $tickets->put('/update', [TicketController::class, 'update']);
 
-        $tickets->delete('/delete', [TicketController::class, 'delete']);
+        $tickets->delete('/delete/{id}', [TicketController::class, 'delete']);
+
+    })->add(LocalAuthMiddleware::class);
+
+    $app->group('/notes', function(RouteCollectorProxy $notes) {
+
+        $notes->get('/new', [NoteController::class, 'new']);
+        $notes->get('/{id}/edit', [NoteController::class, 'edit']);
+        
+        $notes->post('/create', [NoteController::class, 'create']);
+
+        $notes->put('/update', [NoteController::class, 'update']);
+
+        $notes->delete('/delete/{id}', [NoteController::class, 'delete']);
 
     })->add(LocalAuthMiddleware::class);
 
@@ -78,7 +92,7 @@ return function(App $app)
 
         $devices->put('/update', [DeviceController::class, 'update']);
 
-        $devices->delete('/delete', [DeviceController::class, 'delete']);
+        $devices->delete('/delete/{id}', [DeviceController::class, 'delete']);
 
     })->add(LocalAuthMiddleware::class);
 };

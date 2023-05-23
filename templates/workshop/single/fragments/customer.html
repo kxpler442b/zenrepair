@@ -4,11 +4,19 @@
 
         <div class="inline-flex flex-col justify-center items-start space-y-4">
 
-            <div class="flex flex-row justify-center items-center">
-                <a href="{{ globals.base_url }}/workshop/view/{{ page.context.name }}" class="font-title font-medium text-sm text-white hover:underline">{{ page.context.Name }}</a>
-            </div>
+            <a href="{{ globals.base_url }}/workshop/view/{{ page.context.name }}" class="px-2 py font-title font-medium text-xs text-white hover:text-stone-300 rounded-sm border border-white hover:border-stone-300">Back</a>
 
             <h2 class="font-title font-semibold text-4xl text-white">{{ page.record.display_name }}</h2>
+            
+        </div>
+
+        <div class="w-1/3 px-6 flex flex-row justify-end items-center">
+            
+            <button
+                hx-delete="{{ globals.base_url }}/customers/delete/{{ customer.id }}"
+                hx-trigger="click"
+                class="px-4 py-1.5 font-title font-medium text-sm text-white hover:text-red-500 rounded-sm border border-white hover:border-red-500">Delete</button>
+
         </div>
 
     </div>
@@ -17,15 +25,15 @@
 
 <sidebar class="row-start-3 row-span-full col-start-1 col-span-3 px-6 pt-6 flex flex-col justify-start items-center">
 
-    <div class="w-full shadow-sm rounded-sm border border-stone-300 bg-white">
+    <div class="w-full shadow-sm rounded-sm border border-stone-700 bg-stone-900">
 
-        <div class="w-full px-6 py-2 border-b border-stone-300 bg-stone-300">
-            <h4 class="font-title font-medium text-sm text-stone-700">Customer Details</h4>
+        <div class="w-full px-6 py-2 border-b border-stone-700 bg-stone-700">
+            <h4 class="font-title font-medium text-sm text-stone-300">Customer Details</h4>
         </div>
         
         <div class="w-full px-6 py-4">
             
-            <table class="table-auto w-full text-sm text-stone-900">
+            <table class="table-auto w-full text-sm text-white">
                 <thead>
                     <th class="w-1/3"></th>
                     <th class="w-2/3"></th>
@@ -47,36 +55,36 @@
 
 <content class="row-start-3 row-span-full col-start-4 col-span-full px-6 pt-6 flex flex-col justify-start items-center space-y-4">
 
-    <div class="w-full shadow-sm rounded-sm border border-stone-300 bg-white">
+    <div class="w-full shadow-sm rounded-sm border border-stone-700 bg-stone-900">
 
-        <div class="w-full px-6 py-2 border-b border-stone-300 bg-stone-300">
-            <h4 class="font-title font-semibold text-xs text-stone-700">Devices</h4>
+        <div class="w-full px-6 py-2 border-b border-stone-700 bg-stone-700">
+            <h4 class="font-title font-semibold text-sm text-stone-300">Devices</h4>
         </div>
         
         <div class="w-full">
             
-            <table class="table-auto w-full text-white">
-                <thead class="text-left bg-stone-500">
+            <table class="table-auto w-full">
+                <thead class="text-left border-b border-stone-700">
                     <tr>
                         {% for col in devices.cols %}
-                            <th class="px-6 py-1.5 font-title font-medium text-sm text-stone-100">{{ col }}</th>
+                            <th class="px-6 py-1.5 font-title font-medium text-xs text-stone-300">{{ col }}</th>
                         {% endfor %}
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-stone-300">
+                <tbody class="divide-y divide-stone-700">
                 {% for row in devices.rows %}
-                    <tr class="hover:bg-stone-100 transition ease-in-out duration-100">
+                    <tr class="hover:bg-stone-700 transition ease-in-out duration-100">
                         {% for key, data in row %}
                         {% if data is iterable %}
                             <td class="px-6 py-4 font-medium text-sm hover:underline">
-                                <a href="{{ data.link }}" class="inline-flex flex-row items-center text-sky-500">
-                                    <svg class="mr-4" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#0ea5e9" viewBox="0 0 256 256"><path d="M184,80V208a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8V80a8,8,0,0,1,8-8H176A8,8,0,0,1,184,80Z" opacity="0.2"></path><path d="M224,104a8,8,0,0,1-16,0V59.32l-66.33,66.34a8,8,0,0,1-11.32-11.32L196.68,48H152a8,8,0,0,1,0-16h64a8,8,0,0,1,8,8Zm-40,24a8,8,0,0,0-8,8v72H48V80h72a8,8,0,0,0,0-16H48A16,16,0,0,0,32,80V208a16,16,0,0,0,16,16H176a16,16,0,0,0,16-16V136A8,8,0,0,0,184,128Z"></path></svg>
+                                <a href="{{ data.link }}" class="inline-flex flex-row items-center text-green-500">
+                                    <svg class="mr-4" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#22c55e" viewBox="0 0 256 256"><path d="M184,80V208a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8V80a8,8,0,0,1,8-8H176A8,8,0,0,1,184,80Z" opacity="0.2"></path><path d="M224,104a8,8,0,0,1-16,0V59.32l-66.33,66.34a8,8,0,0,1-11.32-11.32L196.68,48H152a8,8,0,0,1,0-16h64a8,8,0,0,1,8,8Zm-40,24a8,8,0,0,0-8,8v72H48V80h72a8,8,0,0,0,0-16H48A16,16,0,0,0,32,80V208a16,16,0,0,0,16,16H176a16,16,0,0,0,16-16V136A8,8,0,0,0,184,128Z"></path></svg>
                                     {{ data.text }}
                                 </a>
                             </td>
                         {% else %}
         
-                            <td class="px-6 py-2 font-medium text-sm text-stone-900">{{ data }}</td>
+                            <td class="px-6 py-2 font-medium text-sm text-white">{{ data }}</td>
                     
                         {% endif %}
                         {% endfor %}
@@ -89,36 +97,36 @@
 
     </div>
 
-    <div class="w-full rounded-sm border border-stone-300 bg-stone-800">
+    <div class="w-full shadow-sm rounded-sm border border-stone-700 bg-stone-900">
 
-        <div class="w-full px-6 py-2 border-b border-stone-300 bg-stone-800">
-            <h4 class="font-title font-medium text-sm text-stone-300">Tickets</h4>
+        <div class="w-full px-6 py-2 border-b border-stone-700 bg-stone-700">
+            <h4 class="font-title font-semibold text-sm text-stone-300">Tickets</h4>
         </div>
         
-        <div class="w-full bg-stone-800">
+        <div class="w-full">
             
-            <table class="table-auto w-full text-white">
-                <thead class="text-left border-y border-stone-300 bg-stone-300">
+            <table class="table-auto w-full">
+                <thead class="text-left border-b border-stone-700">
                     <tr>
                         {% for col in tickets.cols %}
-                            <th class="px-4 py-1.5 font-title font-medium text-sm text-stone-700">{{ col }}</th>
+                            <th class="px-6 py-1.5 font-title font-medium text-xs text-stone-300">{{ col }}</th>
                         {% endfor %}
                     </tr>
                 </thead>
-                <tbody class="divide-y divide-stone-300">
+                <tbody class="divide-y divide-stone-700">
                 {% for row in tickets.rows %}
                     <tr class="hover:bg-stone-700 transition ease-in-out duration-100">
                         {% for key, data in row %}
                         {% if data is iterable %}
-                            <td class="px-4 py-4 font-medium text-sm hover:underline">
-                                <a href="{{ data.link }}" class="inline-flex flex-row items-center text-sky-500">
-                                    <svg class="mr-4" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#0ea5e9" viewBox="0 0 256 256"><path d="M184,80V208a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8V80a8,8,0,0,1,8-8H176A8,8,0,0,1,184,80Z" opacity="0.2"></path><path d="M224,104a8,8,0,0,1-16,0V59.32l-66.33,66.34a8,8,0,0,1-11.32-11.32L196.68,48H152a8,8,0,0,1,0-16h64a8,8,0,0,1,8,8Zm-40,24a8,8,0,0,0-8,8v72H48V80h72a8,8,0,0,0,0-16H48A16,16,0,0,0,32,80V208a16,16,0,0,0,16,16H176a16,16,0,0,0,16-16V136A8,8,0,0,0,184,128Z"></path></svg>
+                            <td class="px-6 py-4 font-medium text-sm hover:underline">
+                                <a href="{{ data.link }}" class="inline-flex flex-row items-center text-green-500">
+                                    <svg class="mr-4" xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="#22c55e" viewBox="0 0 256 256"><path d="M184,80V208a8,8,0,0,1-8,8H48a8,8,0,0,1-8-8V80a8,8,0,0,1,8-8H176A8,8,0,0,1,184,80Z" opacity="0.2"></path><path d="M224,104a8,8,0,0,1-16,0V59.32l-66.33,66.34a8,8,0,0,1-11.32-11.32L196.68,48H152a8,8,0,0,1,0-16h64a8,8,0,0,1,8,8Zm-40,24a8,8,0,0,0-8,8v72H48V80h72a8,8,0,0,0,0-16H48A16,16,0,0,0,32,80V208a16,16,0,0,0,16,16H176a16,16,0,0,0,16-16V136A8,8,0,0,0,184,128Z"></path></svg>
                                     {{ data.text }}
                                 </a>
                             </td>
                         {% else %}
         
-                            <td class="px-4 py-2 font-medium text-sm">{{ data }}</td>
+                            <td class="px-6 py-2 font-medium text-sm text-white">{{ data }}</td>
                     
                         {% endif %}
                         {% endfor %}

@@ -358,6 +358,6 @@ class DeviceController
 
         $this->devices->delete($uuid);
 
-        return $response->withStatus(200);
+        return $response->withHeader('HX-Redirect', BASE_URL . '/workshop/view/devices')->withStatus(200);
     }
 }

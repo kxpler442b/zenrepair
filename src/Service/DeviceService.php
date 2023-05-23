@@ -87,9 +87,12 @@ class DeviceService
         $customer->setFirstName($data['model']);
     }
 
-    public function delete(string $id): void
+    public function delete(string $uuid): void
     {
-        
+        $device = $this->getByUuid($uuid);
+
+        $this->em->remove($device);
+        $this->em->flush();
     }
 
     private function setRepository(): void

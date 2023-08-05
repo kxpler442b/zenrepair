@@ -12,15 +12,40 @@ declare(strict_types = 1);
 
 use Dotenv\Dotenv;
 use Slim\ResponseEmitter;
+use Slim\Factory\AppFactory;
+use App\Http\Handler\HttpErrorHandler;
+use App\Support\Settings\SettingsInterface;
+use Slim\Factory\ServerRequestCreatorFactory;
 
-require __DIR__ . '/../vendor/autoload.php';
+$c = require __DIR__ . '/../app/bootstrap.php';
 
-$env = Dotenv::createImmutable(__DIR__, '../app.env');
-$env->load();
+AppFactory::setContainer($c);
+$app = AppFactory::create();
+$callableResolver = $app->getCallableResolver();
 
-define('BASE_URL', $_ENV['APP_BASE_URL']);
+$middleware = require __DIR__ . '/../app/middleware.php';
+$middleware($app);
 
-$app = require __DIR__ . '/../app/bootstrap.php';
+$routes = require __DIR__ . '/../app/routes.php';
+$routes($app);
+
+$settings = $c->get(SettingsInterface::class);
+
+$serverRequestCreator = ServerRequestCreatorFactory::create();
+$request = $serverRequestCreator->createServerRequestFromGlobals();
+
+$responseFactory = $app->getResponseFactory();
+$errorHandler = new HttpErrorHandler($callableResolver, $responseFactory);
+
+$app->addRoutingMiddleware();
+$app->addBodyParsingMiddleware();
+
+$errorMiddleware = $app->addErrorMiddleware(
+    (bool) $settings->get('displayErrorDetails'), 
+    (bool) $settings->get('logError'), 
+    (bool) $settings->get('logErrorDetails')
+);
+$errorMiddleware->setDefaultErrorHandler($errorHandler);
 
 $response = $app->handle($request);
 $responseEmitter = new ResponseEmitter();

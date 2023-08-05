@@ -21,13 +21,15 @@ return function(ContainerBuilder $cb)
         SettingsInterface::class => function() {
             return new Settings([
 
+                /** General Application Settings */
+                'app_name' => 'zenrepair',
+                'app_version' => '0.2.1',
+                'base_url' => $_ENV['APP_BASE_URL'],
+
                 /** Slim Settings */
                 'displayErrorDetails' => true,
                 'logError' => true,
                 'logErrorDetails' => true,
-
-                /** General Application Settings */
-                'base_url' => $_ENV['APP_BASE_URL'],
 
                 /** Doctrine (Database) Settings */
                 'doctrine' => [
@@ -65,11 +67,17 @@ return function(ContainerBuilder $cb)
                     'cookie_secure' => false
                 ],
 
-                /** Password Cryptography Settings */
-                'passwords' => [
-                    'memory_cost' => PASSWORD_ARGON2_DEFAULT_MEMORY_COST,
-                    'time_cost' => PASSWORD_ARGON2_DEFAULT_TIME_COST,
-                    'threads' => PASSWORD_ARGON2_DEFAULT_THREADS
+                /** Local Authenticator Settings */
+                'localAuthenticator' => [
+                    'enforce2fa' => false,
+                    'crypto' => [
+                        'algo' => PASSWORD_ARGON2ID,
+                        'options' => [
+                            'memory_cost' => PASSWORD_ARGON2_DEFAULT_MEMORY_COST,
+                            'time_cost' => PASSWORD_ARGON2_DEFAULT_TIME_COST,
+                            'threads' => PASSWORD_ARGON2_DEFAULT_THREADS
+                        ]
+                    ]
                 ],
 
                 /** Logger (Monolog) Settings */

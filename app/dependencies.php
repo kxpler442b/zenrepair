@@ -2,6 +2,8 @@
 
 declare(strict_types = 1);
 
+use App\Auth\Auth;
+use App\Auth\Interface\AuthInterface;
 use Monolog\Logger;
 use Slim\Views\Twig;
 use DI\ContainerBuilder;
@@ -23,6 +25,13 @@ use App\Support\Settings\SettingsInterface;
 return function(ContainerBuilder $cb)
 {
     $cb->addDefinitions([
+        AuthInterface::class => function(ContainerInterface $c) {
+            $s = $c->get(SettingsInterface::class);
+
+            $options = $s->get('localAuthenticator');
+
+            return new Auth($c, $options);
+        },
         EntityManagerInterface::class => function(ContainerInterface $c) {
             $settings = $c->get(SettingsInterface::class);
 

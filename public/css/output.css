@@ -913,6 +913,15 @@ select {
   --tw-backdrop-sepia:  ;
 }
 
+.border {
+  border-width: 1px;
+}
+
+.border-stone-500 {
+  --tw-border-opacity: 1;
+  border-color: rgb(120 113 108 / var(--tw-border-opacity));
+}
+
 .text-xl {
   font-size: 1.25rem;
   line-height: 1.75rem;

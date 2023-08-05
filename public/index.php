@@ -1,16 +1,27 @@
 <?php
 
 /**
- * Application Single Point of Entry
+ * Prepare and execute the application.
  * 
- * @author B Moss <P2595849@mydmu.ac.uk>
- * Date: 02/01/23
+ * @author Benjamin Moss <ben@yubit.social>
+ * 
+ * Date: 26/05/23
  */
 
 declare(strict_types = 1);
 
-use Slim\App;
+use Dotenv\Dotenv;
+use Slim\ResponseEmitter;
 
-$container = require __DIR__ . '/../bootstrap.php';
+require __DIR__ . '/../vendor/autoload.php';
 
-$container->get(App::class)->run();
+$env = Dotenv::createImmutable(__DIR__, '../app.env');
+$env->load();
+
+define('BASE_URL', $_ENV['APP_BASE_URL']);
+
+$app = require __DIR__ . '/../app/bootstrap.php';
+
+$response = $app->handle($request);
+$responseEmitter = new ResponseEmitter();
+$responseEmitter->emit($response);

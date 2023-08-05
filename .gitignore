@@ -1,6 +1,7 @@
 /vendor/
 /node_modules/
 /var/
-/migrations/
+/bin/
 
-.env
+*.env
+run-tailwind.sh

@@ -1,6 +1,6 @@
 {
     "name": "kxpler442b/zenrepair",
-    "description": "Repair Shop Management System (RSMS)",
+    "description": "Repair shop management web app",
     "type": "project",
     "license": "MIT",
     "autoload": {
@@ -10,30 +10,26 @@
     },
     "authors": [
         {
-            "name": "Benjamin Moss",
-            "email": "p2595849@my365.dmu.ac.uk"
+            "name": "kxpler442b",
+            "email": "benmoss2002@fastmail.co.uk"
         }
     ],
-    "config": {
-        "process-timeout": 0,
-        "allow-plugins": {
-            "php-http/discovery": true
-        }
-    },
-    "scripts": {
-        "start": "php -S localhost:8080 -t public/"
-    },
     "require": {
         "slim/slim": "4.*",
-        "slim/psr7": "^1.6",
         "slim/twig-view": "^3.3",
         "php-di/slim-bridge": "^3.3",
-        "doctrine/dbal": "^3.5",
-        "doctrine/orm": "^2.14",
-        "doctrine/migrations": "^3.5",
-        "symfony/cache": "^6.2",
+        "http-interop/http-factory-guzzle": "^1.2",
+        "guzzlehttp/guzzle": "^7.7",
+        "guzzlehttp/psr7": "^2",
+        "odan/session": "^6.1",
+        "doctrine/orm": "2.*",
+        "doctrine/dbal": "3.*",
+        "doctrine/migrations": "3.*",
         "ramsey/uuid-doctrine": "^2.0",
+        "symfony/cache": "6.*",
+        "vlucas/valitron": "^1.4",
         "vlucas/phpdotenv": "^5.5",
-        "vlucas/valitron": "^1.4"
+        "nesbot/carbon": "^2.67",
+        "monolog/monolog": "2.*"
     }
 }

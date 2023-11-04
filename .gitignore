@@ -1,7 +1,14 @@
-/vendor/
-/node_modules/
-/var/
-/bin/
+# Environment Variable Files
+app.env
 
-*.env
-run-tailwind.sh
+# Temporary application storage
+!/var/cache/.gitkeep
+/var/cache/*
+!/var/log/.gitkeep
+/var/log*
+
+# Managed by Composer
+/vendor/
+
+# Managed by NPM
+/node_modules/

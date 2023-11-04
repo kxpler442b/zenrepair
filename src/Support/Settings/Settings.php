@@ -4,24 +4,15 @@ declare(strict_types = 1);
 
 namespace App\Support\Settings;
 
-class Settings implements SettingsInterface
+class Settings
 {
     private readonly array $settings;
 
-    public function __construct(array $settings)
-    {
+    public function __construct(array $settings) {
         $this->settings = $settings;
     }
 
-    /**
-     * Undocumented function
-     *
-     * @param string $key
-     * 
-     * @return void
-     */
-    public function get(string $key, mixed $default = null)
-    {
+    public function get(string $key, mixed $default = null) {
         $path = explode('.', $key);
         $value = $this->settings[array_shift($path)] ?? null;
 

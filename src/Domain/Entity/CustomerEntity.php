@@ -7,15 +7,18 @@ namespace App\Domain\Entity;
 use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
+use App\Domain\Entity\UserEntity;
 use App\Domain\Trait\HasUuidTrait;
+use Doctrine\ORM\Mapping\ManyToOne;
 use Doctrine\ORM\Mapping\OneToMany;
+use App\Domain\Entity\AuthTokenEntity;
 use Doctrine\Common\Collections\Collection;
 use App\Domain\Trait\HasCreatedUpdatedTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 
 #[Entity()]
-#[Table(name: 'users')]
-class UserEntity
+#[Table(name: 'customers')]
+class CustomerEntity
 {
     use HasUuidTrait, HasCreatedUpdatedTrait;
 
@@ -25,14 +28,20 @@ class UserEntity
     #[Column(type: 'string')]
     private string $password;
 
-    #[Column(type: 'string', length: 320, nullable: true)]
+    #[Column(type: 'string', length: 320)]
     private string $email;
+
+    #[Column(type: 'string')]
+    private string $mobile_number;
 
     #[Column(type: 'string')]
     private string $given_name;
 
-    #[Column(type: 'string', nullable: true)]
+    #[Column(type: 'string')]
     private string $family_name;
+
+    #[ManyToOne(targetEntity: UserEntity::class, inversedBy: 'customers', cascade: ['PERSIST', 'MERGE'])]
+    private UserEntity $created_by;
 
     #[OneToMany(targetEntity: AuthTokenEntity::class, mappedBy: 'owner', orphanRemoval: true)]
     private Collection $auth_tokens;

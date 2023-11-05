@@ -4,9 +4,9 @@ declare(strict_types = 1);
 
 namespace App\Renderer;
 
+use Slim\Views\Twig;
 use Psr\Container\ContainerInterface;
 use Psr\Http\Message\ResponseInterface;
-use Slim\Views\Twig;
 
 final class TwigRenderer
 {

@@ -38,6 +38,7 @@ return [
     'authenticator' => [
         'enforce2fa' => false,
         'crypto' => [
+            'pepper' => $_ENV['CRYPT_PEPPER'],
             'algo' => PASSWORD_ARGON2ID,
             'options' => [
                 'memory_cost' => PASSWORD_ARGON2_DEFAULT_MEMORY_COST,

@@ -4,15 +4,15 @@ declare(strict_types = 1);
 
 use Slim\App;
 use Slim\Routing\RouteCollectorProxy;
-use App\Http\Controller\AuthController;
-use App\Http\Controller\TestController;
+use App\Http\Action\Auth\ViewLoginAction;
+use App\Http\Action\Auth\DoSignpostAction;
 
 return function(App $app) 
 {
-    $app->get('', [AuthController::class, 'doSignpostClient']);
+    $app->get('', DoSignpostAction::class);
 
     $app->group('/auth', function(RouteCollectorProxy $auth) {
-        $auth->get('/login', [AuthController::class, 'getLoginView']);
+        $auth->get('/login', ViewLoginAction::class);
         $auth->get('/logout', [AuthController::class, 'doLogoutUser']);
 
         $auth->post('/login', [AuthController::class, 'doLoginUser']);

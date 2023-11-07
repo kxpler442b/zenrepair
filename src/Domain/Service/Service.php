@@ -2,17 +2,16 @@
 
 declare(strict_types = 1);
 
-namespace App\Service;
+namespace App\Domain\Service;
 
 use Psr\Log\LoggerInterface;
-use Psr\Container\ContainerInterface;
 
 abstract class Service
 {
     protected LoggerInterface $logger;
 
-    public function __construct(ContainerInterface $c)
+    public function __construct(LoggerInterface $logger)
     {
-        $this->logger = $c->get(LoggerInterface::class);
+        $this->logger = $logger;
     }
 }

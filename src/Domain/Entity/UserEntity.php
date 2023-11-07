@@ -9,11 +9,12 @@ use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use App\Domain\Trait\HasUuidTrait;
 use Doctrine\ORM\Mapping\OneToMany;
+use App\Domain\Repository\UserRepository;
 use Doctrine\Common\Collections\Collection;
 use App\Domain\Trait\HasCreatedUpdatedTrait;
 use Doctrine\Common\Collections\ArrayCollection;
 
-#[Entity()]
+#[Entity(repositoryClass: UserRepository::class)]
 #[Table(name: 'users')]
 class UserEntity
 {

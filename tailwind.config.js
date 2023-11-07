@@ -12,7 +12,8 @@ module.exports = {
         'md': '48px repeat(7, minmax(0, 1fr))'
       },
       gridTemplateColumns: {
-        'md': 'repeat(16, minmax(0, 1fr))'
+        'md': 'repeat(12, minmax(0, 1fr))',
+        'xl': 'repeat(16, minmax(0, 1fr))'
       }
     },
   },

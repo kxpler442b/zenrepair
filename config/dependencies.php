@@ -16,6 +16,9 @@ use Doctrine\DBAL\DriverManager;
 use Idmarinas\TracyPanel\TwigBar;
 use App\Support\Settings\Settings;
 use Odan\Session\SessionInterface;
+use App\Domain\Service\UserService;
+use App\Authenticator\Authenticator;
+use App\Domain\Service\AuthenticatorService;
 use App\Handler\DefaultErrorHandler;
 use Monolog\Formatter\LineFormatter;
 use Slim\Middleware\ErrorMiddleware;
@@ -90,6 +93,36 @@ return [
         return new PhpSession($settings->get('session'));
     },
 
+    // Doctrine EntityManager
+    EntityManager::class => function(ContainerInterface $c) {
+        $settings = $c->get(Settings::class);
+
+        Type::addType('uuid', 'Ramsey\Uuid\Doctrine\UuidType');
+
+        $orm_config = ORMSetup::createAttributeMetadataConfiguration(
+            (array) $settings->get('doctrine.entity_dirs'),
+            $settings->get('doctrine.dev_mode')
+        );
+
+        $connection = DriverManager::getConnection(
+            $settings->get('doctrine.connection')
+        );
+
+        return new EntityManager($connection, $orm_config);
+    },
+
+    AuthenticatorService::class => function(ContainerInterface $c) {
+        $settings = $c->get(Settings::class);
+
+        return new AuthenticatorService(
+            $c->get(EntityManager::class),
+            $c->get(SessionInterface::class),
+            $c->get(LoggerInterface::class),
+            $settings->get('authenticator.crypto.algo'),
+            $settings->get('authenticator.crypto.options')
+        );
+    },
+
     // Twig Template Rendering Engine
     Twig::class => function(ContainerInterface $c) {
         $settings = $c->get(Settings::class);
@@ -147,22 +180,4 @@ return [
 
         return $errorMidleware;
     },
-
-    // Doctrine EntityManager
-    EntityManager::class => function(ContainerInterface $c) {
-        $settings = $c->get(Settings::class);
-
-        Type::addType('uuid', 'Ramsey\Uuid\Doctrine\UuidType');
-
-        $orm_config = ORMSetup::createAttributeMetadataConfiguration(
-            (array) $settings->get('doctrine.entity_dirs'),
-            $settings->get('doctrine.dev_mode')
-        );
-
-        $connection = DriverManager::getConnection(
-            $settings->get('doctrine.connection')
-        );
-
-        return new EntityManager($connection, $orm_config);
-    }
 ];

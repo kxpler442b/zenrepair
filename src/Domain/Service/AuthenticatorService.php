@@ -2,36 +2,41 @@
 
 declare(strict_types = 1);
 
-namespace App\Authenticator;
+namespace App\Domain\Service;
 
-use Random\Engine\Secure;
-use App\Service\UserService;
+use Psr\Log\LoggerInterface;
 use App\Domain\Enum\AuthEnum;
 use Doctrine\ORM\EntityManager;
-use App\Support\Settings\Settings;
+use App\Domain\Entity\UserEntity;
 use Odan\Session\SessionInterface;
 use App\Domain\Entity\AuthTokenEntity;
+use App\Domain\Repository\UserRepository;
 use App\Domain\Repository\AuthTokenRepository;
 use App\Domain\XferObject\UserCredentialsObject;
+use Doctrine\DBAL\Driver\Mysqli\Initializer\Secure;
 
-/**
- * zenRepair local authorization mechanism.
- */
-final class Authenticator
+final class AuthenticatorService extends Service
 {
-    private UserService $users;
+    private UserRepository $users;
     private AuthTokenRepository $tokens;
     private SessionInterface $session;
     private string $algorithm;
     private array $options;
 
-    public function __construct(UserService $userService, EntityManager $em, SessionInterface $session, Settings $settings)
-    {
-        $this->users = $userService;
+    public function __construct(
+        EntityManager $em,
+        SessionInterface $session,
+        LoggerInterface $logger,
+        string $algorithm,
+        array $options
+    ) {
+        $this->users = $em->getRepository(UserEntity::class);
+        $this->tokens = $em->getRepository(AuthTokenEntity::class);
         $this->session = $session;
-        $this->tokens = $em->getRepository('AuthTokenEntity');
-        $this->algorithm = $settings->get('authenticator.crypto.algorithm');
-        $this->options = $settings->get('authenticator.crypto.options');
+        $this->algorithm = $algorithm;
+        $this->options = $options;
+
+        parent::__construct($logger);
     }
 
     /**
@@ -81,6 +86,16 @@ final class Authenticator
         return AuthEnum::AUTH_SUCCESS;
     }
 
+    public function createUser(UserCredentialsObject $credentials): void
+    {
+        $hashedPassword = $this->createPasswordHash($credentials->password);
+        $credentials->password = $hashedPassword;
+
+        $user = $this->users->new($credentials);
+
+        $this->users->save($user);
+    }
+
     /**
      * Creates a password hash from the provided password.
      *
@@ -104,10 +119,10 @@ final class Authenticator
     private function createAuthTokenObject(): AuthTokenEntity
     {
         return (new AuthTokenEntity)
-            ->setHash((new Secure())->generate());
+            ->setHash(bin2hex(openssl_random_pseudo_bytes(32)));
     }
 
-    /**
+     /**
      * Clears the client's authorization storage.
      *
      * @return void

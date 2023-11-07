@@ -47,19 +47,21 @@ final class AuthenticatorService extends Service
      */
     public function login(UserCredentialsObject $credentials): AuthEnum
     {
-        $user = $this->users->find(['username', $credentials->username]);
+        $this->clearSessionStorage();
+
+        $user = $this->users->findOneBy(['username' => $credentials->username]);
 
         if($user == null || !password_verify($credentials->password, $user->getPassword())) {
             return AuthEnum::AUTH_FAILED;
         }
 
-        $this->clearSessionStorage();
+        $token = $this->tokens->new($user);
+        $this->tokens->save($token);
 
-        $token = $this->createAuthTokenObject();
+        $encodedData = $this->sessionDataEncoder($token->getId(), $user->getId());
 
-        $this->session->set('authStorage', [
-            'token' => $token->getHash()
-        ]);
+        $this->session->set('zenrepair_session_auth', $encodedData['encodedTokenId']);
+        $this->session->set('zenrepair_user', $encodedData['encodedUserId']);
 
         return AuthEnum::AUTH_SUCCESS;
     }
@@ -71,13 +73,19 @@ final class AuthenticatorService extends Service
      */
     public function verify(): AuthEnum
     {
-        if(!$this->session->has('authStore')) {
+        if(!$this->session->has('zenrepair_session_auth')) {
             return AuthEnum::AUTH_FAILED;
         }
 
-        $token = $this->tokens->findByHash($this->session->get('authStore')['token']);
+        $encodedTokenId = $this->session->get('zenrepair_session_auth');
+        $encodedUserId = $this->session->get('zenrepair_user');
 
-        if($token == null) {
+        $decodedData = $this->sessionDataDecoder($encodedTokenId, $encodedUserId);
+
+        $token = $this->tokens->findOneBy(['id' => $decodedData['decodedTokenId']]);
+        $user = $this->users->findOneBy(['id' => $decodedData['decodedUserId']]);
+
+        if($token == null || !$token->getOwner() == $user) {
             $this->clearSessionStorage();
 
             return AuthEnum::AUTH_FAILED;
@@ -111,15 +119,20 @@ final class AuthenticatorService extends Service
         );
     }
 
-    /**
-     * Creates a new authorization token.
-     *
-     * @return AuthTokenEntity
-     */
-    private function createAuthTokenObject(): AuthTokenEntity
+    public function sessionDataEncoder(string $tokenId, string $userId): array
     {
-        return (new AuthTokenEntity)
-            ->setHash(bin2hex(openssl_random_pseudo_bytes(32)));
+        return [
+            'encodedTokenId' => base64_encode($tokenId),
+            'encodedUserId' => base64_encode($userId)
+        ];
+    }
+
+    public function sessionDataDecoder(string $encodedTokenId, string $encodedUserId): array
+    {
+        return [
+            'decodedTokenId' => base64_decode($encodedTokenId),
+            'decodedUserId' => base64_decode($encodedUserId)
+        ];
     }
 
      /**

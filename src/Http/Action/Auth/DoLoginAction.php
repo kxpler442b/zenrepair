@@ -4,17 +4,19 @@ declare(strict_types = 1);
 
 namespace App\Http\Action\Auth;
 
-use App\Renderer\JsonRenderer;
+use App\Domain\Enum\AuthEnum;
+use App\Renderer\RedirectRenderer;
 use Psr\Http\Message\ResponseInterface;
 use App\Domain\Service\AuthenticatorService;
 use Psr\Http\Message\ServerRequestInterface;
+use App\Domain\XferObject\UserCredentialsObject;
 
 final class DoLoginAction
 {
     private AuthenticatorService $authenticator;
-    private JsonRenderer $renderer;
+    private RedirectRenderer $renderer;
     
-    public function __construct(AuthenticatorService $authenticator, JsonRenderer $renderer)
+    public function __construct(AuthenticatorService $authenticator, RedirectRenderer $renderer)
     {
         $this->authenticator = $authenticator;
         $this->renderer = $renderer;
@@ -24,6 +26,23 @@ final class DoLoginAction
     {
         $formData = $request->getParsedBody();
 
-        return $this->renderer->json($response, $formData);
+        $credentials = new UserCredentialsObject(
+            $formData['username'],
+            $formData['password']
+        );
+
+        $result = $this->authenticator->login($credentials);
+
+        if($result == AuthEnum::AUTH_SUCCESS) {
+            return $this->renderer->redirect(
+                $response,
+                '/dashboard'
+            );
+        } elseif($result == AuthEnum::AUTH_FAILED) {
+            return $this->renderer->redirect(
+                $response,
+                '/auth/login'
+            );
+        }
     }
 }

@@ -7,6 +7,8 @@ use Slim\Routing\RouteCollectorProxy;
 use App\Http\Action\Auth\DoLoginAction;
 use App\Http\Action\Auth\ViewLoginAction;
 use App\Http\Action\Auth\DoSignpostAction;
+use App\Http\Action\User\CreateUserAction;
+use App\Http\Action\Dashboard\ViewDashboardAction;
 
 return function(App $app) 
 {
@@ -19,7 +21,9 @@ return function(App $app)
         $auth->post('/login', DoLoginAction::class);
     });
 
-    $app->group('/test', function(RouteCollectorProxy $test) {
-        $test->get('', [TestController::class, 'testResponse']);
+    $app->group('/users', function(RouteCollectorProxy $users) {
+        $users->post('/create', CreateUserAction::class);
     });
+
+    $app->get('/dashboard', ViewDashboardAction::class);
 };

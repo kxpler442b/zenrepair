@@ -6,11 +6,30 @@ namespace App\Domain\Repository;
 
 use Doctrine\ORM\EntityRepository;
 use App\Domain\Entity\AuthTokenEntity;
+use App\Domain\Entity\UserEntity;
+use DateTime;
 
 class AuthTokenRepository extends EntityRepository
 {
-    public function findByHash(string $hash): ?AuthTokenEntity
+    public function new(UserEntity $user): AuthTokenEntity
     {
-        return $this->findOneBy(['hash', $hash]);
+        $dt = new DateTime('now');
+
+        $token = (new AuthTokenEntity())
+            ->setOwner($user)
+            ->setCreated($dt)
+            ->setUpdated($dt)
+            ->setExpires($dt);
+
+        return $token;
+    }
+
+    public function save(AuthTokenEntity $token): self
+    {
+        $this->_em->persist($token);
+
+        $this->_em->flush();
+
+        return $this;
     }
 }

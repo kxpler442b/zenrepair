@@ -9,7 +9,6 @@ use Doctrine\ORM\Mapping\Column;
 use Ramsey\Uuid\Doctrine\UuidGenerator;
 use Doctrine\ORM\Mapping\GeneratedValue;
 use Doctrine\ORM\Mapping\CustomIdGenerator;
-use Ramsey\Uuid\Rfc4122\UuidInterface;
 
 trait HasUuidTrait
 {
@@ -17,9 +16,9 @@ trait HasUuidTrait
     #[Column(type: 'uuid', unique: true)]
     #[GeneratedValue(strategy: 'CUSTOM')]
     #[CustomIdGenerator(UuidGenerator::class)]
-    private UuidInterface $id;
+    private string $id;
 
-    public function getId(): UuidInterface
+    public function getId(): string
     {
         return $this->id;
     }

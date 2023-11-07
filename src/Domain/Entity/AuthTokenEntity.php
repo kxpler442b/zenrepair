@@ -19,26 +19,11 @@ class AuthTokenEntity
 {
     use HasUuidTrait, HasCreatedUpdatedTrait;
 
-    #[Column(type: 'string', length: 64)]
-    private string $hash;
-
     #[ManyToOne(targetEntity: UserEntity::class, inversedBy: 'auth_tokens', cascade: ['PERSIST', 'MERGE', 'REMOVE'])]
     private UserEntity $owner;
 
     #[Column(type: 'datetime', updatable: false)]
     private DateTime $expires;
-
-    public function getHash(): string
-    {
-        return $this->hash;
-    }
-
-    public function setHash(string $hash): self
-    {
-        $this->hash = $hash;
-
-        return $this;
-    }
 
     public function getOwner(): UserEntity
     {

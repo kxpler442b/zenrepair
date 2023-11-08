@@ -942,10 +942,6 @@ select {
   grid-column-start: 1;
 }
 
-.col-end-4 {
-  grid-column-end: 4;
-}
-
 .col-end-5 {
   grid-column-end: 5;
 }

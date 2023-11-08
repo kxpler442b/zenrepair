@@ -4,7 +4,7 @@ declare(strict_types = 1);
 
 namespace App\Domain\Repository;
 
-use DateTime;
+use Carbon\Carbon;
 use App\Domain\Entity\UserEntity;
 use Doctrine\ORM\EntityRepository;
 use App\Domain\XferObject\UserCredentialsObject;
@@ -13,7 +13,7 @@ class UserRepository extends EntityRepository
 {
     public function new(UserCredentialsObject $credentials): UserEntity
     {
-        $dt = new DateTime('now');
+        $dt = new Carbon('now');
 
         $user = (new UserEntity())
             ->setUsername($credentials->username)

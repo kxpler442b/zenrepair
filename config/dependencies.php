@@ -99,6 +99,8 @@ return [
         $settings = $c->get(Settings::class);
 
         Type::addType('uuid', 'Ramsey\Uuid\Doctrine\UuidType');
+        Type::addType('carbon', 'Carbon\Doctrine\CarbonType');
+        Type::addType('carbon_immutable', 'Carbon\Doctrine\CarbonImmutableType');
 
         $orm_config = ORMSetup::createAttributeMetadataConfiguration(
             (array) $settings->get('doctrine.entity_dirs'),

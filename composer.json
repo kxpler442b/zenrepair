@@ -33,7 +33,8 @@
         "vlucas/valitron": "^1.4",
         "vlucas/phpdotenv": "^5.5",
         "twig/twig": "^3.7",
-        "monolog/monolog": "^3.5"
+        "monolog/monolog": "^3.5",
+        "nesbot/carbon": "^2.71"
     },
     "require-dev": {
         "phpunit/phpunit": "^10.4",

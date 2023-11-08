@@ -4,30 +4,29 @@ declare(strict_types = 1);
 
 namespace App\Domain\Trait;
 
+use Carbon\Carbon;
+use Doctrine\ORM\Mapping\Column;
+
 /**
  * Used to store the Created and Updated value for an entity.
  */
-
-use DateTime;
-use Doctrine\ORM\Mapping\Column;
-
 trait HasCreatedUpdatedTrait
 {
-    #[Column(type: 'datetime', updatable: false)]
-    private DateTime $created;
+    #[Column(type: 'carbon', updatable: false)]
+    private Carbon $created;
 
-    #[Column(type: 'datetime')]
-    private DateTime $updated;
+    #[Column(type: 'carbon')]
+    private Carbon $updated;
 
     // Retrieve the $created value.
-    public function getCreated(): DateTime
+    public function getCreated(): Carbon
     {
         return $this->created;
     }
 
     // Store a $created value.
     // NB: This can only be issued once per entity.
-    public function setCreated(DateTime $created): self
+    public function setCreated(Carbon $created): self
     {
         $this->created = $created;
 
@@ -35,13 +34,13 @@ trait HasCreatedUpdatedTrait
     }
 
     // Retrieve the $updated value.
-    public function getUpdated(): DateTime
+    public function getUpdated(): Carbon
     {
         return $this->updated;
     }
 
     // Store an $updated value.
-    public function setUpdated(DateTime $updated): self
+    public function setUpdated(Carbon $updated): self
     {
         $this->updated = $updated;
 

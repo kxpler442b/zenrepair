@@ -8,32 +8,43 @@ use Carbon\Carbon;
 use Psr\Log\LoggerInterface;
 use App\Domain\Enum\AuthEnum;
 use Doctrine\ORM\EntityManager;
+use RobThree\Auth\TwoFactorAuth;
 use App\Domain\Entity\UserEntity;
 use Odan\Session\SessionInterface;
 use App\Domain\Entity\AuthTokenEntity;
 use App\Domain\Repository\UserRepository;
 use App\Domain\Repository\AuthTokenRepository;
 use App\Domain\XferObject\UserCredentialsObject;
-use Doctrine\DBAL\Driver\Mysqli\Initializer\Secure;
+use BaconQrCode\Renderer\Image\ImagickImageBackEnd;
+use BaconQrCode\Renderer\Image\SvgImageBackEnd;
+use BaconQrCode\Renderer\ImageRenderer;
+use BaconQrCode\Renderer\RendererStyle\RendererStyle;
+use BaconQrCode\Writer;
 
 final class AuthenticatorService extends Service
 {
     private UserRepository $users;
     private AuthTokenRepository $tokens;
+    private TwoFactorAuth $twoFactorAuth;
     private SessionInterface $session;
+    private string $qrCodePath;
     private string $algorithm;
     private array $options;
 
     public function __construct(
         EntityManager $em,
         SessionInterface $session,
+        TwoFactorAuth $twoFactorAuth,
         LoggerInterface $logger,
+        string $qrCodePath,
         string $algorithm,
         array $options
     ) {
         $this->users = $em->getRepository(UserEntity::class);
         $this->tokens = $em->getRepository(AuthTokenEntity::class);
+        $this->twoFactorAuth = $twoFactorAuth;
         $this->session = $session;
+        $this->qrCodePath = $qrCodePath;
         $this->algorithm = $algorithm;
         $this->options = $options;
 
@@ -44,6 +55,7 @@ final class AuthenticatorService extends Service
      * Attempts to authorize a user with the provided credentials.
      *
      * @param UserCredentialsObject $credentials
+     * 
      * @return AuthEnum
      */
     public function login(UserCredentialsObject $credentials): AuthEnum
@@ -60,15 +72,53 @@ final class AuthenticatorService extends Service
             return AuthEnum::AUTH_FAILED;
         }
 
+        $this->session->set('zenrepair_user', base64_encode($user->getId()));
+
+        /** Redirects the user if TFA is required. */
+        if(!$user->getSecret) {
+            return AuthEnum::AUTH_TWOFACTOR;
+        }
+
+        $token = $this->tokens->create($user);
+
+        $this->session->set('zenrepair_session_auth', base64_encode($token->getId()));
+
+        return AuthEnum::AUTH_SUCCESS;
+    }
+
+    /**
+     * Authenticates the user using their MFA code.
+     *
+     * @param UserCredentialsObject $credentials
+     * @param string $code
+     * 
+     * @return AuthEnum
+     */
+    public function loginTfa(string $code): AuthEnum
+    {
+        $decodedData = $this->sessionDataDecoder([
+            'zenrepair_user' => $this->session->get('zenrepair_user')
+        ]);
+
+        $this->logger->debug('Attempting Two-Factor Authentication with code', [$code]);
+
+        $user = $this->users->findOneBy(['username' => $decodedData['zenrepair_user']]);
+
+        if(!$user || !$this->twoFactorAuth->verifyCode($user->getSecret(), $code)) {
+            $this->logger->debug('Two-Factor Authenticaton Failed.');
+
+            $this->clearSessionStorage();
+
+            return AuthEnum::AUTH_FAILED;
+        }
+
         $token = $this->tokens->create($user);
 
         $encodedData = $this->sessionDataEncoder([
             'zenrepair_session_auth' => $token->getId(),
-            'zenrepair_user' => $user->getId()
         ]);
 
         $this->session->set('zenrepair_session_auth', $encodedData['zenrepair_session_auth']);
-        $this->session->set('zenrepair_user', $encodedData['zenrepair_user']);
 
         return AuthEnum::AUTH_SUCCESS;
     }
@@ -128,6 +178,21 @@ final class AuthenticatorService extends Service
         $user = $this->users->new($credentials);
 
         $this->users->save($user);
+    }
+
+    public function addTfaSecret(string $userId): void
+    {
+        $user = $this->users->findOneBy(['id' => $userId]);
+
+        $renderer = new ImageRenderer(
+            new RendererStyle(400),
+            new SvgImageBackEnd()
+        );
+
+        $writer = new Writer($renderer);
+        $writer->writeFile('Hello World!', sprintf('%s/%s', $this->qrCodePath, $userId));
+
+        $this->users->addTfaSecret($user, $this->twoFactorAuth->createSecret());
     }
 
     /**

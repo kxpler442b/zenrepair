@@ -1,6 +1,10 @@
 # Environment Variable Files
 app.env
 
+# Permanent application storage
+!/app/qrcodes/.gitkeep
+/app/qrcodes/*
+
 # Temporary application storage
 !/var/cache/.gitkeep
 /var/cache/*

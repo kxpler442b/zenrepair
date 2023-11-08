@@ -4,11 +4,10 @@ declare(strict_types = 1);
 
 namespace App\Domain\Repository;
 
+use Carbon\Carbon;
+use App\Domain\Entity\UserEntity;
 use Doctrine\ORM\EntityRepository;
 use App\Domain\Entity\AuthTokenEntity;
-use App\Domain\Entity\UserEntity;
-use Carbon\Carbon;
-use DateTime;
 
 class AuthTokenRepository extends EntityRepository
 {

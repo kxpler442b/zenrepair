@@ -20,7 +20,7 @@ class AuthTokenEntity
 {
     use HasUuidTrait, HasCreatedUpdatedTrait;
 
-    #[ManyToOne(targetEntity: UserEntity::class, inversedBy: 'auth_tokens', cascade: ['PERSIST', 'MERGE', 'REMOVE'])]
+    #[ManyToOne(targetEntity: UserEntity::class, inversedBy: 'auth_tokens', cascade: ['PERSIST', 'MERGE'])]
     private UserEntity $owner;
 
     #[Column(type: 'carbon', updatable: false)]

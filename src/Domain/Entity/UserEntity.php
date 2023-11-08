@@ -26,6 +26,9 @@ class UserEntity
     #[Column(type: 'string')]
     private string $password;
 
+    #[Column(type: 'string', length: 80, nullable: true)]
+    private string $secret;
+
     #[Column(type: 'string', length: 320, nullable: true)]
     private string $email;
 
@@ -67,6 +70,18 @@ class UserEntity
     public function setPassword(string $password): self
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    public function getSecret(): string
+    {
+        return $this->secret;
+    }
+
+    public function setSecret(string $secret = null): self
+    {
+        $this->secret = $secret;
 
         return $this;
     }

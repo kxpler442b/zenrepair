@@ -34,4 +34,13 @@ class UserRepository extends EntityRepository
 
         $this->_em->flush();
     }
+
+    public function addTfaSecret(UserEntity $user, string $secret): self
+    {
+        $user->setSecret($secret);
+
+        $this->_em->flush();
+
+        return $this;
+    }
 }

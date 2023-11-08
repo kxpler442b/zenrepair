@@ -35,6 +35,7 @@ use Idmarinas\TracyPanel\Twig\TracyExtension;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\UploadedFileFactoryInterface;
 use Psr\Http\Message\ServerRequestFactoryInterface;
+use RobThree\Auth\TwoFactorAuth;
 
 return [
 
@@ -120,9 +121,22 @@ return [
         return new AuthenticatorService(
             $c->get(EntityManager::class),
             $c->get(SessionInterface::class),
+            $c->get(TwoFactorAuth::class),
             $c->get(LoggerInterface::class),
+            $settings->get('authenticator.tfa.qrCodePath'),
             $settings->get('authenticator.crypto.algo'),
             $settings->get('authenticator.crypto.options')
+        );
+    },
+
+    TwoFactorAuth::class => function(ContainerInterface $c) {
+        $settings = $c->get(Settings::class);
+
+        return new TwoFactorAuth(
+            $settings->get('authenticator.tfa.issuer'),
+            $settings->get('authenticator.tfa.digits'),
+            $settings->get('authenticator.tfa.period'),
+            $settings->get('authenticator.tfa.algo'),
         );
     },
 

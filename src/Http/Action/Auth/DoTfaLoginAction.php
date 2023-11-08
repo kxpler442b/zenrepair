@@ -12,7 +12,7 @@ use App\Domain\Service\AuthenticatorService;
 use Psr\Http\Message\ServerRequestInterface;
 use App\Domain\XferObject\UserCredentialsObject;
 
-final class DoLoginAction
+final class DoTfaLoginAction
 {
     private AuthenticatorService $authenticator;
     private RedirectRenderer $renderer;
@@ -32,22 +32,12 @@ final class DoLoginAction
     {
         $formData = $request->getParsedBody();
 
-        $credentials = new UserCredentialsObject(
-            $formData['username'],
-            $formData['password']
-        );
-
-        $result = $this->authenticator->login($credentials);
+        $result = $this->authenticator->loginTfa($formData['totp']);
 
         if($result == AuthEnum::AUTH_SUCCESS) {
             return $this->renderer->hxRedirect(
                 $response,
                 '/dashboard'
-            );
-        } elseif($result == AuthEnum::AUTH_TWOFACTOR) {
-            return $this->renderer->hxRedirect(
-                $response,
-                '/auth/twostep'
             );
         } elseif($result == AuthEnum::AUTH_FAILED) {
             return $this->renderer->hxRedirect(

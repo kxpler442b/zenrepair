@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace App\Domain\Service;
 
+use Carbon\Carbon;
 use Psr\Log\LoggerInterface;
 use App\Domain\Enum\AuthEnum;
 use Doctrine\ORM\EntityManager;
@@ -51,17 +52,23 @@ final class AuthenticatorService extends Service
 
         $user = $this->users->findOneBy(['username' => $credentials->username]);
 
+        $this->logger->debug('Attempting to authenticate a user.', [$user]);
+
         if($user == null || !password_verify($credentials->password, $user->getPassword())) {
+            $this->logger->debug('A user failed to authenticate.', [$user, $credentials->password, $user->getPassword]);
+
             return AuthEnum::AUTH_FAILED;
         }
 
-        $token = $this->tokens->new($user);
-        $this->tokens->save($token);
+        $token = $this->tokens->create($user);
 
-        $encodedData = $this->sessionDataEncoder($token->getId(), $user->getId());
+        $encodedData = $this->sessionDataEncoder([
+            'zenrepair_session_auth' => $token->getId(),
+            'zenrepair_user' => $user->getId()
+        ]);
 
-        $this->session->set('zenrepair_session_auth', $encodedData['encodedTokenId']);
-        $this->session->set('zenrepair_user', $encodedData['encodedUserId']);
+        $this->session->set('zenrepair_session_auth', $encodedData['zenrepair_session_auth']);
+        $this->session->set('zenrepair_user', $encodedData['zenrepair_user']);
 
         return AuthEnum::AUTH_SUCCESS;
     }
@@ -80,18 +87,37 @@ final class AuthenticatorService extends Service
         $encodedTokenId = $this->session->get('zenrepair_session_auth');
         $encodedUserId = $this->session->get('zenrepair_user');
 
-        $decodedData = $this->sessionDataDecoder($encodedTokenId, $encodedUserId);
+        $decodedData = $this->sessionDataDecoder([
+            'zenrepair_session_auth' => $encodedTokenId,
+            'zenrepair_user' => $encodedUserId
+        ]);
 
-        $token = $this->tokens->findOneBy(['id' => $decodedData['decodedTokenId']]);
-        $user = $this->users->findOneBy(['id' => $decodedData['decodedUserId']]);
+        $token = $this->tokens->findOneBy(['id' => $decodedData['zenrepair_session_auth']]);
+        $user = $this->users->findOneBy(['id' => $decodedData['zenrepair_user']]);
 
-        if($token == null || !$token->getOwner() == $user) {
+        if($token == null 
+            || $token->getExpires()->lessThanOrEqualTo(new Carbon('now')) 
+            || !$token->getOwner() == $user) {
+                
             $this->clearSessionStorage();
 
             return AuthEnum::AUTH_FAILED;
         }
 
         return AuthEnum::AUTH_SUCCESS;
+    }
+
+    public function logout(): void
+    {
+        $encodedTokenId = $this->session->get('zenrepair_session_auth');
+
+        $decodedData = $this->sessionDataDecoder([
+            'zenrepair_session_auth' => $encodedTokenId
+        ]);
+
+        $token = $this->tokens->findOneBy(['id' => $decodedData['zenrepair_session_auth']]);
+
+        $this->tokens->delete($token);
     }
 
     public function createUser(UserCredentialsObject $credentials): void
@@ -119,20 +145,26 @@ final class AuthenticatorService extends Service
         );
     }
 
-    public function sessionDataEncoder(string $tokenId, string $userId): array
+    public function sessionDataEncoder(array $data): array
     {
-        return [
-            'encodedTokenId' => base64_encode($tokenId),
-            'encodedUserId' => base64_encode($userId)
-        ];
+        $encodedData = [];
+
+        foreach($data as $key => $value) {
+            $encodedData[$key] = base64_encode($value);
+        }
+
+        return $encodedData;
     }
 
-    public function sessionDataDecoder(string $encodedTokenId, string $encodedUserId): array
+    public function sessionDataDecoder(array $data): array
     {
-        return [
-            'decodedTokenId' => base64_decode($encodedTokenId),
-            'decodedUserId' => base64_decode($encodedUserId)
-        ];
+        $decodedData = [];
+
+        foreach($data as $key => $value) {
+            $decodedData[$key] = base64_decode($value);
+        }
+
+        return $decodedData;
     }
 
      /**

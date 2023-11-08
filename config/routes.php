@@ -5,6 +5,8 @@ declare(strict_types = 1);
 use Slim\App;
 use Slim\Routing\RouteCollectorProxy;
 use App\Http\Action\Auth\DoLoginAction;
+use App\Http\Middleware\AuthMiddleware;
+use App\Http\Action\Auth\DoLogoutAction;
 use App\Http\Action\Auth\ViewLoginAction;
 use App\Http\Action\Auth\DoSignpostAction;
 use App\Http\Action\User\CreateUserAction;
@@ -16,7 +18,7 @@ return function(App $app)
 
     $app->group('/auth', function(RouteCollectorProxy $auth) {
         $auth->get('/login', ViewLoginAction::class);
-        $auth->get('/logout', [AuthController::class, 'doLogoutUser']);
+        $auth->get('/logout', DoLogoutAction::class);
 
         $auth->post('/login', DoLoginAction::class);
     });
@@ -25,5 +27,5 @@ return function(App $app)
         $users->post('/create', CreateUserAction::class);
     });
 
-    $app->get('/dashboard', ViewDashboardAction::class);
+    $app->get('/dashboard', ViewDashboardAction::class)->add(AuthMiddleware::class);
 };

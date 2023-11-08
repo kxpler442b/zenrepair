@@ -100,9 +100,9 @@ final class AuthenticatorService extends Service
             'zenrepair_user' => $this->session->get('zenrepair_user')
         ]);
 
-        $this->logger->debug('Attempting Two-Factor Authentication with code', [$code]);
+        $user = $this->users->findOneBy(['id' => $decodedData['zenrepair_user']]);
 
-        $user = $this->users->findOneBy(['username' => $decodedData['zenrepair_user']]);
+        $this->logger->debug('Attempting Two-Factor Authentication with code');
 
         if(!$user || !$this->twoFactorAuth->verifyCode($user->getSecret(), $code)) {
             $this->logger->debug('Two-Factor Authenticaton Failed.');

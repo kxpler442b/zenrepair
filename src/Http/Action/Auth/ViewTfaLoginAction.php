@@ -24,7 +24,9 @@ final class ViewTfaLoginAction
     }
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
-    {   
+    {
+        var_dump($this->session->get('zenrepair_user'));
+
         return $this->renderer->template(
             $response,
             '/auth/login_tfa.twig',

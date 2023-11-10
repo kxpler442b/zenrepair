@@ -5,13 +5,13 @@ declare(strict_types = 1);
 namespace App\Http\Middleware;
 
 use App\Domain\Enum\AuthEnum;
-use App\Domain\Service\AuthenticatorService;
 use App\Renderer\RedirectRenderer;
-use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Server\MiddlewareInterface;
+use App\Domain\Service\AuthenticatorService;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
+use Psr\Http\Message\ResponseFactoryInterface;
 
 class AuthMiddleware implements MiddlewareInterface
 {
@@ -29,7 +29,7 @@ class AuthMiddleware implements MiddlewareInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $requestHandler): ResponseInterface
     {
         if($this->authService->verify() == AuthEnum::AUTH_FAILED) {
-            return $this->responseFactory->createResponse(302)->withHeader('Location', '/auth/login');
+            return $this->responseFactory->createResponse(302)->withHeader('Location', '/login');
         }
 
         return $requestHandler->handle($request);

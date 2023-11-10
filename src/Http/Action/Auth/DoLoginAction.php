@@ -42,17 +42,17 @@ final class DoLoginAction
         if($result == AuthEnum::AUTH_SUCCESS) {
             return $this->renderer->hxRedirect(
                 $response,
-                '/dashboard'
+                '/web/dashboard'
             );
         } elseif($result == AuthEnum::AUTH_TWOFACTOR) {
             return $this->renderer->hxRedirect(
                 $response,
-                '/auth/twostep'
+                '/twostep'
             );
         } elseif($result == AuthEnum::AUTH_FAILED) {
             return $this->renderer->hxRedirect(
                 $response,
-                '/auth/login'
+                '/login'
             );
         }
     }

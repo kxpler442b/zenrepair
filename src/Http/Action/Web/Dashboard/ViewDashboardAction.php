@@ -2,19 +2,21 @@
 
 declare(strict_types = 1);
 
-namespace App\Http\Action\Dashboard;
+namespace App\Http\Action\Web\Dashboard;
 
+use Psr\Log\LoggerInterface;
 use App\Renderer\TwigRenderer;
+use App\Http\Action\Web\WebAction;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-final class ViewDashboardAction
+final class ViewDashboardAction extends WebAction
 {
-    private TwigRenderer $renderer;
-
-    public function __construct(TwigRenderer $renderer)
-    {
-        $this->renderer = $renderer;
+    public function __construct(
+        TwigRenderer $renderer,
+        LoggerInterface $logger
+    ) {
+        parent::__construct($renderer, $logger);
     }
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface

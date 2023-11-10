@@ -9,11 +9,27 @@ module.exports = {
         sans: ["Satoshi-Variable", ...defaultTheme.fontFamily.sans],
       },
       gridTemplateRows: {
-        'md': '48px repeat(7, minmax(0, 1fr))'
+        'md': '48px'
       },
       gridTemplateColumns: {
         'md': 'repeat(12, minmax(0, 1fr))',
         'xl': 'repeat(16, minmax(0, 1fr))'
+      },
+      gridColumns: {
+        'span-16': 'span 16 / span 16',
+        'span-17': 'span 17 / span 17',
+      },
+      gridColumnEnd: {
+        '8': '8',
+        '9': '9',
+        '10': '10',
+        '11': '11',
+        '12': '12',
+        '13': '13',
+        '14': '14',
+        '15': '15',
+        '16': '16',
+        '17': '17',
       }
     },
   },

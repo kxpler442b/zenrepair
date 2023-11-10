@@ -26,7 +26,7 @@ final class DoLogoutAction
 
         return $this->renderer->redirect(
             $response,
-            '/auth/login'
+            '/login'
         );
     }
 }

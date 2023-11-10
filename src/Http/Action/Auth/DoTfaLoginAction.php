@@ -37,12 +37,12 @@ final class DoTfaLoginAction
         if($result == AuthEnum::AUTH_SUCCESS) {
             return $this->renderer->hxRedirect(
                 $response,
-                '/dashboard'
+                '/web/dashboard'
             );
         } elseif($result == AuthEnum::AUTH_FAILED) {
             return $this->renderer->hxRedirect(
                 $response,
-                '/auth/login'
+                '/login'
             );
         }
     }

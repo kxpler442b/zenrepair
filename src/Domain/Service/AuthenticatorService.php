@@ -5,6 +5,7 @@ declare(strict_types = 1);
 namespace App\Domain\Service;
 
 use Carbon\Carbon;
+use BaconQrCode\Writer;
 use Psr\Log\LoggerInterface;
 use App\Domain\Enum\AuthEnum;
 use Doctrine\ORM\EntityManager;
@@ -12,21 +13,20 @@ use RobThree\Auth\TwoFactorAuth;
 use App\Domain\Entity\UserEntity;
 use Odan\Session\SessionInterface;
 use App\Domain\Entity\AuthTokenEntity;
+use BaconQrCode\Renderer\ImageRenderer;
 use App\Domain\Repository\UserRepository;
 use App\Domain\Repository\AuthTokenRepository;
-use App\Domain\XferObject\UserCredentialsObject;
-use BaconQrCode\Renderer\Image\ImagickImageBackEnd;
 use BaconQrCode\Renderer\Image\SvgImageBackEnd;
-use BaconQrCode\Renderer\ImageRenderer;
+use App\Domain\XferObject\UserCredentialsObject;
 use BaconQrCode\Renderer\RendererStyle\RendererStyle;
-use BaconQrCode\Writer;
 
-final class AuthenticatorService extends Service
+final class AuthenticatorService
 {
     private UserRepository $users;
     private AuthTokenRepository $tokens;
     private TwoFactorAuth $twoFactorAuth;
     private SessionInterface $session;
+    private LoggerInterface $logger;
     private string $qrCodePath;
     private string $algorithm;
     private array $options;
@@ -44,11 +44,10 @@ final class AuthenticatorService extends Service
         $this->tokens = $em->getRepository(AuthTokenEntity::class);
         $this->twoFactorAuth = $twoFactorAuth;
         $this->session = $session;
+        $this->logger = $logger;
         $this->qrCodePath = $qrCodePath;
         $this->algorithm = $algorithm;
         $this->options = $options;
-
-        parent::__construct($logger);
     }
 
     /**
@@ -75,7 +74,7 @@ final class AuthenticatorService extends Service
         $this->session->set('zenrepair_user', base64_encode($user->getId()));
 
         /** Redirects the user if TFA is required. */
-        if(!$user->getSecret) {
+        if($user->getSecret) {
             return AuthEnum::AUTH_TWOFACTOR;
         }
 

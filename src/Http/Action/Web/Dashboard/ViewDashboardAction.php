@@ -23,7 +23,7 @@ final class ViewDashboardAction extends WebAction
     {
         return $this->renderer->template(
             $response,
-            '/dashboard/dashboard.twig',
+            '/pages/dashboard.twig',
             []
         );
     }

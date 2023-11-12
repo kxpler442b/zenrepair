@@ -9,11 +9,11 @@ module.exports = {
         sans: ["Satoshi-Variable", ...defaultTheme.fontFamily.sans],
       },
       gridTemplateRows: {
-        'md': '48px'
+        'custom-1': '48px'
       },
       gridTemplateColumns: {
-        'md': 'repeat(12, minmax(0, 1fr))',
-        'xl': 'repeat(16, minmax(0, 1fr))'
+        'xl': 'repeat(12, minmax(0, 1fr))',
+        '2xl': 'repeat(16, minmax(0, 1fr))'
       },
       gridColumns: {
         'span-16': 'span 16 / span 16',
@@ -37,4 +37,3 @@ module.exports = {
     require('@tailwindcss/forms')
   ],
 }
-

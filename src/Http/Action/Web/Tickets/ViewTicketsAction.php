@@ -23,7 +23,7 @@ final class ViewTicketsAction extends WebAction
     {
         return $this->renderer->template(
             $response,
-            '/tickets/tickets.twig',
+            '/pages/tickets/tickets_table.twig',
             []
         );
     }

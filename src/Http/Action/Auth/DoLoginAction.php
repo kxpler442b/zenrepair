@@ -33,8 +33,8 @@ final class DoLoginAction
         $formData = $request->getParsedBody();
 
         $credentials = new UserCredentialsObject(
-            $formData['username'],
-            $formData['password']
+            $formData['auth_form_username'],
+            $formData['auth_form_password']
         );
 
         $result = $this->authenticator->login($credentials);

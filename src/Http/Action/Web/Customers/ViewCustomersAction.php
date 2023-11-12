@@ -2,26 +2,28 @@
 
 declare(strict_types = 1);
 
-namespace App\Http\Action\Auth;
+namespace App\Http\Action\Web\Customers;
 
+use Psr\Log\LoggerInterface;
 use App\Renderer\TwigRenderer;
+use App\Http\Action\Web\WebAction;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-final class ViewLoginAction
+final class ViewCustomersAction extends WebAction
 {
-    private TwigRenderer $renderer;
-
-    public function __construct(TwigRenderer $renderer)
-    {
-        $this->renderer = $renderer;
+    public function __construct(
+        TwigRenderer $renderer,
+        LoggerInterface $logger
+    ) {
+        parent::__construct($renderer, $logger);
     }
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
         return $this->renderer->template(
             $response,
-            '/pages/auth/auth_password.twig',
+            '/pages/customers/customers_table.twig',
             []
         );
     }

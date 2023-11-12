@@ -12,7 +12,9 @@ use App\Http\Action\Auth\DoSignpostAction;
 use App\Http\Action\Auth\DoTfaLoginAction;
 use App\Http\Action\Auth\ViewTfaLoginAction;
 use App\Http\Action\Api\User\CreateUserAction;
+use App\Http\Action\Web\Devices\ViewDevicesAction;
 use App\Http\Action\Web\Tickets\ViewTicketsAction;
+use App\Http\Action\Web\Customers\ViewCustomersAction;
 use App\Http\Action\Web\Dashboard\ViewDashboardAction;
 
 /**
@@ -55,6 +57,12 @@ return function(App $app)
         // Tickets
         $web->get('/tickets', ViewTicketsAction::class);
         $web->get('/ticket/{id}', ViewTicketAction::class);
+
+        // Customers
+        $web->get('/customers', ViewCustomersAction::class);
+
+        // Devices
+        $web->get('/devices', ViewDevicesAction::class);
 
     })->add(AuthMiddleware::class); // Protected group.
 };

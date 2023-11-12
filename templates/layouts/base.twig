@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta author="Benjamin Moss">
+
+    <!-- Tailwind CSS Output -->
+    <link rel="stylesheet" type="text/css" href="/css/output.css">
+
+    <title>{{ page.title }}</title>
+</head>
+<body
+    class="grid grid-rows-custom-1 grid-cols-xl 2xl:grid-cols-2xl
+        min-h-screen
+        bg-stone-900">
+
+    {% block navbar %}{% endblock %}
+
+    {% block content %}{% endblock %}
+
+    <!-- HTMX (Via CDN) -->
+    <script src="https://unpkg.com/htmx.org@1.9.8" integrity="sha384-rgjA7mptc2ETQqXoYC3/zJvkU7K/aP44Y+z7xQuJiVnB/422P/Ak+F/AqFR7E4Wr" crossorigin="anonymous"></script>
+
+    <!-- HyperScript (Via CDN) -->
+    <script src="https://unpkg.com/hyperscript.org@0.9.12"></script>
+
+</body>
+</html>

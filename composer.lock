@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "83d75a29377c7b0e7fd63405ebbfd3ab",
+    "content-hash": "05324c892deb31f44713d7cfc58c00e4",
     "packages": [
         {
             "name": "bacon/bacon-qr-code",
@@ -4751,66 +4751,6 @@
     ],
     "packages-dev": [
         {
-            "name": "idmarinas/tracy-twig-bar",
-            "version": "0.3.1",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/idmarinas/tracy-twig-bar.git",
-                "reference": "171f8b8756b2ee01610ed9e4334f7292eea7ace1"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/idmarinas/tracy-twig-bar/zipball/171f8b8756b2ee01610ed9e4334f7292eea7ace1",
-                "reference": "171f8b8756b2ee01610ed9e4334f7292eea7ace1",
-                "shasum": ""
-            },
-            "require": {
-                "php": "^7.2 | ^8.0 | ^8.1",
-                "tracy/tracy": "^2.7",
-                "twig/twig": "^2.0 || ^3.0"
-            },
-            "require-dev": {
-                "rector/rector": "^0.12.5"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Idmarinas\\TracyPanel\\": "src/"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "IDMarinas",
-                    "email": "35842929+idmarinas@users.noreply.github.com",
-                    "homepage": "https://github.com/idmarinas/lotgd-game",
-                    "role": "Developer, Maintainer"
-                }
-            ],
-            "description": "A Tracy panel for Twig Template Engine",
-            "keywords": [
-                "bar",
-                "debugger",
-                "panel",
-                "tracy",
-                "twig"
-            ],
-            "support": {
-                "issues": "https://github.com/idmarinas/tracy-twig-bar/issues",
-                "source": "https://github.com/idmarinas/tracy-twig-bar/tree/0.3.1"
-            },
-            "funding": [
-                {
-                    "url": "https://liberapay.com/idmarinas",
-                    "type": "liberapay"
-                }
-            ],
-            "time": "2022-01-18T08:29:23+00:00"
-        },
-        {
             "name": "myclabs/deep-copy",
             "version": "1.11.1",
             "source": {
@@ -6472,81 +6412,6 @@
                 }
             ],
             "time": "2021-07-28T10:34:58+00:00"
-        },
-        {
-            "name": "tracy/tracy",
-            "version": "v2.10.5",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/nette/tracy.git",
-                "reference": "86bdba4aa0f707d3f125933931d3df6e5c7aad79"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/nette/tracy/zipball/86bdba4aa0f707d3f125933931d3df6e5c7aad79",
-                "reference": "86bdba4aa0f707d3f125933931d3df6e5c7aad79",
-                "shasum": ""
-            },
-            "require": {
-                "ext-json": "*",
-                "ext-session": "*",
-                "php": ">=8.0 <8.4"
-            },
-            "conflict": {
-                "nette/di": "<3.0"
-            },
-            "require-dev": {
-                "latte/latte": "^2.5",
-                "nette/di": "^3.0",
-                "nette/http": "^3.0",
-                "nette/mail": "^3.0",
-                "nette/tester": "^2.2",
-                "nette/utils": "^3.0",
-                "phpstan/phpstan": "^1.0",
-                "psr/log": "^1.0 || ^2.0 || ^3.0"
-            },
-            "type": "library",
-            "extra": {
-                "branch-alias": {
-                    "dev-master": "2.10-dev"
-                }
-            },
-            "autoload": {
-                "files": [
-                    "src/Tracy/functions.php"
-                ],
-                "classmap": [
-                    "src"
-                ]
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "BSD-3-Clause"
-            ],
-            "authors": [
-                {
-                    "name": "David Grudl",
-                    "homepage": "https://davidgrudl.com"
-                },
-                {
-                    "name": "Nette Community",
-                    "homepage": "https://nette.org/contributors"
-                }
-            ],
-            "description": "😎  Tracy: the addictive tool to ease debugging PHP code for cool developers. Friendly design, logging, profiler, advanced features like debugging AJAX calls or CLI support. You will love it.",
-            "homepage": "https://tracy.nette.org",
-            "keywords": [
-                "Xdebug",
-                "debug",
-                "debugger",
-                "nette",
-                "profiler"
-            ],
-            "support": {
-                "issues": "https://github.com/nette/tracy/issues",
-                "source": "https://github.com/nette/tracy/tree/v2.10.5"
-            },
-            "time": "2023-10-16T21:54:18+00:00"
         }
     ],
     "aliases": [],

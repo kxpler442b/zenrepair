@@ -4,13 +4,13 @@ declare(strict_types = 1);
 
 namespace App\Http\Action\Api\User;
 
+use Psr\Log\LoggerInterface;
 use App\Renderer\JsonRenderer;
 use App\Http\Action\Api\ApiAction;
 use Psr\Http\Message\ResponseInterface;
 use App\Domain\Service\AuthenticatorService;
 use Psr\Http\Message\ServerRequestInterface;
 use App\Domain\XferObject\UserCredentialsObject;
-use Psr\Log\LoggerInterface;
 
 final class CreateUserAction extends ApiAction
 {

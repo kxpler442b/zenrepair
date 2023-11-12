@@ -9,7 +9,7 @@
 
     <title>{{ document.name }}</title>
 </head>
-<body class="min-h-screen grid grid-rows-md grid-cols-md bg-stone-100">
+<body class="min-h-screen grid grid-rows-md grid-cols-xl bg-stone-900">
 
 <div
     class="sticky top-0 left-0 row-start-1 row-span-1 col-start-1 col-span-full z-50 
@@ -17,14 +17,9 @@
         border-b border-stone-700 bg-stone-900">
 
     <div
-        class="flex flex-row justify-center items-center space-x-3 h-fit px-6">
+        class="flex flex-row justify-center items-center space-x-3 h-fit px-12">
 
-        <img
-            class="h-8"
-            src="/assets/images/logo_dark.svg"
-            alt="">
-
-        <h1 class="font-bold text-white">zenRepair</h1>
+        <h1 class="font-semibold text-sm text-white">zenRepair</h1>
 
     </div>
 
@@ -34,8 +29,7 @@
 
 <div 
     class="row-start-2 row-span-full col-start-1 col-end-5
-        flex flex-col justify-start align-middle items-center
-        border-r border-stone-300 shadow-sm">
+        flex flex-col justify-start align-middle items-center px-12">
 
     {% block content_area %} {% endblock %}
     

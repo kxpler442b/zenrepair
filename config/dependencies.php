@@ -6,24 +6,20 @@ use Slim\App;
 use Monolog\Logger;
 use Slim\Views\Twig;
 use Doctrine\ORM\ORMSetup;
-use Twig\Profiler\Profile;
 use Odan\Session\PhpSession;
 use Psr\Log\LoggerInterface;
 use Slim\Factory\AppFactory;
 use Doctrine\DBAL\Types\Type;
 use Doctrine\ORM\EntityManager;
 use Doctrine\DBAL\DriverManager;
-use Idmarinas\TracyPanel\TwigBar;
+use RobThree\Auth\TwoFactorAuth;
 use App\Support\Settings\Settings;
 use Odan\Session\SessionInterface;
-use App\Domain\Service\UserService;
-use App\Authenticator\Authenticator;
 use App\Handler\DefaultErrorHandler;
 use Monolog\Formatter\LineFormatter;
 use Slim\Middleware\ErrorMiddleware;
 use Nyholm\Psr7\Factory\Psr17Factory;
 use Psr\Container\ContainerInterface;
-use Twig\Extension\ProfilerExtension;
 use Monolog\Handler\RotatingFileHandler;
 use Odan\Session\SessionManagerInterface;
 use Psr\Http\Message\UriFactoryInterface;
@@ -31,11 +27,9 @@ use Slim\Interfaces\RouteParserInterface;
 use Selective\BasePath\BasePathMiddleware;
 use App\Domain\Service\AuthenticatorService;
 use Psr\Http\Message\StreamFactoryInterface;
-use Idmarinas\TracyPanel\Twig\TracyExtension;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\UploadedFileFactoryInterface;
 use Psr\Http\Message\ServerRequestFactoryInterface;
-use RobThree\Auth\TwoFactorAuth;
 
 return [
 
@@ -149,15 +143,6 @@ return [
             'cache' => $settings->get('twig.cache_dir'),
             'auto_reload' => $settings->get('twig.auto_reload')
         ]);
-
-        if($settings->get('twig.debug')) {
-            $profile = new Profile();
-            $twig->getEnvironment()->addExtension(new ProfilerExtension($profile));
-
-            $twig->getEnvironment()->addExtension(new TracyExtension());
-
-            TwigBar::init($profile);
-        }
 
         return $twig;
 

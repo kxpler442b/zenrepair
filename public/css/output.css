@@ -966,6 +966,11 @@ select {
   grid-row-start: 2;
 }
 
+.my-3 {
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
 .ml-3 {
   margin-left: 0.75rem;
 }
@@ -988,10 +993,6 @@ select {
 
 .h-12 {
   height: 3rem;
-}
-
-.h-6 {
-  height: 1.5rem;
 }
 
 .h-72 {
@@ -1038,10 +1039,6 @@ select {
 
 .flex-grow {
   flex-grow: 1;
-}
-
-.grid-cols-md {
-  grid-template-columns: repeat(12, minmax(0, 1fr));
 }
 
 .grid-cols-xl {
@@ -1104,12 +1101,19 @@ select {
   margin-bottom: calc(0.75rem * var(--tw-space-y-reverse));
 }
 
+.space-y-6 > :not([hidden]) ~ :not([hidden]) {
+  --tw-space-y-reverse: 0;
+  margin-top: calc(1.5rem * calc(1 - var(--tw-space-y-reverse)));
+  margin-bottom: calc(1.5rem * var(--tw-space-y-reverse));
+}
+
 .rounded-full {
   border-radius: 9999px;
 }
 
-.border {
-  border-width: 1px;
+.border-y {
+  border-top-width: 1px;
+  border-bottom-width: 1px;
 }
 
 .border-b {
@@ -1120,11 +1124,6 @@ select {
   border-right-width: 1px;
 }
 
-.border-red-500 {
-  --tw-border-opacity: 1;
-  border-color: rgb(239 68 68 / var(--tw-border-opacity));
-}
-
 .border-stone-300 {
   --tw-border-opacity: 1;
   border-color: rgb(214 211 209 / var(--tw-border-opacity));
@@ -1133,6 +1132,15 @@ select {
 .border-stone-700 {
   --tw-border-opacity: 1;
   border-color: rgb(68 64 60 / var(--tw-border-opacity));
+}
+
+.border-x-transparent {
+  border-left-color: transparent;
+  border-right-color: transparent;
+}
+
+.border-t-transparent {
+  border-top-color: transparent;
 }
 
 .bg-blue-600 {
@@ -1148,6 +1156,11 @@ select {
 .bg-stone-500 {
   --tw-bg-opacity: 1;
   background-color: rgb(120 113 108 / var(--tw-bg-opacity));
+}
+
+.bg-stone-700 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(68 64 60 / var(--tw-bg-opacity));
 }
 
 .bg-stone-900 {
@@ -1170,6 +1183,11 @@ select {
 
 .p-3 {
   padding: 0.75rem;
+}
+
+.px-12 {
+  padding-left: 3rem;
+  padding-right: 3rem;
 }
 
 .px-3 {
@@ -1195,6 +1213,14 @@ select {
 .py-6 {
   padding-top: 1.5rem;
   padding-bottom: 1.5rem;
+}
+
+.pb-12 {
+  padding-bottom: 3rem;
+}
+
+.pt-6 {
+  padding-top: 1.5rem;
 }
 
 .align-middle {
@@ -1229,9 +1255,23 @@ select {
   font-weight: 500;
 }
 
+.font-semibold {
+  font-weight: 600;
+}
+
+.text-blue-500 {
+  --tw-text-opacity: 1;
+  color: rgb(59 130 246 / var(--tw-text-opacity));
+}
+
 .text-stone-100 {
   --tw-text-opacity: 1;
   color: rgb(245 245 244 / var(--tw-text-opacity));
+}
+
+.text-stone-300 {
+  --tw-text-opacity: 1;
+  color: rgb(214 211 209 / var(--tw-text-opacity));
 }
 
 .text-stone-700 {
@@ -1251,12 +1291,6 @@ select {
 
 .underline {
   text-decoration-line: underline;
-}
-
-.shadow-sm {
-  --tw-shadow: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --tw-shadow-colored: 0 1px 2px 0 var(--tw-shadow-color);
-  box-shadow: var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--tw-shadow);
 }
 
 @tailwindcss/forms;

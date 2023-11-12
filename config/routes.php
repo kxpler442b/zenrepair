@@ -39,10 +39,10 @@ return function(App $app)
     $app->group('/api', function(RouteCollectorProxy $api) {
 
         // Users
-        $api->get('/users/{id}', GetUserAction::class);
+        $api->get('/users/get/{id}', GetUserAction::class);
         $api->post('/users/create', CreateUserAction::class);
 
-    })->add(AuthMiddleware::class); // Protected group.
+    })->add(AuthMiddleware::class);
 
     /**
      * Frontend related routes.

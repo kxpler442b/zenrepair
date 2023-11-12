@@ -1,6 +1,10 @@
 # Environment Variable Files
 app.env
 
+# Docker container files
+!/resources/docker/.gitkeep
+/resources/docker/*.env
+
 # Permanent application storage
 !/app/qrcodes/.gitkeep
 /app/qrcodes/*
@@ -10,6 +14,10 @@ app.env
 /var/cache/*
 !/var/log/.gitkeep
 /var/log*
+
+# Doctrine migrations and seeds
+!/resources/migrations/.gitkeep
+!/resources/seeds/.gitkeep
 
 # Managed by Composer
 /vendor/

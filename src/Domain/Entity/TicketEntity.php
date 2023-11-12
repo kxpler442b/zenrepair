@@ -8,9 +8,10 @@ use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use App\Domain\Trait\HasUuidTrait;
+use App\Domain\Repository\TicketRepository;
 use App\Domain\Trait\HasCreatedUpdatedTrait;
 
-#[Entity()]
+#[Entity(repositoryClass: TicketRepository::class)]
 #[Table(name: 'tickets')]
 class TicketEntity
 {

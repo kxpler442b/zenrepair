@@ -167,16 +167,6 @@ final class AuthenticatorService
         $this->tokens->delete($token);
     }
 
-    public function createUser(UserCredentialsObject $credentials): void
-    {
-        $hashedPassword = $this->cryptoService->createPasswordHash($credentials->password);
-        $credentials->password = $hashedPassword;
-
-        $user = $this->users->new($credentials);
-
-        $this->users->save($user);
-    }
-
     public function addTfaSecret(string $userId): void
     {
         $user = $this->users->findOneBy(['id' => $userId]);

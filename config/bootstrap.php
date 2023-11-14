@@ -8,7 +8,7 @@ use App\Support\Settings\Settings;
 
 require_once __DIR__ . '/../vendor/autoload.php';
 
-if($_ENV['APP_ENV'] == 'dev') {
+if($_ENV['APP_ENV'] != 'docker' || $_ENV['APP_ENV'] != 'docker_dev') {
     Dotenv::createImmutable([__DIR__ . '/../'], ['app.env'])->load();
 }
 

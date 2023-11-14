@@ -11,7 +11,7 @@ use App\Domain\XferObject\UserCredentialsObject;
 
 class UserRepository extends EntityRepository
 {
-    public function new(UserCredentialsObject $credentials): UserEntity
+    public function newUser(UserCredentialsObject $credentials): UserEntity
     {
         $dt = new Carbon('now');
 
@@ -28,10 +28,9 @@ class UserRepository extends EntityRepository
         return $user;
     }
 
-    public function save(UserEntity $user): void
+    public function persitNewUser(UserEntity $user): void
     {
         $this->_em->persist($user);
-
         $this->_em->flush();
     }
 

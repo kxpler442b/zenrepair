@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use App\Domain\Trait\HasUuidTrait;
+use App\Domain\Entity\TicketEntity;
 use Doctrine\ORM\Mapping\OneToMany;
 use App\Domain\Repository\UserRepository;
 use Doctrine\Common\Collections\Collection;
@@ -38,6 +39,9 @@ class UserEntity
     #[Column(type: 'string', nullable: true)]
     private string $family_name;
 
+    #[OneToMany(targetEntity: TicketEntity::class, mappedBy: 'author', cascade: ['PERSIST'], orphanRemoval: false)]
+    private Collection $tickets;
+
     #[OneToMany(targetEntity: CustomerEntity::class, mappedBy: 'created_by', orphanRemoval: false)]
     private Collection $customers;
 
@@ -46,6 +50,7 @@ class UserEntity
 
     public function __construct()
     {
+        $this->tickets = new ArrayCollection();
         $this->customers = new ArrayCollection();
         $this->auth_tokens = new ArrayCollection();
     }

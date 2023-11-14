@@ -3,6 +3,7 @@
 declare(strict_types = 1);
 
 use Slim\App;
+use Slim\Middleware\ErrorMiddleware;
 use Selective\BasePath\BasePathMiddleware;
 use Odan\Session\Middleware\SessionStartMiddleware;
 
@@ -12,4 +13,5 @@ return function(App $app)
     $app->addRoutingMiddleware();
     $app->add(SessionStartMiddleware::class);
     $app->add(BasePathMiddleware::class);
+    $app->add(ErrorMiddleware::class);
 };

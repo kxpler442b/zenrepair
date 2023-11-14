@@ -16,6 +16,7 @@ use App\Http\Action\Web\Devices\ViewDevicesAction;
 use App\Http\Action\Web\Tickets\ViewTicketsAction;
 use App\Http\Action\Web\Customers\ViewCustomersAction;
 use App\Http\Action\Web\Dashboard\ViewDashboardAction;
+use App\Http\Action\Web\Settings\ViewUserSettingsAction;
 
 /**
  * Route strategy defenitions.
@@ -63,6 +64,9 @@ return function(App $app)
 
         // Devices
         $web->get('/devices', ViewDevicesAction::class);
+
+        // Settings
+        $web->get('/settings/user', ViewUserSettingsAction::class);
 
     })->add(AuthMiddleware::class); // Protected group.
 };

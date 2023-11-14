@@ -1,0 +1,25 @@
+{% extends "/layouts/base.twig" %}
+
+{% block navbar %}
+    {% include "/components/navbar.twig" %}
+{% endblock %}
+
+{% block sidebar %}
+    {% include "/pages/settings/components/settings_sidebar.twig" %}
+{% endblock %}
+
+{% block content %}
+<div
+    class="row-start-2 col-start-5 col-end-17
+    flex flex-col justify-start align-middle items-center">
+
+    <div
+        class="flex flex-row justify-start items-center space-x-3 w-full p-6 pt-12
+            border-b border-stone-700 bg-stone-900">
+
+        <h1 class="font-bold text-3xl text-white">Settings</h1>
+    
+    </div>
+
+</div>
+{% endblock %}

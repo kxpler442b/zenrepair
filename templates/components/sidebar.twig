@@ -1,0 +1,10 @@
+{% block sidebar %}
+<nav
+    class="row-start-2 col-start-1 col-end-3 2xl:col-end-4
+        flex flex-col justify-start align-middle items-center space-y-3
+        border-r border-stone-700">
+
+    {% block sidebar_content %}{% endblock %}
+
+</nav>
+{% endblock %}

@@ -8,6 +8,7 @@ use Doctrine\ORM\Mapping\Table;
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\ORM\Mapping\Entity;
 use App\Domain\Trait\HasUuidTrait;
+use Doctrine\ORM\Mapping\ManyToOne;
 use App\Domain\Repository\TicketRepository;
 use App\Domain\Trait\HasCreatedUpdatedTrait;
 
@@ -22,6 +23,9 @@ class TicketEntity
 
     #[Column(type: 'integer')]
     private int $status;
+
+    #[ManyToOne(targetEntity: UserEntity::class, inversedBy: 'tickets', cascade: ['PERSIST'])]
+    private UserEntity $author;
 
     public function getTitle(): string
     {

@@ -25,6 +25,7 @@ use Odan\Session\SessionManagerInterface;
 use Psr\Http\Message\UriFactoryInterface;
 use Slim\Interfaces\RouteParserInterface;
 use Selective\BasePath\BasePathMiddleware;
+use App\Domain\Service\CryptographyService;
 use App\Domain\Service\AuthenticatorService;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
@@ -113,6 +114,7 @@ return [
         $settings = $c->get(Settings::class);
 
         return new AuthenticatorService(
+            $c->get(CryptographyService::class),
             $c->get(EntityManager::class),
             $c->get(SessionInterface::class),
             $c->get(TwoFactorAuth::class),
@@ -120,6 +122,15 @@ return [
             $settings->get('authenticator.tfa.qrCodePath'),
             $settings->get('authenticator.crypto.algo'),
             $settings->get('authenticator.crypto.options')
+        );
+    },
+
+    CryptographyService::class => function(ContainerInterface $c) {
+        $s = $c->get(Settings::class);
+
+        return new CryptographyService(
+            $s->get('authenticator.crypto.algo'),
+            $s->get('authenticator.crypto.options')
         );
     },
 

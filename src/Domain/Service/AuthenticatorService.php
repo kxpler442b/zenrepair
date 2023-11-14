@@ -15,6 +15,7 @@ use Odan\Session\SessionInterface;
 use App\Domain\Entity\AuthTokenEntity;
 use BaconQrCode\Renderer\ImageRenderer;
 use App\Domain\Repository\UserRepository;
+use App\Domain\Service\CryptographyService;
 use App\Domain\Repository\AuthTokenRepository;
 use BaconQrCode\Renderer\Image\SvgImageBackEnd;
 use App\Domain\XferObject\UserCredentialsObject;
@@ -24,30 +25,27 @@ final class AuthenticatorService
 {
     private UserRepository $users;
     private AuthTokenRepository $tokens;
+    private CryptographyService $cryptoService;
     private TwoFactorAuth $twoFactorAuth;
     private SessionInterface $session;
     private LoggerInterface $logger;
     private string $qrCodePath;
-    private string $algorithm;
-    private array $options;
 
     public function __construct(
+        CryptographyService $cryptoService,
         EntityManager $em,
         SessionInterface $session,
         TwoFactorAuth $twoFactorAuth,
         LoggerInterface $logger,
-        string $qrCodePath,
-        string $algorithm,
-        array $options
+        string $qrCodePath
     ) {
         $this->users = $em->getRepository(UserEntity::class);
         $this->tokens = $em->getRepository(AuthTokenEntity::class);
+        $this->cryptoService = $cryptoService;
         $this->twoFactorAuth = $twoFactorAuth;
         $this->session = $session;
         $this->logger = $logger;
         $this->qrCodePath = $qrCodePath;
-        $this->algorithm = $algorithm;
-        $this->options = $options;
     }
 
     /**
@@ -95,7 +93,7 @@ final class AuthenticatorService
      */
     public function loginTfa(string $code): AuthEnum
     {
-        $decodedData = $this->sessionDataDecoder([
+        $decodedData = $this->cryptoService->sessionDataDecoder([
             'zenrepair_user' => $this->session->get('zenrepair_user')
         ]);
 
@@ -113,7 +111,7 @@ final class AuthenticatorService
 
         $token = $this->tokens->create($user);
 
-        $encodedData = $this->sessionDataEncoder([
+        $encodedData = $this->cryptoService->sessionDataEncoder([
             'zenrepair_session_auth' => $token->getId(),
         ]);
 
@@ -136,7 +134,7 @@ final class AuthenticatorService
         $encodedTokenId = $this->session->get('zenrepair_session_auth');
         $encodedUserId = $this->session->get('zenrepair_user');
 
-        $decodedData = $this->sessionDataDecoder([
+        $decodedData = $this->cryptoService->sessionDataDecoder([
             'zenrepair_session_auth' => $encodedTokenId,
             'zenrepair_user' => $encodedUserId
         ]);
@@ -160,7 +158,7 @@ final class AuthenticatorService
     {
         $encodedTokenId = $this->session->get('zenrepair_session_auth');
 
-        $decodedData = $this->sessionDataDecoder([
+        $decodedData = $this->cryptoService->sessionDataDecoder([
             'zenrepair_session_auth' => $encodedTokenId
         ]);
 
@@ -171,7 +169,7 @@ final class AuthenticatorService
 
     public function createUser(UserCredentialsObject $credentials): void
     {
-        $hashedPassword = $this->createPasswordHash($credentials->password);
+        $hashedPassword = $this->cryptoService->createPasswordHash($credentials->password);
         $credentials->password = $hashedPassword;
 
         $user = $this->users->new($credentials);
@@ -192,43 +190,6 @@ final class AuthenticatorService
         $writer->writeFile('Hello World!', sprintf('%s/%s', $this->qrCodePath, $userId));
 
         $this->users->addTfaSecret($user, $this->twoFactorAuth->createSecret());
-    }
-
-    /**
-     * Creates a password hash from the provided password.
-     *
-     * @param string $password
-     * @return string
-     */
-    public function createPasswordHash(string $password): string
-    {
-        return password_hash(
-            $password,
-            $this->algorithm,
-            $this->options
-        );
-    }
-
-    public function sessionDataEncoder(array $data): array
-    {
-        $encodedData = [];
-
-        foreach($data as $key => $value) {
-            $encodedData[$key] = base64_encode($value);
-        }
-
-        return $encodedData;
-    }
-
-    public function sessionDataDecoder(array $data): array
-    {
-        $decodedData = [];
-
-        foreach($data as $key => $value) {
-            $decodedData[$key] = base64_decode($value);
-        }
-
-        return $decodedData;
     }
 
      /**

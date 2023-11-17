@@ -12,9 +12,10 @@ use App\Http\Action\Auth\DoSignpostAction;
 use App\Http\Action\Auth\DoTfaLoginAction;
 use App\Http\Action\Auth\ViewTfaLoginAction;
 use App\Http\Action\Api\User\CreateUserAction;
-use App\Http\Action\Web\Devices\ViewDevicesAction;
-use App\Http\Action\Web\Tickets\ViewTicketsAction;
-use App\Http\Action\Web\Customers\ViewCustomersAction;
+use App\Http\Action\Web\Device\ViewDevicesAction;
+use App\Http\Action\Web\Ticket\ViewTicketsAction;
+use App\Http\Action\Web\User\ViewCreateUserAction;
+use App\Http\Action\Web\Customer\ViewCustomersAction;
 use App\Http\Action\Web\Dashboard\ViewDashboardAction;
 use App\Http\Action\Web\Settings\ViewUserSettingsAction;
 
@@ -65,8 +66,11 @@ return function(App $app)
         // Devices
         $web->get('/devices', ViewDevicesAction::class);
 
+        // Users
+        $web->get('/users/create', ViewCreateUserAction::class);
+
         // Settings
         $web->get('/settings/user', ViewUserSettingsAction::class);
 
-    })->add(AuthMiddleware::class); // Protected group.
+    })->add(AuthMiddleware::class);
 };

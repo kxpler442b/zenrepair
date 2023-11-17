@@ -29,11 +29,11 @@ return [
         ],
         'connection' => [
             'driver' => 'pdo_pgsql',
-            'host' => $_ENV['DB_HOSTNAME'],
-            'port' => $_ENV['DB_PORT'],
-            'dbname' => $_ENV['DB_NAME'],
-            'user' => $_ENV['DB_USER'],
-            'password' => $_ENV['DB_PASSWORD']
+            'host' => $_ENV['DOCTRINE_DATABASE_HOST'],
+            'port' => $_ENV['DOCTRINE_DATABASE_PORT'],
+            'dbname' => $_ENV['DOCTRINE_DATABASE_NAME'],
+            'user' => $_ENV['DOCTRINE_USER'],
+            'password' => $_ENV['DOCTRINE_PASSWORD']
         ]
     ],
 
@@ -49,7 +49,7 @@ return [
             'qrCodePath' => __DIR__ . '/../app/qrcodes'
         ],
         'crypto' => [
-            'pepper' => $_ENV['CRYPT_PEPPER'],
+            'pepper' => $_ENV['APP_CRYPT_PEPPER'],
             'algo' => PASSWORD_ARGON2ID,
             'options' => [
                 'memory_cost' => PASSWORD_ARGON2_DEFAULT_MEMORY_COST,
@@ -57,6 +57,11 @@ return [
                 'threads' => PASSWORD_ARGON2_DEFAULT_THREADS
             ]
         ]
+    ],
+
+    // InputGuard Settings
+    'inputguard' => [
+        'ruleset_path' => __DIR__ . '/inputguard'
     ],
 
     // Twig Rendering Engine Settings

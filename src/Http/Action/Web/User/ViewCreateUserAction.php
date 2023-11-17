@@ -2,15 +2,15 @@
 
 declare(strict_types = 1);
 
-namespace App\Http\Action\Web\Devices;
+namespace App\Http\Action\Web\User;
 
-use Psr\Log\LoggerInterface;
 use App\Renderer\TwigRenderer;
 use App\Http\Action\Web\WebAction;
-use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
+use Psr\Http\Message\ResponseInterface;
+use Psr\Log\LoggerInterface;
 
-final class ViewDevicesAction extends WebAction
+final class ViewCreateUserAction extends WebAction
 {
     public function __construct(
         TwigRenderer $renderer,
@@ -23,8 +23,7 @@ final class ViewDevicesAction extends WebAction
     {
         return $this->renderer->template(
             $response,
-            '/pages/devices/devices_table.twig',
-            []
+            '/pages/users/create_user.twig'
         );
     }
 }

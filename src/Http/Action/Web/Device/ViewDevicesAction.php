@@ -2,7 +2,7 @@
 
 declare(strict_types = 1);
 
-namespace App\Http\Action\Web\Tickets;
+namespace App\Http\Action\Web\Device;
 
 use Psr\Log\LoggerInterface;
 use App\Renderer\TwigRenderer;
@@ -10,7 +10,7 @@ use App\Http\Action\Web\WebAction;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
 
-final class ViewTicketsAction extends WebAction
+final class ViewDevicesAction extends WebAction
 {
     public function __construct(
         TwigRenderer $renderer,
@@ -23,7 +23,7 @@ final class ViewTicketsAction extends WebAction
     {
         return $this->renderer->template(
             $response,
-            '/pages/tickets/tickets_table.twig',
+            '/pages/devices/devices_table.twig',
             []
         );
     }

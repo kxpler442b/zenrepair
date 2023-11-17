@@ -27,6 +27,7 @@ use Slim\Interfaces\RouteParserInterface;
 use Selective\BasePath\BasePathMiddleware;
 use App\Domain\Service\CryptographyService;
 use App\Domain\Service\AuthenticatorService;
+use App\Domain\Service\InputGuardService;
 use Psr\Http\Message\StreamFactoryInterface;
 use Psr\Http\Message\ResponseFactoryInterface;
 use Psr\Http\Message\UploadedFileFactoryInterface;
@@ -142,6 +143,15 @@ return [
             $settings->get('authenticator.tfa.digits'),
             $settings->get('authenticator.tfa.period'),
             $settings->get('authenticator.tfa.algo'),
+        );
+    },
+
+    InputGuardService::class => function(ContainerInterface $c) {
+        $settings = $c->get(Settings::class);
+
+        return new InputGuardService(
+            $c->get(LoggerInterface::class),
+            $settings->get('inputguard.ruleset_path')
         );
     },
 

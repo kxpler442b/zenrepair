@@ -1,0 +1,20 @@
+{% extends "/layouts/base.twig" %}
+
+{% block content %}
+<form
+    hx-post="/api/tickets/create">
+
+    <input type="text" name="create_form_title" id="create_form_title">
+    <select name="create_form_status" id="create_form_status">
+        <option value="0">Created</option>
+        <option value="1">Pre-Testing</option>
+        <option value="2">In Progress</option>
+        <option value="3">Post-Testing</option>
+        <option value="5">Completed</option>
+        <option value="6">Stalled</option>
+    </select>
+
+    <input class="p-3 text-black bg-white" type="submit" value="submit">
+
+</form>
+{% endblock %}

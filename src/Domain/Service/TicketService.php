@@ -5,11 +5,14 @@ declare(strict_types = 1);
 namespace App\Domain\Service;
 
 use Psr\Log\LoggerInterface;
-use App\Domain\Entity\TicketEntity;
-use App\Domain\Repository\TicketRepository;
-use App\Domain\XferObject\TicketObject;
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\EntityManager;
+use App\Domain\Entity\UserEntity;
+use Odan\Session\SessionInterface;
+use App\Domain\Entity\TicketEntity;
+use App\Domain\XferObject\TicketObject;
+use App\Domain\Repository\UserRepository;
+use App\Domain\Repository\TicketRepository;
+use Doctrine\Common\Collections\ArrayCollection;
 
 /**
  * Service for handling ticket CRUD actions.
@@ -17,13 +20,18 @@ use Doctrine\ORM\EntityManager;
 class TicketService
 {
     private TicketRepository $tickets;
+    private UserRepository $users;
+    private SessionInterface $session;
     private LoggerInterface $logger;
 
     public function __construct(
         EntityManager $em,
+        SessionInterface $session,
         LoggerInterface $logger
     ) {
-        $this->tickets = $em->getRepository(TicketRepository::class);
+        $this->tickets = $em->getRepository(TicketEntity::class);
+        $this->users = $em->getRepository(UserEntity::class);
+        $this->session = $session;
         $this->logger = $logger;
     }
 
@@ -34,9 +42,12 @@ class TicketService
      * 
      * @return self
      */
-    public function newTicket(TicketObject $ticketObject): self
+    public function createTicket(TicketObject $ticketObject): self
     {
-        $ticket = $this->tickets->newTicket($ticketObject);
+        $authorId = base64_decode($this->session->get('zenrepair_user'));
+        $author = $this->users->findOneBy(['id' => $authorId]);
+
+        $ticket = $this->tickets->newTicket($ticketObject, $author);
         $this->tickets->persistNewTicket($ticket);
 
         return $this;

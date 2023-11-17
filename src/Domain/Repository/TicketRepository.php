@@ -7,6 +7,7 @@ namespace App\Domain\Repository;
 use Carbon\Carbon;
 use Doctrine\ORM\EntityRepository;
 use App\Domain\Entity\TicketEntity;
+use App\Domain\Entity\UserEntity;
 use App\Domain\XferObject\TicketObject;
 
 /**
@@ -21,13 +22,14 @@ class TicketRepository extends EntityRepository
      * 
      * @return TicketEntity
      */
-    public function newTicket(TicketObject $ticketObject): TicketEntity
+    public function newTicket(TicketObject $ticketObject, UserEntity $author): TicketEntity
     {
         $dt = new Carbon('now');
 
         return (new TicketEntity())
             ->setTitle($ticketObject->title)
             ->setStatus($ticketObject->status)
+            ->setAuthor($author)
             ->setCreated($dt)
             ->setUpdated($dt);
     }

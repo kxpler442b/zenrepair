@@ -50,4 +50,16 @@ class TicketEntity
 
         return $this;
     }
+
+    public function getAuthor(): ?UserEntity
+    {
+        return $this->author;
+    }
+
+    public function setAuthor(UserEntity $author): self
+    {
+        $this->author = $author;
+
+        return $this;
+    }
 }

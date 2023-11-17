@@ -14,9 +14,11 @@ use App\Http\Action\Auth\ViewTfaLoginAction;
 use App\Http\Action\Api\User\CreateUserAction;
 use App\Http\Action\Web\Device\ViewDevicesAction;
 use App\Http\Action\Web\Ticket\ViewTicketsAction;
+use App\Http\Action\Api\Ticket\CreateTicketAction;
 use App\Http\Action\Web\User\ViewCreateUserAction;
 use App\Http\Action\Web\Customer\ViewCustomersAction;
 use App\Http\Action\Web\Dashboard\ViewDashboardAction;
+use App\Http\Action\Web\Ticket\ViewCreateTicketAction;
 use App\Http\Action\Web\Settings\ViewUserSettingsAction;
 
 /**
@@ -42,6 +44,9 @@ return function(App $app)
      */
     $app->group('/api', function(RouteCollectorProxy $api) {
 
+        // Tickets
+        $api->post('/tickets/create', CreateTicketAction::class);
+
         // Users
         $api->get('/users/get/{id}', GetUserAction::class);
         $api->post('/users/create', CreateUserAction::class);
@@ -58,6 +63,7 @@ return function(App $app)
 
         // Tickets
         $web->get('/tickets', ViewTicketsAction::class);
+        $web->get('/tickets/create', ViewCreateTicketAction::class);
         $web->get('/ticket/{id}', ViewTicketAction::class);
 
         // Customers

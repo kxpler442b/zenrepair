@@ -4,18 +4,42 @@
     {% include "/components/navbar.twig" %}
 {% endblock %}
 
+{% block sidebar %}
+    {% include "/pages/tickets/components/sidebar.twig" %}
+{% endblock %}
+
 {% block content %}
+
 <div
-    class="row-start-2 col-start-1 col-end-17
-    flex flex-col justify-start align-middle items-center">
+    class="row-start-3 col-start-4 2xl:col-start-4 col-end-17
+        flex flex-col justify-start align-middle items-start space-y-3 w-full min-h-fit p-3">
 
     <div
-        class="flex flex-row justify-start items-center space-x-3 w-full p-6 pt-12
-            border-b border-stone-700 bg-stone-900">
+        class="w-full
+            rounded-sm border border-stone-700">
 
-        <h1 class="font-bold text-3xl text-white">Tickets</h1>
-    
+        <table
+            class="w-full min-h-fit">
+
+            <thead class="text-sm text-left text-stone-300 border-b border-stone-700 rounded-tl-sm rounded-tr-sm">
+                <th class="w-1/2 px-3 py-1.5">Subject</th>
+                <th class="px-3">Priority</th>
+                <th class="px-3">Status</th>
+                <th class="px-3">Date Created</th>
+                <th class="px-3">Last Updated</th>
+            </thead>
+
+            <tbody class="text-white">
+                <tr class="bg-stone-700">
+                    <td class="p-3">Test Ticket</td>
+                    <td class="px-3">Normal</td>
+                    <td class="px-3">Created</td>
+                    <td class="px-3">Sat 18 Nov 18:00</td>
+                    <td class="px-3">Sat 18 Nov 18:00</td>
+                </tr>
+            </tbody>
+        </table>
     </div>
-
 </div>
+
 {% endblock %}

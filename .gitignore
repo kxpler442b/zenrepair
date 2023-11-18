@@ -19,6 +19,9 @@ app.env
 !/resources/migrations/.gitkeep
 !/resources/seeds/.gitkeep
 
+# PHPUnit Test Cache
+/.phpunit.cache
+
 # Managed by Composer
 /vendor/
 

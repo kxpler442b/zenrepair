@@ -21,10 +21,16 @@ final class ViewDevicesAction extends WebAction
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
+        $data = [
+            'page' => [
+                'group' => 'devices'
+            ]
+        ];
+
         return $this->renderer->template(
             $response,
             '/pages/devices/devices_table.twig',
-            []
+            $data
         );
     }
 }

@@ -61,10 +61,8 @@ final class AuthenticatorService
 
         $user = $this->users->findOneBy(['username' => $credentials->username]);
 
-        $this->logger->debug('Attempting to authenticate a user.', [$user]);
-
         if($user == null || !password_verify($credentials->password, $user->getPassword())) {
-            $this->logger->debug('A user failed to authenticate.', [$user, $credentials->password, $user->getPassword]);
+            $this->logger->debug('A user failed to authenticate.');
 
             return AuthEnum::AUTH_FAILED;
         }

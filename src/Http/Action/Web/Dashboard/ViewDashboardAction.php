@@ -21,10 +21,16 @@ final class ViewDashboardAction extends WebAction
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
+        $data = [
+            'page' => [
+                'group' => 'dashboard'
+            ]
+        ];
+
         return $this->renderer->template(
             $response,
             '/pages/dashboard.twig',
-            []
+            $data
         );
     }
 }

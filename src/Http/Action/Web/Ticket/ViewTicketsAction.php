@@ -21,10 +21,16 @@ final class ViewTicketsAction extends WebAction
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
+        $data = [
+            'page' => [
+                'group' => 'tickets'
+            ]
+        ];
+
         return $this->renderer->template(
             $response,
             '/pages/tickets/tickets_table.twig',
-            []
+            $data
         );
     }
 }

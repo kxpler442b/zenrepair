@@ -21,10 +21,16 @@ final class ViewCustomersAction extends WebAction
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
+        $data = [
+            'page' => [
+                'group' => 'customers'
+            ]
+        ];
+
         return $this->renderer->template(
             $response,
             '/pages/customers/customers_table.twig',
-            []
+            $data
         );
     }
 }

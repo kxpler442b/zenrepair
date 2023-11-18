@@ -19,10 +19,16 @@ final class ViewLoginAction
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
+        $data = [
+            'page' => [
+                'title' => 'Login - zenRepair'
+            ]
+        ];
+
         return $this->renderer->template(
             $response,
             '/pages/auth/auth_password.twig',
-            []
+            $data
         );
     }
 }

@@ -9,7 +9,8 @@ module.exports = {
         sans: ["Satoshi-Variable", ...defaultTheme.fontFamily.sans],
       },
       gridTemplateRows: {
-        'custom-1': '48px'
+        'none': '',
+        'custom-1': '48px 32px'
       },
       gridTemplateColumns: {
         'xl': 'repeat(12, minmax(0, 1fr))',

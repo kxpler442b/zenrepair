@@ -59,7 +59,13 @@ final class InputGuardService
     public function process(array $input, string $rulesetName): InputGuardEnum
     {
         $v = new Validator($input);
-        $v->rules($this->getRuleset($rulesetName));
+        $ruleset = $this->getRuleset($rulesetName);
+
+        if($ruleset == null) {
+            return InputGuardEnum::FAILED_ERROR;
+        }
+        
+        $v->rules($ruleset);
 
         if($v->validate()) {
             $this->sanitise($input);
@@ -101,8 +107,6 @@ final class InputGuardService
         if(is_array($ruleset)) {
             return $ruleset;
         }
-
-        $this->logger->debug($ruleset);
 
         return null;
     }

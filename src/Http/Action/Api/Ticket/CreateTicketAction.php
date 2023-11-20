@@ -9,34 +9,48 @@ use App\Renderer\JsonRenderer;
 use App\Http\Action\Api\ApiAction;
 use App\Domain\Enum\InputGuardEnum;
 use App\Domain\Service\TicketService;
-use Psr\Http\Message\ResponseInterface;
-use App\Domain\Service\InputGuardService;
 use App\Domain\XferObject\TicketObject;
+use Psr\Http\Message\ResponseInterface;
+use App\Domain\Service\SanitizerService;
+use App\Domain\Service\InputGuardService;
 use Fig\Http\Message\StatusCodeInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use App\Domain\XferObject\UserCredentialsObject;
+use Exception;
 
 final class CreateTicketAction extends ApiAction
 {
     private TicketService $tickets;
     private InputGuardService $inputGuard;
+    private SanitizerService $sanitizer;
 
     public function __construct(
         TicketService $tickets,
         InputGuardService $inputGuard,
         JsonRenderer $renderer,
-        LoggerInterface $logger
+        LoggerInterface $logger,
+        SanitizerService $sanitizer
     ) {
         $this->tickets = $tickets;
         $this->inputGuard = $inputGuard;
+        $this->sanitizer = $sanitizer;
 
         parent::__construct($renderer, $logger);
     }
 
     public function __invoke(ServerRequestInterface $request, ResponseInterface $response): ResponseInterface
     {
+        $data = $request->getParsedBody();
+        try {
+            $data['create_form_title'] = $this->sanitizer->sanitizeString($data['create_form_title']);
+        } catch (Exception $e) {
+            //change in production
+            $this->logger->debug($e . 'sanitization failed');
+            return $response->withStatus(StatusCodeInterface::STATUS_INTERNAL_SERVER_ERROR);
+        }
+
         $result = $this->inputGuard->process(
-            $request->getParsedBody(),
+            $data,
             'ticketCreation'
         );
 
